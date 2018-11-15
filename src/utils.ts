@@ -1,6 +1,16 @@
 import { murmur3 } from "murmurhash-js";
-import { curryN, is, isNil, propOr } from "ramda";
-import { Styles } from ".";
+import {
+  complement,
+  curryN,
+  is,
+  isEmpty,
+  isNil,
+  keys,
+  map,
+  propOr
+} from "ramda";
+import { IConfig, Styles } from ".";
+import { Column } from "./column";
 
 export const getStyleFrom = curryN(2, (styles: Styles, name: string) => {
   if (isNil(styles)) {
@@ -21,3 +31,25 @@ function supportsFeatureDetection() {
 export function hash(value: string) {
   return String(murmur3(value));
 }
+
+export const isNotEmpty = complement(isEmpty);
+export const isNotNil = complement(isNil);
+
+export const makeColumns = curryN(2, (config: IConfig, fields: string[]) => {
+  const mapColumns = map<string, Column>(
+    field =>
+      new Column({
+        config: config.properties[field],
+        id: hash(field),
+        text: field
+      })
+  );
+
+  const defaultFields = config.order || map(String, keys(config.properties));
+
+  if (isNotEmpty(fields)) {
+    return mapColumns(fields);
+  }
+
+  return mapColumns(defaultFields);
+});

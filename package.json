@@ -25,6 +25,7 @@
     "@types/murmurhash-js": "^1.0.3",
     "@types/ramda": "^0.25.41",
     "@types/react": "^16.7.3",
+    "@types/react-beautiful-dnd": "^7.1.2",
     "@types/react-dom": "^16.0.9",
     "@types/tape": "^4.2.32",
     "jsdom": "^13.0.0",

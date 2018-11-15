@@ -23,9 +23,9 @@ const styles = {
   `,
   wrapper: css`
     box-sizing: border-box;
-    display: inline-block;
+    /* display: inline-block;
     width: 600px;
-    height: 150px;
+    height: 150px; */
     overflow: scroll;
   `
 };
