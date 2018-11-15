@@ -1,0 +1,49 @@
+{
+  "name": "@neezer/react-a11y-table",
+  "private": true,
+  "version": "1.0.0-alpha.1",
+  "description": "Accessible table",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "yarn clean && tsc",
+    "clean": "rimraf dist .cache",
+    "preview": "parcel preview/index.html",
+    "test": "tape -r ts-node/register 'test/**/*.test.{ts,tsx}'"
+  },
+  "author": "Evan Sherwood <evan@sherwood.io>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/neezer/react-a11y-table.git"
+  },
+  "license": "ISC",
+  "peerDependencies": {
+    "ramda": "^0.25.0",
+    "react": "^16.6.1"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^12.2.0",
+    "@types/murmurhash-js": "^1.0.3",
+    "@types/ramda": "^0.25.41",
+    "@types/react": "^16.7.3",
+    "@types/react-dom": "^16.0.9",
+    "@types/tape": "^4.2.32",
+    "jsdom": "^13.0.0",
+    "parcel-bundler": "^1.10.3",
+    "prettier": "^1.15.2",
+    "ramda": "^0.25.0",
+    "react": "^16.6.1",
+    "react-dom": "^16.6.1",
+    "react-testing-library": "^5.2.3",
+    "rimraf": "^2.6.2",
+    "tape": "^4.9.1",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.15.0",
+    "typescript": "^3.1.6"
+  },
+  "dependencies": {
+    "emotion": "^9.2.12",
+    "murmurhash-js": "^1.0.0",
+    "react-beautiful-dnd": "^10.0.1"
+  }
+}
