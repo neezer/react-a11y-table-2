@@ -18,17 +18,27 @@ const stickyStyle = css`
   top: 0;
 `;
 
+const draggingStyle = css`
+  background-color: rgba(255, 0, 0, 0.5);
+  width: auto;
+`;
+
 export const Head = React.forwardRef<Ref, IProps>((props, ref) => {
   const { columns, styles, sticky, onReorder } = props;
   const baseStyle = getStyleFrom(styles, "headers");
   const hasStickyStyle = sticky.supported && sticky.enabled;
-  const style = hasStickyStyle ? cx(baseStyle, stickyStyle) : baseStyle;
+
+  const getStyle = (isDragging: boolean) =>
+    cx(baseStyle, {
+      [stickyStyle]: hasStickyStyle,
+      [draggingStyle]: isDragging
+    });
 
   const columnLabels = columns.map((column, index) => (
     <Draggable key={column.id} draggableId={column.id} index={index}>
-      {provided => (
+      {(provided, snapshot) => (
         <th
-          className={style}
+          className={getStyle(snapshot.isDragging)}
           scope="col"
           {...provided.draggableProps}
           {...provided.dragHandleProps}

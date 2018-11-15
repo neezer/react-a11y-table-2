@@ -63,7 +63,7 @@ export class Grid extends React.Component<IProps, IState> {
             onReorder={this.saveNewOrder(columns)}
             ref={theadRef}
           />
-          <Body columns={columns} data={data} />
+          <Body columns={columns} data={data} styles={styles} />
         </Table>
       </Wrapper>
     );

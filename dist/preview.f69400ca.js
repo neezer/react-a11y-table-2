@@ -42627,7 +42627,8 @@ Object.defineProperty(exports, "__esModule", {
 var React = __importStar(require("react"));
 
 exports.Colgroup = function (props) {
-  var columns = props.columns;
+  var columns = props.columns,
+      placeholder = props.placeholder;
   var cols = columns.map(function (column) {
     var width = column.config.width;
     var colProps = {
@@ -42638,7 +42639,7 @@ exports.Colgroup = function (props) {
     };
     return React.createElement("col", Object.assign({}, colProps));
   });
-  return React.createElement("colgroup", null, cols);
+  return React.createElement("colgroup", null, cols, placeholder);
 };
 },{"react":"../node_modules/react/index.js"}],"../src/empty.tsx":[function(require,module,exports) {
 "use strict";
@@ -54174,6 +54175,18 @@ ConnectedDraggable.defaultProps = defaultProps$1;
 },{"redux":"../node_modules/redux/es/redux.js","@babel/runtime-corejs2/core-js/object/values":"../node_modules/@babel/runtime-corejs2/core-js/object/values.js","@babel/runtime-corejs2/core-js/object/keys":"../node_modules/@babel/runtime-corejs2/core-js/object/keys.js","@babel/runtime-corejs2/core-js/object/assign":"../node_modules/@babel/runtime-corejs2/core-js/object/assign.js","react-redux":"../node_modules/react-redux/es/index.js","@babel/runtime-corejs2/helpers/esm/inheritsLoose":"../node_modules/@babel/runtime-corejs2/helpers/esm/inheritsLoose.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","memoize-one":"../node_modules/memoize-one/dist/memoize-one.esm.js","raf-schd":"../node_modules/raf-schd/dist/raf-schd.esm.js","css-box-model":"../node_modules/css-box-model/dist/css-box-model.esm.js","@babel/runtime-corejs2/helpers/esm/extends":"../node_modules/@babel/runtime-corejs2/helpers/esm/extends.js","@babel/runtime-corejs2/core-js/number/is-integer":"../node_modules/@babel/runtime-corejs2/core-js/number/is-integer.js","tiny-invariant":"../node_modules/tiny-invariant/dist/tiny-invariant.esm.js"}],"../src/head.tsx":[function(require,module,exports) {
 "use strict";
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _templateObject2() {
+  var data = _taggedTemplateLiteral(["\n  background-color: rgba(255, 0, 0, 0.5);\n  width: auto;\n"]);
+
+  _templateObject2 = function _templateObject2() {
+    return data;
+  };
+
+  return data;
+}
+
 function _templateObject() {
   var data = _taggedTemplateLiteral(["\n  position: sticky;\n  top: 0;\n"]);
 
@@ -54209,6 +54222,7 @@ var react_beautiful_dnd_1 = require("react-beautiful-dnd");
 var utils_1 = require("./utils");
 
 var stickyStyle = emotion_1.css(_templateObject());
+var draggingStyle = emotion_1.css(_templateObject2());
 exports.Head = React.forwardRef(function (props, ref) {
   var columns = props.columns,
       styles = props.styles,
@@ -54216,15 +54230,21 @@ exports.Head = React.forwardRef(function (props, ref) {
       onReorder = props.onReorder;
   var baseStyle = utils_1.getStyleFrom(styles, "headers");
   var hasStickyStyle = sticky.supported && sticky.enabled;
-  var style = hasStickyStyle ? emotion_1.cx(baseStyle, stickyStyle) : baseStyle;
+
+  var getStyle = function getStyle(isDragging) {
+    var _emotion_1$cx;
+
+    return emotion_1.cx(baseStyle, (_emotion_1$cx = {}, _defineProperty(_emotion_1$cx, stickyStyle, hasStickyStyle), _defineProperty(_emotion_1$cx, draggingStyle, isDragging), _emotion_1$cx));
+  };
+
   var columnLabels = columns.map(function (column, index) {
     return React.createElement(react_beautiful_dnd_1.Draggable, {
       key: column.id,
       draggableId: column.id,
       index: index
-    }, function (provided) {
+    }, function (provided, snapshot) {
       return React.createElement("th", Object.assign({
-        className: style,
+        className: getStyle(snapshot.isDragging),
         scope: "col"
       }, provided.draggableProps, provided.dragHandleProps, {
         ref: provided.innerRef
@@ -54480,7 +54500,8 @@ function (_React$Component) {
         ref: theadRef
       }), React.createElement(body_1.Body, {
         columns: columns,
-        data: data
+        data: data,
+        styles: styles
       })));
     }
   }]);
@@ -54577,7 +54598,7 @@ exports.config = {
       width: 300
     },
     id: {
-      width: 20
+      width: 30
     },
     quote: {
       width: 600
@@ -54637,7 +54658,7 @@ exports.data = [{
 "use strict";
 
 function _templateObject4() {
-  var data = _taggedTemplateLiteral(["\n    box-sizing: border-box;\n    /* display: inline-block;\n    width: 600px;\n    height: 150px; */\n    overflow: scroll;\n  "]);
+  var data = _taggedTemplateLiteral(["\n    border: 1px solid #666;\n    box-sizing: border-box;\n    display: inline-block;\n    width: 600px;\n    height: 150px;\n    overflow: scroll;\n  "]);
 
   _templateObject4 = function _templateObject4() {
     return data;
@@ -54657,7 +54678,7 @@ function _templateObject3() {
 }
 
 function _templateObject2() {
-  var data = _taggedTemplateLiteral(["\n    background-color: white;\n    box-sizing: border-box;\n  "]);
+  var data = _taggedTemplateLiteral(["\n    background-color: white;\n    box-sizing: border-box;\n    padding: 5px 10px;\n    text-align: left;\n    text-transform: uppercase;\n  "]);
 
   _templateObject2 = function _templateObject2() {
     return data;
@@ -54667,7 +54688,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["\n    white-space: nowrap;\n    overflow: hidden;\n    box-sizing: border-box;\n  "]);
+  var data = _taggedTemplateLiteral(["\n    white-space: nowrap;\n    overflow: hidden;\n    box-sizing: border-box;\n    padding: 5px 10px;\n  "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -54743,7 +54764,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49942" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50694" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

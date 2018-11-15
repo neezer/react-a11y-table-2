@@ -12,20 +12,25 @@ const styles = {
     white-space: nowrap;
     overflow: hidden;
     box-sizing: border-box;
+    padding: 5px 10px;
   `,
   headers: css`
     background-color: white;
     box-sizing: border-box;
+    padding: 5px 10px;
+    text-align: left;
+    text-transform: uppercase;
   `,
   table: css`
     border-collapse: collapse;
     table-layout: fixed;
   `,
   wrapper: css`
+    border: 1px solid #666;
     box-sizing: border-box;
-    /* display: inline-block;
+    display: inline-block;
     width: 600px;
-    height: 150px; */
+    height: 150px;
     overflow: scroll;
   `
 };
