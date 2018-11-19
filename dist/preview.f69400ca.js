@@ -54064,6 +54064,7 @@ exports.ColumnReorder = function (props) {
       return React.createElement("div", Object.assign({
         className: utils_1.applyStyles(columnStyle)
       }, provided.draggableProps, provided.dragHandleProps, {
+        style: getDraggingStyle(provided.draggableProps.style, snapshot.isDragging),
         ref: provided.innerRef
       }), React.createElement("span", {
         className: utils_1.applyStyles(textStyle)
@@ -54082,6 +54083,39 @@ exports.ColumnReorder = function (props) {
     }), columnComponents, provided.placeholder);
   })));
 };
+
+function getDraggingStyle(dragStyle, isDragging) {
+  if (dragStyle === undefined) {
+    return undefined;
+  }
+
+  var transform = dragStyle.transform;
+  var transitionsTransform = transitionIncludesTransform(dragStyle.transition);
+
+  if (transform !== null) {
+    if (isDragging) {
+      if (transitionsTransform) {
+        return Object.assign({}, dragStyle, {
+          transform: "".concat(transform, " rotate(0)")
+        });
+      }
+
+      return Object.assign({}, dragStyle, {
+        transform: "".concat(transform, " rotate(10deg)")
+      });
+    }
+  }
+
+  return dragStyle;
+}
+
+function transitionIncludesTransform(transition) {
+  if (transition === undefined) {
+    return false;
+  }
+
+  return /transform/.test(transition);
+}
 },{"react":"../node_modules/react/index.js","react-beautiful-dnd":"../node_modules/react-beautiful-dnd/dist/react-beautiful-dnd.esm.js","./utils":"../src/utils.ts"}],"../src/defaultStyles.ts":[function(require,module,exports) {
 "use strict";
 
@@ -54928,7 +54962,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50965" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53339" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
