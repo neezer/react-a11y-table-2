@@ -1,16 +1,14 @@
 import { css, cx } from "emotion";
 import * as React from "react";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { Columns, IStickyConfig, Styles } from ".";
-import { getStyleFrom } from "./utils";
+import { applyStyles, getStyleFrom } from "./utils";
 
 export type Ref = HTMLTableSectionElement;
 
 interface IProps {
-  styles?: Styles;
+  styles: Styles;
   sticky: IStickyConfig;
   columns: Columns;
-  onReorder: (result: any) => void;
 }
 
 const stickyStyle = css`
@@ -18,50 +16,22 @@ const stickyStyle = css`
   top: 0;
 `;
 
-const draggingStyle = css`
-  background-color: rgba(255, 0, 0, 0.5);
-  width: auto;
-`;
-
 export const Head = React.forwardRef<Ref, IProps>((props, ref) => {
-  const { columns, styles, sticky, onReorder } = props;
-  const baseStyle = getStyleFrom(styles, "headers");
+  const { columns, styles, sticky } = props;
+  const gridStyles = getStyleFrom(styles, "grid");
+  const baseStyle = getStyleFrom(gridStyles, "headers");
   const hasStickyStyle = sticky.supported && sticky.enabled;
+  const style = cx(applyStyles(baseStyle), { [stickyStyle]: hasStickyStyle });
 
-  const getStyle = (isDragging: boolean) =>
-    cx(baseStyle, {
-      [stickyStyle]: hasStickyStyle,
-      [draggingStyle]: isDragging
-    });
-
-  const columnLabels = columns.map((column, index) => (
-    <Draggable key={column.id} draggableId={column.id} index={index}>
-      {(provided, snapshot) => (
-        <th
-          className={getStyle(snapshot.isDragging)}
-          scope="col"
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-          ref={provided.innerRef}
-        >
-          {column.text}
-        </th>
-      )}
-    </Draggable>
+  const columnLabels = columns.map(column => (
+    <th key={column.id} className={style} scope="col">
+      {column.text}
+    </th>
   ));
 
   return (
-    <DragDropContext onDragEnd={onReorder}>
-      <thead ref={ref}>
-        <Droppable droppableId="column-headers" direction="horizontal">
-          {provided => (
-            <tr {...provided.droppableProps} ref={provided.innerRef}>
-              {columnLabels}
-              {provided.placeholder}
-            </tr>
-          )}
-        </Droppable>
-      </thead>
-    </DragDropContext>
+    <thead ref={ref}>
+      <tr>{columnLabels}</tr>
+    </thead>
   );
 });

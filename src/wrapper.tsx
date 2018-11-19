@@ -1,40 +1,13 @@
-import { not } from "ramda";
 import * as React from "react";
-import { IStickyConfig, Styles } from ".";
-import { getStyleFrom } from "./utils";
-
-type THeadRef = React.RefObject<HTMLTableSectionElement>;
+import { Styles } from ".";
+import { applyStyles, getStyleFrom } from "./utils";
 
 interface IProps {
-  styles?: Styles;
-  sticky: IStickyConfig;
-  theadRef: THeadRef;
+  styles: Styles;
 }
 
 export const Wrapper: React.FunctionComponent<IProps> = props => {
-  const { children, styles, sticky, theadRef } = props;
-  const style = getStyleFrom(styles, "wrapper");
-  const wrapperProps: React.HTMLAttributes<HTMLDivElement> = {};
+  const style = getStyleFrom(props.styles, "wrapper");
 
-  if (sticky.enabled && not(sticky.supported)) {
-    wrapperProps.onScroll = followHeaders(theadRef);
-  }
-
-  return (
-    <div className={style} {...wrapperProps}>
-      {children}
-    </div>
-  );
+  return <div className={applyStyles(style)}>{props.children}</div>;
 };
-
-function followHeaders(theadRef: THeadRef) {
-  return (event: React.UIEvent<HTMLDivElement>) => {
-    const { scrollTop: top } = event.currentTarget;
-    const translate = `translate(0,${top}px)`;
-    const thead = theadRef.current;
-
-    if (thead !== null) {
-      thead.style.transform = translate;
-    }
-  };
-}

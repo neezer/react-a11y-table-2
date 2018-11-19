@@ -1,4 +1,4 @@
-import { css } from "emotion";
+import { injectGlobal } from "emotion";
 import * as React from "react";
 import { render } from "react-dom";
 import { Table } from "../src";
@@ -7,32 +7,24 @@ import { data } from "./data";
 
 const elem = document.getElementById("container");
 
+const _ = injectGlobal`
+  body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  #container {
+    flex: 0 0 960px;
+    height: 400px;
+  }
+`;
+
 const styles = {
-  cell: css`
-    white-space: nowrap;
-    overflow: hidden;
-    box-sizing: border-box;
-    padding: 5px 10px;
-  `,
-  headers: css`
-    background-color: white;
-    box-sizing: border-box;
-    padding: 5px 10px;
-    text-align: left;
-    text-transform: uppercase;
-  `,
-  table: css`
-    border-collapse: collapse;
-    table-layout: fixed;
-  `,
-  wrapper: css`
-    border: 1px solid #666;
-    box-sizing: border-box;
-    display: inline-block;
-    width: 600px;
-    height: 150px;
-    overflow: scroll;
-  `
+  wrapper: {}
 };
 
 render(<Table config={config} data={data} styles={styles} />, elem);

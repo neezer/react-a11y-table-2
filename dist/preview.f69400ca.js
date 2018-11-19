@@ -25392,88 +25392,7 @@ if ("development" === 'production') {
 } else {
   module.exports = require('./cjs/react-dom.development.js');
 }
-},{"./cjs/react-dom.development.js":"../node_modules/react-dom/cjs/react-dom.development.js"}],"../src/errorBoundary.tsx":[function(require,module,exports) {
-"use strict";
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-var __importStar = this && this.__importStar || function (mod) {
-  if (mod && mod.__esModule) return mod;
-  var result = {};
-  if (mod != null) for (var k in mod) {
-    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-  }
-  result["default"] = mod;
-  return result;
-};
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var React = __importStar(require("react"));
-
-var ErrorBoundary =
-/*#__PURE__*/
-function (_React$Component) {
-  _inherits(ErrorBoundary, _React$Component);
-
-  function ErrorBoundary() {
-    var _this;
-
-    _classCallCheck(this, ErrorBoundary);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(ErrorBoundary).apply(this, arguments));
-    _this.state = {
-      hasError: false
-    };
-    return _this;
-  }
-
-  _createClass(ErrorBoundary, [{
-    key: "componentDidCatch",
-    value: function componentDidCatch(error) {
-      console.log(error);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      if (this.state.hasError) {
-        return React.createElement("h1", null, "error");
-      }
-
-      return this.props.children;
-    }
-  }], [{
-    key: "getDerivedStateFromError",
-    value: function getDerivedStateFromError(_) {
-      return {
-        hasError: true
-      };
-    }
-  }]);
-
-  return ErrorBoundary;
-}(React.Component);
-
-exports.ErrorBoundary = ErrorBoundary;
-},{"react":"../node_modules/react/index.js"}],"../node_modules/ramda/es/internal/_isPlaceholder.js":[function(require,module,exports) {
+},{"./cjs/react-dom.development.js":"../node_modules/react-dom/cjs/react-dom.development.js"}],"../node_modules/ramda/es/internal/_isPlaceholder.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -42517,6 +42436,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var emotion_1 = require("emotion");
+
 var murmurhash_js_1 = require("murmurhash-js");
 
 var ramda_1 = require("ramda");
@@ -42564,7 +42485,13 @@ exports.makeColumns = ramda_1.curryN(2, function (config, fields) {
 
   return mapColumns(defaultFields);
 });
-},{"murmurhash-js":"../node_modules/murmurhash-js/index.js","ramda":"../node_modules/ramda/es/index.js","./column":"../src/column.ts"}],"../src/body.tsx":[function(require,module,exports) {
+
+function applyStyles(styles) {
+  return emotion_1.css(styles);
+}
+
+exports.applyStyles = applyStyles;
+},{"emotion":"../node_modules/emotion/dist/index.esm.js","murmurhash-js":"../node_modules/murmurhash-js/index.js","ramda":"../node_modules/ramda/es/index.js","./column":"../src/column.ts"}],"../src/actions.tsx":[function(require,module,exports) {
 "use strict";
 
 var __importStar = this && this.__importStar || function (mod) {
@@ -42585,88 +42512,14 @@ var React = __importStar(require("react"));
 
 var utils_1 = require("./utils");
 
-exports.Body = function (props) {
-  var columns = props.columns,
-      data = props.data,
-      styles = props.styles;
-  var style = utils_1.getStyleFrom(styles, "cell");
-  var rows = data.map(function (datum) {
-    var rowKey = datum.id;
-    var cells = columns.map(function (column) {
-      var value = datum[column.text];
-      var cellKey = "".concat(rowKey, "--").concat(column.id);
-      var cellAttrs = {
-        key: cellKey,
-        className: style
-      };
-      return React.createElement("td", Object.assign({}, cellAttrs), value);
-    });
-    return React.createElement("tr", {
-      key: rowKey
-    }, cells);
-  });
-  return React.createElement("tbody", null, rows);
+exports.Actions = function (props) {
+  var actionsStyles = utils_1.getStyleFrom(props.styles, "actions");
+  var wrapperStyle = utils_1.getStyleFrom(actionsStyles, "wrapper");
+  return React.createElement("div", {
+    className: utils_1.applyStyles(wrapperStyle)
+  }, props.children);
 };
-},{"react":"../node_modules/react/index.js","./utils":"../src/utils.ts"}],"../src/colgroup.tsx":[function(require,module,exports) {
-"use strict";
-
-var __importStar = this && this.__importStar || function (mod) {
-  if (mod && mod.__esModule) return mod;
-  var result = {};
-  if (mod != null) for (var k in mod) {
-    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-  }
-  result["default"] = mod;
-  return result;
-};
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var React = __importStar(require("react"));
-
-exports.Colgroup = function (props) {
-  var columns = props.columns,
-      placeholder = props.placeholder;
-  var cols = columns.map(function (column) {
-    var width = column.config.width;
-    var colProps = {
-      key: column.id,
-      style: {
-        width: "".concat(width, "px")
-      }
-    };
-    return React.createElement("col", Object.assign({}, colProps));
-  });
-  return React.createElement("colgroup", null, cols, placeholder);
-};
-},{"react":"../node_modules/react/index.js"}],"../src/empty.tsx":[function(require,module,exports) {
-"use strict";
-
-var __importStar = this && this.__importStar || function (mod) {
-  if (mod && mod.__esModule) return mod;
-  var result = {};
-  if (mod != null) for (var k in mod) {
-    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-  }
-  result["default"] = mod;
-  return result;
-};
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var React = __importStar(require("react"));
-
-var defaultMessage = "no results";
-
-exports.Empty = function (_ref) {
-  var message = _ref.message;
-  return React.createElement("h1", null, message || defaultMessage);
-};
-},{"react":"../node_modules/react/index.js"}],"../node_modules/symbol-observable/es/ponyfill.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","./utils":"../src/utils.ts"}],"../node_modules/symbol-observable/es/ponyfill.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -54172,20 +54025,379 @@ var ConnectedDraggable = (0, _reactRedux.connect)(makeMapStateToProps$1, mapDisp
 })(Draggable);
 exports.Draggable = ConnectedDraggable;
 ConnectedDraggable.defaultProps = defaultProps$1;
-},{"redux":"../node_modules/redux/es/redux.js","@babel/runtime-corejs2/core-js/object/values":"../node_modules/@babel/runtime-corejs2/core-js/object/values.js","@babel/runtime-corejs2/core-js/object/keys":"../node_modules/@babel/runtime-corejs2/core-js/object/keys.js","@babel/runtime-corejs2/core-js/object/assign":"../node_modules/@babel/runtime-corejs2/core-js/object/assign.js","react-redux":"../node_modules/react-redux/es/index.js","@babel/runtime-corejs2/helpers/esm/inheritsLoose":"../node_modules/@babel/runtime-corejs2/helpers/esm/inheritsLoose.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","memoize-one":"../node_modules/memoize-one/dist/memoize-one.esm.js","raf-schd":"../node_modules/raf-schd/dist/raf-schd.esm.js","css-box-model":"../node_modules/css-box-model/dist/css-box-model.esm.js","@babel/runtime-corejs2/helpers/esm/extends":"../node_modules/@babel/runtime-corejs2/helpers/esm/extends.js","@babel/runtime-corejs2/core-js/number/is-integer":"../node_modules/@babel/runtime-corejs2/core-js/number/is-integer.js","tiny-invariant":"../node_modules/tiny-invariant/dist/tiny-invariant.esm.js"}],"../src/head.tsx":[function(require,module,exports) {
+},{"redux":"../node_modules/redux/es/redux.js","@babel/runtime-corejs2/core-js/object/values":"../node_modules/@babel/runtime-corejs2/core-js/object/values.js","@babel/runtime-corejs2/core-js/object/keys":"../node_modules/@babel/runtime-corejs2/core-js/object/keys.js","@babel/runtime-corejs2/core-js/object/assign":"../node_modules/@babel/runtime-corejs2/core-js/object/assign.js","react-redux":"../node_modules/react-redux/es/index.js","@babel/runtime-corejs2/helpers/esm/inheritsLoose":"../node_modules/@babel/runtime-corejs2/helpers/esm/inheritsLoose.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","memoize-one":"../node_modules/memoize-one/dist/memoize-one.esm.js","raf-schd":"../node_modules/raf-schd/dist/raf-schd.esm.js","css-box-model":"../node_modules/css-box-model/dist/css-box-model.esm.js","@babel/runtime-corejs2/helpers/esm/extends":"../node_modules/@babel/runtime-corejs2/helpers/esm/extends.js","@babel/runtime-corejs2/core-js/number/is-integer":"../node_modules/@babel/runtime-corejs2/core-js/number/is-integer.js","tiny-invariant":"../node_modules/tiny-invariant/dist/tiny-invariant.esm.js"}],"../src/columnReorder.tsx":[function(require,module,exports) {
+"use strict";
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+  }
+  result["default"] = mod;
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var React = __importStar(require("react"));
+
+var react_beautiful_dnd_1 = require("react-beautiful-dnd");
+
+var utils_1 = require("./utils");
+
+exports.ColumnReorder = function (props) {
+  var columns = props.columns,
+      styles = props.styles;
+  var reorderStyle = utils_1.getStyleFrom(styles, "reorder");
+  var containerStyle = utils_1.getStyleFrom(reorderStyle, "container");
+  var columnStyle = utils_1.getStyleFrom(reorderStyle, "column");
+  var textStyle = utils_1.getStyleFrom(reorderStyle, "text");
+  var columnComponents = columns.map(function (column, index) {
+    return React.createElement(react_beautiful_dnd_1.Draggable, {
+      key: column.id,
+      draggableId: column.id,
+      index: index
+    }, function (provided, snapshot) {
+      return React.createElement("div", Object.assign({
+        className: utils_1.applyStyles(columnStyle)
+      }, provided.draggableProps, provided.dragHandleProps, {
+        ref: provided.innerRef
+      }), React.createElement("span", {
+        className: utils_1.applyStyles(textStyle)
+      }, column.text));
+    });
+  });
+  return React.createElement(react_beautiful_dnd_1.DragDropContext, {
+    onDragEnd: props.saveNewOrder
+  }, React.createElement("div", null, React.createElement(react_beautiful_dnd_1.Droppable, {
+    droppableId: "columns",
+    direction: "horizontal"
+  }, function (provided) {
+    return React.createElement("div", Object.assign({}, provided.droppableProps, {
+      ref: provided.innerRef,
+      className: utils_1.applyStyles(containerStyle)
+    }), columnComponents, provided.placeholder);
+  })));
+};
+},{"react":"../node_modules/react/index.js","react-beautiful-dnd":"../node_modules/react-beautiful-dnd/dist/react-beautiful-dnd.esm.js","./utils":"../src/utils.ts"}],"../src/defaultStyles.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.defaultStyles = {
+  actions: {
+    wrapper: {
+      display: "flex",
+      justifyContent: "right"
+    }
+  },
+  grid: {
+    cell: {
+      boxSizing: "border-box",
+      overflow: "hidden",
+      padding: "10px 6px",
+      whiteSpace: "nowrap"
+    },
+    headers: {
+      backgroundColor: "rgb(247, 248, 249)",
+      borderBottom: "1px solid rgb(225, 227, 231)",
+      boxSizing: "border-box",
+      color: "rgb(148, 157, 173)",
+      fontSize: "0.9rem",
+      padding: "16px 6px 10px",
+      textAlign: "left",
+      textTransform: "uppercase"
+    },
+    row: {
+      "& + *": {
+        borderTop: "1px solid rgb(225, 227, 231)"
+      }
+    },
+    table: {
+      borderCollapse: "collapse",
+      tableLayout: "fixed"
+    },
+    wrapper: {
+      border: "1px solid rgb(225, 227, 231)",
+      borderRadius: "4px",
+      boxSizing: "border-box",
+      display: "inline-block",
+      overflow: "scroll"
+    }
+  },
+  reorder: {
+    column: {
+      display: "flex",
+      flex: "0 0 100px",
+      height: "calc(100px - 10px)"
+    },
+    container: {
+      display: "flex",
+      flexWrap: "nowrap"
+    },
+    text: {
+      alignItems: "center",
+      backgroundColor: "#aaa",
+      borderRadius: "10px",
+      display: "flex",
+      height: "100%",
+      justifyContent: "center",
+      margin: "10px",
+      width: "100%"
+    }
+  },
+  wrapper: {
+    display: "flex",
+    flexDirection: "column",
+    height: "inherit"
+  }
+};
+},{}],"../src/errorBoundary.tsx":[function(require,module,exports) {
+"use strict";
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+  }
+  result["default"] = mod;
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var React = __importStar(require("react"));
+
+var ErrorBoundary =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(ErrorBoundary, _React$Component);
+
+  function ErrorBoundary() {
+    var _this;
+
+    _classCallCheck(this, ErrorBoundary);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(ErrorBoundary).apply(this, arguments));
+    _this.state = {
+      hasError: false
+    };
+    return _this;
+  }
+
+  _createClass(ErrorBoundary, [{
+    key: "componentDidCatch",
+    value: function componentDidCatch(error) {
+      console.log(error);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      if (this.state.hasError) {
+        return React.createElement("h1", null, "error");
+      }
+
+      return this.props.children;
+    }
+  }], [{
+    key: "getDerivedStateFromError",
+    value: function getDerivedStateFromError(_) {
+      return {
+        hasError: true
+      };
+    }
+  }]);
+
+  return ErrorBoundary;
+}(React.Component);
+
+exports.ErrorBoundary = ErrorBoundary;
+},{"react":"../node_modules/react/index.js"}],"../src/body.tsx":[function(require,module,exports) {
+"use strict";
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+  }
+  result["default"] = mod;
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var React = __importStar(require("react"));
+
+var utils_1 = require("./utils");
+
+exports.Body = function (props) {
+  var columns = props.columns,
+      data = props.data,
+      styles = props.styles;
+  var gridStyles = utils_1.getStyleFrom(styles, "grid");
+  var cellStyles = utils_1.getStyleFrom(gridStyles, "cell");
+  var rowStyles = utils_1.getStyleFrom(gridStyles, "row");
+  var rows = data.map(function (datum) {
+    var rowKey = datum.id;
+    var cells = columns.map(function (column) {
+      var value = datum[column.text];
+      var cellKey = "".concat(rowKey, "--").concat(column.id);
+      var cellAttrs = {
+        key: cellKey,
+        className: utils_1.applyStyles(cellStyles)
+      };
+      return React.createElement("td", Object.assign({}, cellAttrs), value);
+    });
+    return React.createElement("tr", {
+      key: rowKey,
+      className: utils_1.applyStyles(rowStyles)
+    }, cells);
+  });
+  return React.createElement("tbody", null, rows);
+};
+},{"react":"../node_modules/react/index.js","./utils":"../src/utils.ts"}],"../src/colgroup.tsx":[function(require,module,exports) {
+"use strict";
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+  }
+  result["default"] = mod;
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var React = __importStar(require("react"));
+
+exports.Colgroup = function (props) {
+  var columns = props.columns,
+      placeholder = props.placeholder;
+  var cols = columns.map(function (column) {
+    var width = column.config.width;
+    var colProps = {
+      key: column.id,
+      style: {
+        width: "".concat(width, "px")
+      }
+    };
+    return React.createElement("col", Object.assign({}, colProps));
+  });
+  return React.createElement("colgroup", null, cols, placeholder);
+};
+},{"react":"../node_modules/react/index.js"}],"../src/empty.tsx":[function(require,module,exports) {
+"use strict";
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+  }
+  result["default"] = mod;
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var React = __importStar(require("react"));
+
+var defaultMessage = "no results";
+
+exports.Empty = function (_ref) {
+  var message = _ref.message;
+  return React.createElement("h1", null, message || defaultMessage);
+};
+},{"react":"../node_modules/react/index.js"}],"../src/gridWrapper.tsx":[function(require,module,exports) {
+"use strict";
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+  }
+  result["default"] = mod;
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var ramda_1 = require("ramda");
+
+var React = __importStar(require("react"));
+
+var utils_1 = require("./utils");
+
+exports.GridWrapper = function (props) {
+  var children = props.children,
+      styles = props.styles,
+      sticky = props.sticky,
+      theadRef = props.theadRef;
+  var gridStyles = utils_1.getStyleFrom(styles, "grid");
+  var style = utils_1.getStyleFrom(gridStyles, "wrapper");
+  var wrapperProps = {};
+
+  if (sticky.enabled && ramda_1.not(sticky.supported)) {
+    wrapperProps.onScroll = followHeaders(theadRef);
+  }
+
+  return React.createElement("div", Object.assign({
+    className: utils_1.applyStyles(style)
+  }, wrapperProps), children);
+};
+
+function followHeaders(theadRef) {
+  return function (event) {
+    var top = event.currentTarget.scrollTop;
+    var translate = "translate(0,".concat(top, "px)");
+    var thead = theadRef.current;
+
+    if (thead !== null) {
+      thead.style.transform = translate;
+    }
+  };
+}
+},{"ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","./utils":"../src/utils.ts"}],"../src/head.tsx":[function(require,module,exports) {
 "use strict";
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _templateObject2() {
-  var data = _taggedTemplateLiteral(["\n  background-color: rgba(255, 0, 0, 0.5);\n  width: auto;\n"]);
-
-  _templateObject2 = function _templateObject2() {
-    return data;
-  };
-
-  return data;
-}
 
 function _templateObject() {
   var data = _taggedTemplateLiteral(["\n  position: sticky;\n  top: 0;\n"]);
@@ -54217,54 +54429,29 @@ var emotion_1 = require("emotion");
 
 var React = __importStar(require("react"));
 
-var react_beautiful_dnd_1 = require("react-beautiful-dnd");
-
 var utils_1 = require("./utils");
 
 var stickyStyle = emotion_1.css(_templateObject());
-var draggingStyle = emotion_1.css(_templateObject2());
 exports.Head = React.forwardRef(function (props, ref) {
   var columns = props.columns,
       styles = props.styles,
-      sticky = props.sticky,
-      onReorder = props.onReorder;
-  var baseStyle = utils_1.getStyleFrom(styles, "headers");
+      sticky = props.sticky;
+  var gridStyles = utils_1.getStyleFrom(styles, "grid");
+  var baseStyle = utils_1.getStyleFrom(gridStyles, "headers");
   var hasStickyStyle = sticky.supported && sticky.enabled;
-
-  var getStyle = function getStyle(isDragging) {
-    var _emotion_1$cx;
-
-    return emotion_1.cx(baseStyle, (_emotion_1$cx = {}, _defineProperty(_emotion_1$cx, stickyStyle, hasStickyStyle), _defineProperty(_emotion_1$cx, draggingStyle, isDragging), _emotion_1$cx));
-  };
-
-  var columnLabels = columns.map(function (column, index) {
-    return React.createElement(react_beautiful_dnd_1.Draggable, {
+  var style = emotion_1.cx(utils_1.applyStyles(baseStyle), _defineProperty({}, stickyStyle, hasStickyStyle));
+  var columnLabels = columns.map(function (column) {
+    return React.createElement("th", {
       key: column.id,
-      draggableId: column.id,
-      index: index
-    }, function (provided, snapshot) {
-      return React.createElement("th", Object.assign({
-        className: getStyle(snapshot.isDragging),
-        scope: "col"
-      }, provided.draggableProps, provided.dragHandleProps, {
-        ref: provided.innerRef
-      }), column.text);
-    });
+      className: style,
+      scope: "col"
+    }, column.text);
   });
-  return React.createElement(react_beautiful_dnd_1.DragDropContext, {
-    onDragEnd: onReorder
-  }, React.createElement("thead", {
+  return React.createElement("thead", {
     ref: ref
-  }, React.createElement(react_beautiful_dnd_1.Droppable, {
-    droppableId: "column-headers",
-    direction: "horizontal"
-  }, function (provided) {
-    return React.createElement("tr", Object.assign({}, provided.droppableProps, {
-      ref: provided.innerRef
-    }), columnLabels, provided.placeholder);
-  })));
+  }, React.createElement("tr", null, columnLabels));
 });
-},{"emotion":"../node_modules/emotion/dist/index.esm.js","react":"../node_modules/react/index.js","react-beautiful-dnd":"../node_modules/react-beautiful-dnd/dist/react-beautiful-dnd.esm.js","./utils":"../src/utils.ts"}],"../src/table.tsx":[function(require,module,exports) {
+},{"emotion":"../node_modules/emotion/dist/index.esm.js","react":"../node_modules/react/index.js","./utils":"../src/utils.ts"}],"../src/table.tsx":[function(require,module,exports) {
 "use strict";
 
 function _templateObject() {
@@ -54309,82 +54496,15 @@ exports.Table = function (props) {
     var config = _ref.config;
     return config.width;
   }, columns));
-  var style = emotion_1.cx(utils_1.getStyleFrom(styles, "table"), emotion_1.css(_templateObject(), tableWidth));
+  var gridStyles = utils_1.getStyleFrom(styles, "grid");
+  var tableStyles = utils_1.getStyleFrom(gridStyles, "table");
+  var style = emotion_1.cx(utils_1.applyStyles(tableStyles), emotion_1.css(_templateObject(), tableWidth));
   return React.createElement("table", {
     className: style
   }, children);
 };
-},{"emotion":"../node_modules/emotion/dist/index.esm.js","ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","./utils":"../src/utils.ts"}],"../src/wrapper.tsx":[function(require,module,exports) {
+},{"emotion":"../node_modules/emotion/dist/index.esm.js","ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","./utils":"../src/utils.ts"}],"../src/grid.tsx":[function(require,module,exports) {
 "use strict";
-
-var __importStar = this && this.__importStar || function (mod) {
-  if (mod && mod.__esModule) return mod;
-  var result = {};
-  if (mod != null) for (var k in mod) {
-    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-  }
-  result["default"] = mod;
-  return result;
-};
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var ramda_1 = require("ramda");
-
-var React = __importStar(require("react"));
-
-var utils_1 = require("./utils");
-
-exports.Wrapper = function (props) {
-  var children = props.children,
-      styles = props.styles,
-      sticky = props.sticky,
-      theadRef = props.theadRef;
-  var style = utils_1.getStyleFrom(styles, "wrapper");
-  var wrapperProps = {};
-
-  if (sticky.enabled && ramda_1.not(sticky.supported)) {
-    wrapperProps.onScroll = followHeaders(theadRef);
-  }
-
-  return React.createElement("div", Object.assign({
-    className: style
-  }, wrapperProps), children);
-};
-
-function followHeaders(theadRef) {
-  return function (event) {
-    var top = event.currentTarget.scrollTop;
-    var translate = "translate(0,".concat(top, "px)");
-    var thead = theadRef.current;
-
-    if (thead !== null) {
-      thead.style.transform = translate;
-    }
-  };
-}
-},{"ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","./utils":"../src/utils.ts"}],"../src/grid.tsx":[function(require,module,exports) {
-"use strict";
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var __importStar = this && this.__importStar || function (mod) {
   if (mod && mod.__esModule) return mod;
@@ -54410,107 +54530,79 @@ var colgroup_1 = require("./colgroup");
 
 var empty_1 = require("./empty");
 
+var gridWrapper_1 = require("./gridWrapper");
+
 var head_1 = require("./head");
 
 var table_1 = require("./table");
 
-var utils_1 = require("./utils");
+exports.Grid = function (props) {
+  var columns = props.columns,
+      data = props.data,
+      config = props.config,
+      styles = props.styles,
+      sticky = props.sticky;
+  var theadRef = React.createRef();
 
-var wrapper_1 = require("./wrapper");
-
-var Grid =
-/*#__PURE__*/
-function (_React$Component) {
-  _inherits(Grid, _React$Component);
-
-  function Grid() {
-    var _this;
-
-    _classCallCheck(this, Grid);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Grid).apply(this, arguments));
-    _this.state = {
-      fields: _this.props.config.order || ramda_1.map(String, ramda_1.keys(_this.props.config.properties))
-    };
-    _this.fieldsLens = ramda_1.lensProp("fields");
-
-    _this.saveNewOrder = function (columns) {
-      return function (dropResult) {
-        var destination = dropResult.destination,
-            source = dropResult.source,
-            columnId = dropResult.draggableId;
-        var lacksDestination = ramda_1.isNil(destination);
-
-        if (lacksDestination) {
-          return;
-        }
-
-        var toIndex = destination.index;
-        var fromIndex = source.index;
-        var destinationChanged = toIndex !== fromIndex;
-
-        if (destinationChanged === false) {
-          return;
-        }
-
-        var column = ramda_1.find(ramda_1.propEq("id", columnId), columns);
-        var addAtIndex = ramda_1.insert(toIndex, column.text);
-        var removeAtIndex = ramda_1.remove(fromIndex, 1);
-        var update = ramda_1.over(_this.fieldsLens, ramda_1.pipe(removeAtIndex, addAtIndex));
-
-        _this.setState(update);
-      };
-    };
-
-    return _this;
+  if (ramda_1.isEmpty(data)) {
+    return React.createElement(empty_1.Empty, {
+      message: config.emptyMessage
+    });
   }
 
-  _createClass(Grid, [{
-    key: "render",
-    value: function render() {
-      var _this$props = this.props,
-          data = _this$props.data,
-          config = _this$props.config,
-          styles = _this$props.styles,
-          sticky = _this$props.sticky;
-      var fields = this.state.fields;
-      var theadRef = React.createRef();
-      var columns = utils_1.makeColumns(config, fields);
+  var wrapperProps = {
+    sticky: sticky,
+    styles: styles,
+    theadRef: theadRef
+  };
+  var headProps = {
+    columns: columns,
+    sticky: sticky,
+    styles: styles,
+    theadRef: theadRef
+  };
+  var bodyProps = {
+    columns: columns,
+    data: data,
+    styles: styles
+  };
+  var colGroupProps = {
+    columns: columns
+  };
+  var tableProps = {
+    columns: columns,
+    styles: styles
+  };
+  return React.createElement(gridWrapper_1.GridWrapper, Object.assign({}, wrapperProps), React.createElement(table_1.Table, Object.assign({}, tableProps), React.createElement(colgroup_1.Colgroup, Object.assign({}, colGroupProps)), React.createElement(head_1.Head, Object.assign({}, headProps)), React.createElement(body_1.Body, Object.assign({}, bodyProps))));
+};
+},{"ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","./body":"../src/body.tsx","./colgroup":"../src/colgroup.tsx","./empty":"../src/empty.tsx","./gridWrapper":"../src/gridWrapper.tsx","./head":"../src/head.tsx","./table":"../src/table.tsx"}],"../src/wrapper.tsx":[function(require,module,exports) {
+"use strict";
 
-      if (ramda_1.isEmpty(data)) {
-        return React.createElement(empty_1.Empty, {
-          message: config.emptyMessage
-        });
-      }
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+  }
+  result["default"] = mod;
+  return result;
+};
 
-      return React.createElement(wrapper_1.Wrapper, {
-        sticky: sticky,
-        styles: styles,
-        theadRef: theadRef
-      }, React.createElement(table_1.Table, {
-        styles: styles,
-        columns: columns
-      }, React.createElement(colgroup_1.Colgroup, {
-        columns: columns
-      }), React.createElement(head_1.Head, {
-        columns: columns,
-        styles: styles,
-        sticky: sticky,
-        onReorder: this.saveNewOrder(columns),
-        ref: theadRef
-      }), React.createElement(body_1.Body, {
-        columns: columns,
-        data: data,
-        styles: styles
-      })));
-    }
-  }]);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-  return Grid;
-}(React.Component);
+var React = __importStar(require("react"));
 
-exports.Grid = Grid;
-},{"ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","./body":"../src/body.tsx","./colgroup":"../src/colgroup.tsx","./empty":"../src/empty.tsx","./head":"../src/head.tsx","./table":"../src/table.tsx","./utils":"../src/utils.ts","./wrapper":"../src/wrapper.tsx"}],"../src/index.tsx":[function(require,module,exports) {
+var utils_1 = require("./utils");
+
+exports.Wrapper = function (props) {
+  var style = utils_1.getStyleFrom(props.styles, "wrapper");
+  return React.createElement("div", {
+    className: utils_1.applyStyles(style)
+  }, props.children);
+};
+},{"react":"../node_modules/react/index.js","./utils":"../src/utils.ts"}],"../src/index.tsx":[function(require,module,exports) {
 "use strict";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -54545,7 +54637,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var ramda_1 = require("ramda");
+
 var React = __importStar(require("react"));
+
+var actions_1 = require("./actions");
+
+var columnReorder_1 = require("./columnReorder");
+
+var defaultStyles_1 = require("./defaultStyles");
 
 var errorBoundary_1 = require("./errorBoundary");
 
@@ -54553,22 +54653,76 @@ var grid_1 = require("./grid");
 
 var utils_1 = require("./utils");
 
+var wrapper_1 = require("./wrapper");
+
+var Modes;
+
+(function (Modes) {
+  Modes["View"] = "View";
+  Modes["Edit"] = "Edit";
+  Modes["ReorderColumns"] = "ReorderColumns";
+})(Modes = exports.Modes || (exports.Modes = {}));
+
 var Table =
 /*#__PURE__*/
 function (_React$Component) {
   _inherits(Table, _React$Component);
 
-  function Table() {
+  function Table(props) {
     var _this;
 
     _classCallCheck(this, Table);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Table).apply(this, arguments));
-    _this.state = {
-      sticky: {
-        enabled: _this.props.config.stickyHeaders === true,
-        supported: utils_1.supports("position", "sticky")
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Table).call(this, props));
+    _this.columnsLens = ramda_1.lensProp("columns");
+    _this.modeLens = ramda_1.lensProp("mode");
+
+    _this.changeMode = function (newMode) {
+      return function (_) {
+        _this.setState(ramda_1.set(_this.modeLens, newMode));
+      };
+    };
+
+    _this.saveNewOrder = function (dropResult) {
+      var columns = _this.state.columns;
+      var destination = dropResult.destination,
+          source = dropResult.source,
+          columnId = dropResult.draggableId;
+      var lacksDestination = ramda_1.isNil(destination);
+
+      if (lacksDestination) {
+        return;
       }
+
+      var toIndex = destination.index;
+      var fromIndex = source.index;
+      var destinationChanged = toIndex !== fromIndex;
+
+      if (destinationChanged === false) {
+        return;
+      }
+
+      var column = ramda_1.find(ramda_1.propEq("id", columnId), columns);
+      var addAtIndex = ramda_1.insert(toIndex, column);
+      var removeAtIndex = ramda_1.remove(fromIndex, 1);
+      var update = ramda_1.pipe(removeAtIndex, addAtIndex);
+      var newColumns = update(columns);
+
+      _this.setState(ramda_1.set(_this.columnsLens, newColumns));
+    };
+
+    var config = props.config;
+    var fields = config.order || ramda_1.map(String, ramda_1.keys(config.properties));
+    var columns = utils_1.makeColumns(config, fields);
+    var mode = props.mode || Modes.View;
+    var sticky = {
+      enabled: config.stickyHeaders === true,
+      supported: utils_1.supports("position", "sticky")
+    };
+    _this.state = {
+      columns: columns,
+      sticky: sticky,
+      mode: mode
     };
     return _this;
   }
@@ -54576,7 +54730,47 @@ function (_React$Component) {
   _createClass(Table, [{
     key: "render",
     value: function render() {
-      return React.createElement(errorBoundary_1.ErrorBoundary, null, React.createElement(grid_1.Grid, Object.assign({}, this.props, this.state)));
+      var _this$props = this.props,
+          config = _this$props.config,
+          data = _this$props.data;
+      var _this$state = this.state,
+          columns = _this$state.columns,
+          mode = _this$state.mode,
+          sticky = _this$state.sticky;
+      var styles = ramda_1.mergeDeepLeft(this.props.styles, defaultStyles_1.defaultStyles);
+      var component = null;
+
+      switch (mode) {
+        case Modes.View:
+          component = React.createElement(React.Fragment, null, React.createElement(actions_1.Actions, {
+            styles: styles
+          }, React.createElement("button", {
+            onClick: this.changeMode(Modes.ReorderColumns)
+          }, "Re-order Columns")), React.createElement(grid_1.Grid, {
+            columns: columns,
+            config: config,
+            data: data,
+            sticky: sticky,
+            styles: styles
+          }));
+          break;
+
+        case Modes.ReorderColumns:
+          component = React.createElement(React.Fragment, null, React.createElement(actions_1.Actions, {
+            styles: styles
+          }, React.createElement("button", {
+            onClick: this.changeMode(Modes.View)
+          }, "Save Column Order")), React.createElement(columnReorder_1.ColumnReorder, {
+            columns: columns,
+            saveNewOrder: this.saveNewOrder,
+            styles: styles
+          }));
+          break;
+      }
+
+      return React.createElement(wrapper_1.Wrapper, {
+        styles: styles
+      }, React.createElement(errorBoundary_1.ErrorBoundary, null, component));
     }
   }]);
 
@@ -54584,7 +54778,7 @@ function (_React$Component) {
 }(React.Component);
 
 exports.Table = Table;
-},{"react":"../node_modules/react/index.js","./errorBoundary":"../src/errorBoundary.tsx","./grid":"../src/grid.tsx","./utils":"../src/utils.ts"}],"config.ts":[function(require,module,exports) {
+},{"ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","./actions":"../src/actions.tsx","./columnReorder":"../src/columnReorder.tsx","./defaultStyles":"../src/defaultStyles.ts","./errorBoundary":"../src/errorBoundary.tsx","./grid":"../src/grid.tsx","./utils":"../src/utils.ts","./wrapper":"../src/wrapper.tsx"}],"config.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -54657,38 +54851,8 @@ exports.data = [{
 },{}],"index.tsx":[function(require,module,exports) {
 "use strict";
 
-function _templateObject4() {
-  var data = _taggedTemplateLiteral(["\n    border: 1px solid #666;\n    box-sizing: border-box;\n    display: inline-block;\n    width: 600px;\n    height: 150px;\n    overflow: scroll;\n  "]);
-
-  _templateObject4 = function _templateObject4() {
-    return data;
-  };
-
-  return data;
-}
-
-function _templateObject3() {
-  var data = _taggedTemplateLiteral(["\n    border-collapse: collapse;\n    table-layout: fixed;\n  "]);
-
-  _templateObject3 = function _templateObject3() {
-    return data;
-  };
-
-  return data;
-}
-
-function _templateObject2() {
-  var data = _taggedTemplateLiteral(["\n    background-color: white;\n    box-sizing: border-box;\n    padding: 5px 10px;\n    text-align: left;\n    text-transform: uppercase;\n  "]);
-
-  _templateObject2 = function _templateObject2() {
-    return data;
-  };
-
-  return data;
-}
-
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["\n    white-space: nowrap;\n    overflow: hidden;\n    box-sizing: border-box;\n    padding: 5px 10px;\n  "]);
+  var data = _taggedTemplateLiteral(["\n  body {\n    margin: 0;\n    padding: 0;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    height: 100vh;\n  }\n\n  #container {\n    flex: 0 0 960px;\n    height: 400px;\n  }\n"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -54726,11 +54890,11 @@ var config_1 = require("./config");
 var data_1 = require("./data");
 
 var elem = document.getElementById("container");
+
+var _ = emotion_1.injectGlobal(_templateObject());
+
 var styles = {
-  cell: emotion_1.css(_templateObject()),
-  headers: emotion_1.css(_templateObject2()),
-  table: emotion_1.css(_templateObject3()),
-  wrapper: emotion_1.css(_templateObject4())
+  wrapper: {}
 };
 react_dom_1.render(React.createElement(src_1.Table, {
   config: config_1.config,

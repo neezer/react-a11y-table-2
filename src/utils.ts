@@ -1,3 +1,4 @@
+import { css } from "emotion";
 import { murmur3 } from "murmurhash-js";
 import {
   complement,
@@ -53,3 +54,7 @@ export const makeColumns = curryN(2, (config: IConfig, fields: string[]) => {
 
   return mapColumns(defaultFields);
 });
+
+export function applyStyles(styles: Styles) {
+  return css(styles);
+}
