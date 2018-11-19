@@ -21,4 +21,12 @@ export class Column {
     this.text = props.text;
     this.config = props.config;
   }
+
+  public setWidth(newWidth: number) {
+    return new Column({
+      config: { ...this.config, width: newWidth },
+      id: this.id,
+      text: this.text
+    });
+  }
 }

@@ -5,8 +5,32 @@ export const defaultStyles = {
       justifyContent: "right"
     }
   },
+  columnEdit: {
+    column: {
+      display: "flex",
+      flex: "0 0 100px",
+      height: "calc(100px - 10px)"
+    },
+    container: {
+      display: "flex",
+      flexWrap: "nowrap",
+      overflow: "scroll",
+      padding: "50px 0"
+    },
+    text: {
+      alignItems: "center",
+      backgroundColor: "#aaa",
+      borderRadius: "10px",
+      display: "flex",
+      height: "100%",
+      justifyContent: "center",
+      margin: "10px",
+      width: "100%"
+    }
+  },
   grid: {
     cell: {
+      backgroundColor: "#fff",
       boxSizing: "border-box",
       overflow: "hidden",
       padding: "10px 6px",
@@ -32,32 +56,12 @@ export const defaultStyles = {
       tableLayout: "fixed"
     },
     wrapper: {
+      backgroundColor: "rgb(225, 227, 231)",
       border: "1px solid rgb(225, 227, 231)",
       borderRadius: "4px",
       boxSizing: "border-box",
       display: "inline-block",
       overflow: "scroll"
-    }
-  },
-  reorder: {
-    column: {
-      display: "flex",
-      flex: "0 0 100px",
-      height: "calc(100px - 10px)"
-    },
-    container: {
-      display: "flex",
-      flexWrap: "nowrap"
-    },
-    text: {
-      alignItems: "center",
-      backgroundColor: "#aaa",
-      borderRadius: "10px",
-      display: "flex",
-      height: "100%",
-      justifyContent: "center",
-      margin: "10px",
-      width: "100%"
     }
   },
   wrapper: {

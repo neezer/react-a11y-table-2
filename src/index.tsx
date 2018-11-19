@@ -16,6 +16,7 @@ import { DraggableLocation, DropResult } from "react-beautiful-dnd";
 import { Actions } from "./actions";
 import { Column, PropertiesConfig } from "./column";
 import { ColumnReorder } from "./columnReorder";
+import { ColumnResize } from "./columnResize";
 import { defaultStyles } from "./defaultStyles";
 import { ErrorBoundary } from "./errorBoundary";
 import { Grid } from "./grid";
@@ -25,7 +26,8 @@ import { Wrapper } from "./wrapper";
 export enum Modes {
   View = "View",
   Edit = "Edit",
-  ReorderColumns = "ReorderColumns"
+  ReorderColumns = "ReorderColumns",
+  ResizeColumns = "ResizeColumns"
 }
 
 interface IProps {
@@ -70,6 +72,9 @@ export class Table extends React.Component<IProps, IState> {
               <button onClick={this.changeMode(Modes.ReorderColumns)}>
                 Re-order Columns
               </button>
+              <button onClick={this.changeMode(Modes.ResizeColumns)}>
+                Resize Columns
+              </button>
             </Actions>
             <Grid
               columns={columns}
@@ -98,6 +103,22 @@ export class Table extends React.Component<IProps, IState> {
         );
 
         break;
+
+      case Modes.ResizeColumns:
+        component = (
+          <React.Fragment>
+            <Actions styles={styles}>
+              <button onClick={this.changeMode(Modes.View)}>
+                Save Column Sizes
+              </button>
+            </Actions>
+            <ColumnResize
+              columns={columns}
+              styles={styles}
+              resize={this.resizeColumns}
+            />
+          </React.Fragment>
+        );
     }
 
     return (
@@ -140,6 +161,16 @@ export class Table extends React.Component<IProps, IState> {
     );
 
     const newColumns = update(columns);
+
+    this.setState(set(this.columnsLens, newColumns));
+  };
+
+  public resizeColumns = (newColumnWidths: number[]) => {
+    const { columns } = this.state;
+
+    const newColumns = columns.map((column, index) =>
+      column.setWidth(newColumnWidths[index])
+    );
 
     this.setState(set(this.columnsLens, newColumns));
   };

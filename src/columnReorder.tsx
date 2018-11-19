@@ -18,7 +18,7 @@ interface IProps {
 
 export const ColumnReorder: React.FunctionComponent<IProps> = props => {
   const { columns, styles } = props;
-  const reorderStyle = getStyleFrom(styles, "reorder");
+  const reorderStyle = getStyleFrom(styles, "columnEdit");
   const containerStyle = getStyleFrom(reorderStyle, "container");
   const columnStyle = getStyleFrom(reorderStyle, "column");
   const textStyle = getStyleFrom(reorderStyle, "text");

@@ -18,8 +18,8 @@ const _ = injectGlobal`
   }
 
   #container {
-    flex: 0 0 960px;
     height: 400px;
+    width: 960px;
   }
 `;
 
