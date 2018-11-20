@@ -1,8 +1,29 @@
 export const defaultStyles = {
   actions: {
+    button: {
+      "&:first-of-type": {
+        borderBottomLeftRadius: "4px",
+        borderTopLeftRadius: "4px"
+      },
+      "&:hover": {
+        backgroundColor: "#485460"
+      },
+      "&:last-of-type": {
+        borderBottomRightRadius: "4px",
+        borderTopRightRadius: "4px"
+      },
+      backgroundColor: "#1e272e",
+      border: 0,
+      color: "#fff",
+      cursor: "pointer",
+      fontSize: ".8rem",
+      fontWeight: "bold",
+      padding: "10px"
+    },
     wrapper: {
       display: "flex",
-      justifyContent: "right"
+      justifyContent: "right",
+      padding: "20px 0"
     }
   },
   columnEdit: {
@@ -12,19 +33,30 @@ export const defaultStyles = {
       height: "calc(100px - 10px)"
     },
     container: {
+      backgroundColor: "rgb(225, 227, 231)",
+      borderRadius: "4px",
       display: "flex",
+      flex: "1 auto",
       flexWrap: "nowrap",
-      overflow: "scroll",
-      padding: "50px 0"
+      overflow: "scroll"
+    },
+    dragHandle: {
+      backgroundColor: "transparent",
+      border: "1px solid red",
+      cursor: "ew-resize",
+      flexWrap: "nowrap",
+      height: "calc(100px - 10px)",
+      margin: "0 10px"
     },
     text: {
       alignItems: "center",
-      backgroundColor: "#aaa",
+      backgroundColor: "#575fcf",
       borderRadius: "10px",
+      color: "#fff",
       display: "flex",
+      fontWeight: "bold",
       height: "100%",
       justifyContent: "center",
-      margin: "10px",
       width: "100%"
     }
   },

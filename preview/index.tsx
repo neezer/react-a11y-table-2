@@ -15,6 +15,7 @@ const _ = injectGlobal`
     justify-content: center;
     align-items: center;
     height: 100vh;
+    background-color: #808e9b;
   }
 
   #container {

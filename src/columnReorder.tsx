@@ -1,3 +1,4 @@
+import { mergeDeepLeft } from "ramda";
 import * as React from "react";
 import {
   DragDropContext,
@@ -21,7 +22,10 @@ export const ColumnReorder: React.FunctionComponent<IProps> = props => {
   const reorderStyle = getStyleFrom(styles, "columnEdit");
   const containerStyle = getStyleFrom(reorderStyle, "container");
   const columnStyle = getStyleFrom(reorderStyle, "column");
-  const textStyle = getStyleFrom(reorderStyle, "text");
+
+  const textStyle = mergeDeepLeft(getStyleFrom(reorderStyle, "text"), {
+    margin: "10px"
+  });
 
   const columnComponents = columns.map((column, index) => (
     <Draggable key={column.id} draggableId={column.id} index={index}>
@@ -44,20 +48,18 @@ export const ColumnReorder: React.FunctionComponent<IProps> = props => {
 
   return (
     <DragDropContext onDragEnd={props.saveNewOrder}>
-      <div>
-        <Droppable droppableId="columns" direction="horizontal">
-          {provided => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              className={applyStyles(containerStyle)}
-            >
-              {columnComponents}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </div>
+      <Droppable droppableId="columns" direction="horizontal">
+        {provided => (
+          <div
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            className={applyStyles(containerStyle)}
+          >
+            {columnComponents}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
     </DragDropContext>
   );
 };

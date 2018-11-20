@@ -54065,6 +54065,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var ramda_1 = require("ramda");
+
 var React = __importStar(require("react"));
 
 var react_beautiful_dnd_1 = require("react-beautiful-dnd");
@@ -54077,7 +54079,9 @@ exports.ColumnReorder = function (props) {
   var reorderStyle = utils_1.getStyleFrom(styles, "columnEdit");
   var containerStyle = utils_1.getStyleFrom(reorderStyle, "container");
   var columnStyle = utils_1.getStyleFrom(reorderStyle, "column");
-  var textStyle = utils_1.getStyleFrom(reorderStyle, "text");
+  var textStyle = ramda_1.mergeDeepLeft(utils_1.getStyleFrom(reorderStyle, "text"), {
+    margin: "10px"
+  });
   var columnComponents = columns.map(function (column, index) {
     return React.createElement(react_beautiful_dnd_1.Draggable, {
       key: column.id,
@@ -54096,7 +54100,7 @@ exports.ColumnReorder = function (props) {
   });
   return React.createElement(react_beautiful_dnd_1.DragDropContext, {
     onDragEnd: props.saveNewOrder
-  }, React.createElement("div", null, React.createElement(react_beautiful_dnd_1.Droppable, {
+  }, React.createElement(react_beautiful_dnd_1.Droppable, {
     droppableId: "columns",
     direction: "horizontal"
   }, function (provided) {
@@ -54104,7 +54108,7 @@ exports.ColumnReorder = function (props) {
       ref: provided.innerRef,
       className: utils_1.applyStyles(containerStyle)
     }), columnComponents, provided.placeholder);
-  })));
+  }));
 };
 
 function getDraggingStyle(dragStyle, isDragging) {
@@ -54139,7 +54143,7 @@ function transitionIncludesTransform(transition) {
 
   return /transform/.test(transition);
 }
-},{"react":"../node_modules/react/index.js","react-beautiful-dnd":"../node_modules/react-beautiful-dnd/dist/react-beautiful-dnd.esm.js","./utils":"../src/utils.ts"}],"../node_modules/@most/prelude/dist/index.es.js":[function(require,module,exports) {
+},{"ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","react-beautiful-dnd":"../node_modules/react-beautiful-dnd/dist/react-beautiful-dnd.esm.js","./utils":"../src/utils.ts"}],"../node_modules/@most/prelude/dist/index.es.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -60107,28 +60111,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-function _templateObject2() {
-  var data = _taggedTemplateLiteral(["\n  cursor: grab;\n"]);
-
-  _templateObject2 = function _templateObject2() {
-    return data;
-  };
-
-  return data;
-}
-
-function _templateObject() {
-  var data = _taggedTemplateLiteral(["\n  cursor: grabbing !important;\n"]);
-
-  _templateObject = function _templateObject() {
-    return data;
-  };
-
-  return data;
-}
-
-function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
-
 var __importStar = this && this.__importStar || function (mod) {
   if (mod && mod.__esModule) return mod;
   var result = {};
@@ -60149,16 +60131,12 @@ var dom_event_1 = require("@most/dom-event");
 
 var scheduler_1 = require("@most/scheduler");
 
-var emotion_1 = require("emotion");
-
 var ramda_1 = require("ramda");
 
 var React = __importStar(require("react"));
 
 var utils_1 = require("./utils");
 
-var draggingStyle = emotion_1.css(_templateObject());
-var dragHandleStyle = emotion_1.css(_templateObject2());
 var THROTTLE = 10; // milliseconds
 
 var MIN_WIDTH = 30;
@@ -60211,13 +60189,10 @@ function (_React$Component) {
         var colElem = ref.current;
 
         var mouseupEffects = function mouseupEffects(_) {
-          dragStyle.remove();
-
           _this2.props.resize(_this2.state.columnWidths);
         };
 
-        var dragStyle = toggleStyle(draggingStyle, colElem);
-        var mousedowns = core_1.tap(dragStyle.add, core_1.map(getX, dom_event_1.mousedown(colElem)));
+        var mousedowns = core_1.map(getX, dom_event_1.mousedown(colElem));
         var mouseups = core_1.tap(mouseupEffects, core_1.map(getX, dom_event_1.mouseup(window)));
         var mousemoves = core_1.skipRepeats(core_1.map(getX, dom_event_1.mousemove(window)));
         var dragStream = core_1.chain(function (startX) {
@@ -60243,8 +60218,11 @@ function (_React$Component) {
           styles = _this$props.styles;
       var columnWidths = this.state.columnWidths;
       var editStyle = utils_1.getStyleFrom(styles, "columnEdit");
-      var containerStyle = utils_1.getStyleFrom(editStyle, "container");
       var textStyle = utils_1.getStyleFrom(editStyle, "text");
+      var dragHandleStyle = utils_1.getStyleFrom(editStyle, "dragHandle");
+      var containerStyle = ramda_1.mergeDeepLeft(utils_1.getStyleFrom(editStyle, "container"), {
+        padding: "10px"
+      });
       var columnComponents = columns.map(function (column, index) {
         var width = "".concat(columnWidths[index], "px !important");
         var ref = React.createRef();
@@ -60262,7 +60240,7 @@ function (_React$Component) {
           className: utils_1.applyStyles(textStyle)
         }, column.text)), React.createElement("button", {
           ref: ref,
-          className: dragHandleStyle
+          className: utils_1.applyStyles(dragHandleStyle)
         }, "Drag handle"));
       });
       return React.createElement("div", {
@@ -60285,18 +60263,7 @@ function getΔX(startX) {
     return x - startX;
   };
 }
-
-function toggleStyle(style, elem) {
-  return {
-    add: function add() {
-      elem.classList.add(style);
-    },
-    remove: function remove() {
-      elem.classList.remove(style);
-    }
-  };
-}
-},{"@most/core":"../node_modules/@most/core/dist/index.es.js","@most/dom-event":"../node_modules/@most/dom-event/dist/index.es.js","@most/scheduler":"../node_modules/@most/scheduler/dist/index.es.js","emotion":"../node_modules/emotion/dist/index.esm.js","ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","./utils":"../src/utils.ts"}],"../src/defaultStyles.ts":[function(require,module,exports) {
+},{"@most/core":"../node_modules/@most/core/dist/index.es.js","@most/dom-event":"../node_modules/@most/dom-event/dist/index.es.js","@most/scheduler":"../node_modules/@most/scheduler/dist/index.es.js","ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","./utils":"../src/utils.ts"}],"../src/defaultStyles.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -60304,9 +60271,30 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.defaultStyles = {
   actions: {
+    button: {
+      "&:first-of-type": {
+        borderBottomLeftRadius: "4px",
+        borderTopLeftRadius: "4px"
+      },
+      "&:hover": {
+        backgroundColor: "#485460"
+      },
+      "&:last-of-type": {
+        borderBottomRightRadius: "4px",
+        borderTopRightRadius: "4px"
+      },
+      backgroundColor: "#1e272e",
+      border: 0,
+      color: "#fff",
+      cursor: "pointer",
+      fontSize: ".8rem",
+      fontWeight: "bold",
+      padding: "10px"
+    },
     wrapper: {
       display: "flex",
-      justifyContent: "right"
+      justifyContent: "right",
+      padding: "20px 0"
     }
   },
   columnEdit: {
@@ -60316,19 +60304,30 @@ exports.defaultStyles = {
       height: "calc(100px - 10px)"
     },
     container: {
+      backgroundColor: "rgb(225, 227, 231)",
+      borderRadius: "4px",
       display: "flex",
+      flex: "1 auto",
       flexWrap: "nowrap",
-      overflow: "scroll",
-      padding: "50px 0"
+      overflow: "scroll"
+    },
+    dragHandle: {
+      backgroundColor: "transparent",
+      border: "1px solid red",
+      cursor: "ew-resize",
+      flexWrap: "nowrap",
+      height: "calc(100px - 10px)",
+      margin: "0 10px"
     },
     text: {
       alignItems: "center",
-      backgroundColor: "#aaa",
+      backgroundColor: "#575fcf",
       borderRadius: "10px",
+      color: "#fff",
       display: "flex",
+      fontWeight: "bold",
       height: "100%",
       justifyContent: "center",
-      margin: "10px",
       width: "100%"
     }
   },
@@ -60968,6 +60967,8 @@ function (_React$Component) {
           mode = _this$state.mode,
           sticky = _this$state.sticky;
       var styles = ramda_1.mergeDeepLeft(this.props.styles, defaultStyles_1.defaultStyles);
+      var actionsStyle = utils_1.getStyleFrom(styles, "actions");
+      var buttonStyle = utils_1.getStyleFrom(actionsStyle, "button");
       var component = null;
 
       switch (mode) {
@@ -60975,9 +60976,11 @@ function (_React$Component) {
           component = React.createElement(React.Fragment, null, React.createElement(actions_1.Actions, {
             styles: styles
           }, React.createElement("button", {
-            onClick: this.changeMode(Modes.ReorderColumns)
+            onClick: this.changeMode(Modes.ReorderColumns),
+            className: utils_1.applyStyles(buttonStyle)
           }, "Re-order Columns"), React.createElement("button", {
-            onClick: this.changeMode(Modes.ResizeColumns)
+            onClick: this.changeMode(Modes.ResizeColumns),
+            className: utils_1.applyStyles(buttonStyle)
           }, "Resize Columns")), React.createElement(grid_1.Grid, {
             columns: columns,
             config: config,
@@ -60991,7 +60994,8 @@ function (_React$Component) {
           component = React.createElement(React.Fragment, null, React.createElement(actions_1.Actions, {
             styles: styles
           }, React.createElement("button", {
-            onClick: this.changeMode(Modes.View)
+            onClick: this.changeMode(Modes.View),
+            className: utils_1.applyStyles(buttonStyle)
           }, "Save Column Order")), React.createElement(columnReorder_1.ColumnReorder, {
             columns: columns,
             saveNewOrder: this.saveNewOrder,
@@ -61003,7 +61007,8 @@ function (_React$Component) {
           component = React.createElement(React.Fragment, null, React.createElement(actions_1.Actions, {
             styles: styles
           }, React.createElement("button", {
-            onClick: this.changeMode(Modes.View)
+            onClick: this.changeMode(Modes.View),
+            className: utils_1.applyStyles(buttonStyle)
           }, "Save Column Sizes")), React.createElement(columnResize_1.ColumnResize, {
             columns: columns,
             styles: styles,
@@ -61095,7 +61100,7 @@ exports.data = [{
 "use strict";
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["\n  body {\n    margin: 0;\n    padding: 0;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    height: 100vh;\n  }\n\n  #container {\n    height: 400px;\n    width: 960px;\n  }\n"]);
+  var data = _taggedTemplateLiteral(["\n  body {\n    margin: 0;\n    padding: 0;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    height: 100vh;\n    background-color: #808e9b;\n  }\n\n  #container {\n    height: 400px;\n    width: 960px;\n  }\n"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -61171,7 +61176,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56434" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58026" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

@@ -9,7 +9,6 @@ import {
 } from "@most/core";
 import { mousedown, mousemove, mouseup } from "@most/dom-event";
 import { newDefaultScheduler } from "@most/scheduler";
-import { css } from "emotion";
 import { allPass, gt, lensPath, lt, mergeDeepLeft, set } from "ramda";
 import * as React from "react";
 import { Columns, Styles } from ".";
@@ -24,14 +23,6 @@ interface IProps {
 interface IState {
   columnWidths: number[];
 }
-
-const draggingStyle = css`
-  cursor: grabbing !important;
-`;
-
-const dragHandleStyle = css`
-  cursor: grab;
-`;
 
 const THROTTLE = 10; // milliseconds
 const MIN_WIDTH = 30;
@@ -53,12 +44,10 @@ export class ColumnResize extends React.Component<IProps, IState> {
       const { current: colElem } = ref;
 
       const mouseupEffects = (_: number) => {
-        dragStyle.remove();
         this.props.resize(this.state.columnWidths);
       };
 
-      const dragStyle = toggleStyle(draggingStyle, colElem);
-      const mousedowns = tap(dragStyle.add, map(getX, mousedown(colElem)));
+      const mousedowns = map(getX, mousedown(colElem));
       const mouseups = tap(mouseupEffects, map(getX, mouseup(window)));
       const mousemoves = skipRepeats(map(getX, mousemove(window)));
 
@@ -82,8 +71,12 @@ export class ColumnResize extends React.Component<IProps, IState> {
     const { columns, styles } = this.props;
     const { columnWidths } = this.state;
     const editStyle = getStyleFrom(styles, "columnEdit");
-    const containerStyle = getStyleFrom(editStyle, "container");
     const textStyle = getStyleFrom(editStyle, "text");
+    const dragHandleStyle = getStyleFrom(editStyle, "dragHandle");
+
+    const containerStyle = mergeDeepLeft(getStyleFrom(editStyle, "container"), {
+      padding: "10px"
+    });
 
     const columnComponents = columns.map((column, index) => {
       const width = `${columnWidths[index]}px !important`;
@@ -101,7 +94,7 @@ export class ColumnResize extends React.Component<IProps, IState> {
           <div className={applyStyles(columnStyle)}>
             <span className={applyStyles(textStyle)}>{column.text}</span>
           </div>
-          <button ref={ref} className={dragHandleStyle}>
+          <button ref={ref} className={applyStyles(dragHandleStyle)}>
             Drag handle
           </button>
         </React.Fragment>
@@ -133,15 +126,4 @@ function getX(event: MouseEvent) {
 
 function getΔX(startX: number) {
   return (x: number) => x - startX;
-}
-
-function toggleStyle(style: string, elem: HTMLButtonElement) {
-  return {
-    add: () => {
-      elem.classList.add(style);
-    },
-    remove: () => {
-      elem.classList.remove(style);
-    }
-  };
 }

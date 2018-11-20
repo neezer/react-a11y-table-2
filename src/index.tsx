@@ -20,7 +20,7 @@ import { ColumnResize } from "./columnResize";
 import { defaultStyles } from "./defaultStyles";
 import { ErrorBoundary } from "./errorBoundary";
 import { Grid } from "./grid";
-import { makeColumns, supports } from "./utils";
+import { applyStyles, getStyleFrom, makeColumns, supports } from "./utils";
 import { Wrapper } from "./wrapper";
 
 export enum Modes {
@@ -61,6 +61,8 @@ export class Table extends React.Component<IProps, IState> {
     const { config, data } = this.props;
     const { columns, mode, sticky } = this.state;
     const styles = mergeDeepLeft(this.props.styles, defaultStyles);
+    const actionsStyle = getStyleFrom(styles, "actions");
+    const buttonStyle = getStyleFrom(actionsStyle, "button");
 
     let component = null;
 
@@ -69,10 +71,16 @@ export class Table extends React.Component<IProps, IState> {
         component = (
           <React.Fragment>
             <Actions styles={styles}>
-              <button onClick={this.changeMode(Modes.ReorderColumns)}>
+              <button
+                onClick={this.changeMode(Modes.ReorderColumns)}
+                className={applyStyles(buttonStyle)}
+              >
                 Re-order Columns
               </button>
-              <button onClick={this.changeMode(Modes.ResizeColumns)}>
+              <button
+                onClick={this.changeMode(Modes.ResizeColumns)}
+                className={applyStyles(buttonStyle)}
+              >
                 Resize Columns
               </button>
             </Actions>
@@ -90,7 +98,10 @@ export class Table extends React.Component<IProps, IState> {
         component = (
           <React.Fragment>
             <Actions styles={styles}>
-              <button onClick={this.changeMode(Modes.View)}>
+              <button
+                onClick={this.changeMode(Modes.View)}
+                className={applyStyles(buttonStyle)}
+              >
                 Save Column Order
               </button>
             </Actions>
@@ -108,7 +119,10 @@ export class Table extends React.Component<IProps, IState> {
         component = (
           <React.Fragment>
             <Actions styles={styles}>
-              <button onClick={this.changeMode(Modes.View)}>
+              <button
+                onClick={this.changeMode(Modes.View)}
+                className={applyStyles(buttonStyle)}
+              >
                 Save Column Sizes
               </button>
             </Actions>
