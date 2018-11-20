@@ -1,8 +1,10 @@
 import {
   find,
+  findIndex,
   insert,
   isNil,
   keys,
+  lensPath,
   lensProp,
   map,
   mergeDeepLeft,
@@ -15,6 +17,7 @@ import * as React from "react";
 import { DraggableLocation, DropResult } from "react-beautiful-dnd";
 import { Actions } from "./actions";
 import { Column, PropertiesConfig } from "./column";
+import { ColumnPicker } from "./columnPicker";
 import { ColumnReorder } from "./columnReorder";
 import { ColumnResize } from "./columnResize";
 import { defaultStyles } from "./defaultStyles";
@@ -27,7 +30,8 @@ export enum Modes {
   View = "View",
   Edit = "Edit",
   ReorderColumns = "ReorderColumns",
-  ResizeColumns = "ResizeColumns"
+  ResizeColumns = "ResizeColumns",
+  PickColumns = "PickColumns"
 }
 
 interface IProps {
@@ -59,7 +63,8 @@ export class Table extends React.Component<IProps, IState> {
 
   public render() {
     const { config, data } = this.props;
-    const { columns, mode, sticky } = this.state;
+    const { columns: allColumns, mode, sticky } = this.state;
+    const visibleColumns = allColumns.filter(column => column.visible);
     const styles = mergeDeepLeft(this.props.styles, defaultStyles);
     const actionsStyle = getStyleFrom(styles, "actions");
     const buttonStyle = getStyleFrom(actionsStyle, "button");
@@ -83,9 +88,15 @@ export class Table extends React.Component<IProps, IState> {
               >
                 Resize Columns
               </button>
+              <button
+                onClick={this.changeMode(Modes.PickColumns)}
+                className={applyStyles(buttonStyle)}
+              >
+                Show/Hide Columns
+              </button>
             </Actions>
             <Grid
-              columns={columns}
+              columns={visibleColumns}
               config={config}
               data={data}
               sticky={sticky}
@@ -93,7 +104,9 @@ export class Table extends React.Component<IProps, IState> {
             />
           </React.Fragment>
         );
+
         break;
+
       case Modes.ReorderColumns:
         component = (
           <React.Fragment>
@@ -106,7 +119,7 @@ export class Table extends React.Component<IProps, IState> {
               </button>
             </Actions>
             <ColumnReorder
-              columns={columns}
+              columns={visibleColumns}
               saveNewOrder={this.saveNewOrder}
               styles={styles}
             />
@@ -127,12 +140,35 @@ export class Table extends React.Component<IProps, IState> {
               </button>
             </Actions>
             <ColumnResize
-              columns={columns}
+              columns={visibleColumns}
               styles={styles}
               resize={this.resizeColumns}
             />
           </React.Fragment>
         );
+
+        break;
+
+      case Modes.PickColumns:
+        component = (
+          <React.Fragment>
+            <Actions styles={styles}>
+              <button
+                onClick={this.changeMode(Modes.View)}
+                className={applyStyles(buttonStyle)}
+              >
+                Save Column Visibility
+              </button>
+            </Actions>
+            <ColumnPicker
+              columns={allColumns}
+              styles={styles}
+              toggle={this.toggleColumn}
+            />
+          </React.Fragment>
+        );
+
+        break;
     }
 
     return (
@@ -141,6 +177,16 @@ export class Table extends React.Component<IProps, IState> {
       </Wrapper>
     );
   }
+
+  public toggleColumn = (column: Column) => (
+    _: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const index = findIndex(col => col.id === column.id, this.state.columns);
+    const lens = lensPath(["columns", index]);
+    const update = set(lens, column.toggleVisibility());
+
+    this.setState(update);
+  };
 
   public changeMode = (newMode: Modes) => (
     _: React.MouseEvent<HTMLButtonElement>

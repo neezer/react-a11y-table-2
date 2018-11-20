@@ -42433,6 +42433,7 @@ function () {
     this.id = props.id;
     this.text = props.text;
     this.config = props.config;
+    this.visible = props.visible;
   }
 
   _createClass(Column, [{
@@ -42443,7 +42444,18 @@ function () {
           width: newWidth
         }),
         id: this.id,
-        text: this.text
+        text: this.text,
+        visible: this.visible
+      });
+    }
+  }, {
+    key: "toggleVisibility",
+    value: function toggleVisibility() {
+      return new Column({
+        config: this.config,
+        id: this.id,
+        text: this.text,
+        visible: !this.visible
       });
     }
   }]);
@@ -42497,16 +42509,11 @@ exports.makeColumns = ramda_1.curryN(2, function (config, fields) {
     return new column_1.Column({
       config: config.properties[field],
       id: hash(field),
-      text: field
+      text: field,
+      visible: true
     });
   });
-  var defaultFields = config.order || ramda_1.map(String, ramda_1.keys(config.properties));
-
-  if (exports.isNotEmpty(fields)) {
-    return mapColumns(fields);
-  }
-
-  return mapColumns(defaultFields);
+  return mapColumns(fields);
 });
 
 function applyStyles(styles) {
@@ -42542,7 +42549,40 @@ exports.Actions = function (props) {
     className: utils_1.applyStyles(wrapperStyle)
   }, props.children);
 };
-},{"react":"../node_modules/react/index.js","./utils":"../src/utils.ts"}],"../node_modules/symbol-observable/es/ponyfill.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","./utils":"../src/utils.ts"}],"../src/columnPicker.tsx":[function(require,module,exports) {
+"use strict";
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+  }
+  result["default"] = mod;
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var React = __importStar(require("react"));
+
+exports.ColumnPicker = function (props) {
+  var columns = props.columns,
+      toggle = props.toggle;
+  var columnComponents = columns.map(function (column) {
+    return React.createElement("li", {
+      key: column.id
+    }, React.createElement("input", {
+      type: "checkbox",
+      checked: column.visible,
+      onChange: toggle(column)
+    }), column.text);
+  });
+  return React.createElement("ol", null, columnComponents);
+};
+},{"react":"../node_modules/react/index.js"}],"../node_modules/symbol-observable/es/ponyfill.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -60860,6 +60900,8 @@ var React = __importStar(require("react"));
 
 var actions_1 = require("./actions");
 
+var columnPicker_1 = require("./columnPicker");
+
 var columnReorder_1 = require("./columnReorder");
 
 var columnResize_1 = require("./columnResize");
@@ -60881,6 +60923,7 @@ var Modes;
   Modes["Edit"] = "Edit";
   Modes["ReorderColumns"] = "ReorderColumns";
   Modes["ResizeColumns"] = "ResizeColumns";
+  Modes["PickColumns"] = "PickColumns";
 })(Modes = exports.Modes || (exports.Modes = {}));
 
 var Table =
@@ -60896,6 +60939,18 @@ function (_React$Component) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Table).call(this, props));
     _this.columnsLens = ramda_1.lensProp("columns");
     _this.modeLens = ramda_1.lensProp("mode");
+
+    _this.toggleColumn = function (column) {
+      return function (_) {
+        var index = ramda_1.findIndex(function (col) {
+          return col.id === column.id;
+        }, _this.state.columns);
+        var lens = ramda_1.lensPath(["columns", index]);
+        var update = ramda_1.set(lens, column.toggleVisibility());
+
+        _this.setState(update);
+      };
+    };
 
     _this.changeMode = function (newMode) {
       return function (_) {
@@ -60963,9 +61018,12 @@ function (_React$Component) {
           config = _this$props.config,
           data = _this$props.data;
       var _this$state = this.state,
-          columns = _this$state.columns,
+          allColumns = _this$state.columns,
           mode = _this$state.mode,
           sticky = _this$state.sticky;
+      var visibleColumns = allColumns.filter(function (column) {
+        return column.visible;
+      });
       var styles = ramda_1.mergeDeepLeft(this.props.styles, defaultStyles_1.defaultStyles);
       var actionsStyle = utils_1.getStyleFrom(styles, "actions");
       var buttonStyle = utils_1.getStyleFrom(actionsStyle, "button");
@@ -60981,8 +61039,11 @@ function (_React$Component) {
           }, "Re-order Columns"), React.createElement("button", {
             onClick: this.changeMode(Modes.ResizeColumns),
             className: utils_1.applyStyles(buttonStyle)
-          }, "Resize Columns")), React.createElement(grid_1.Grid, {
-            columns: columns,
+          }, "Resize Columns"), React.createElement("button", {
+            onClick: this.changeMode(Modes.PickColumns),
+            className: utils_1.applyStyles(buttonStyle)
+          }, "Show/Hide Columns")), React.createElement(grid_1.Grid, {
+            columns: visibleColumns,
             config: config,
             data: data,
             sticky: sticky,
@@ -60997,7 +61058,7 @@ function (_React$Component) {
             onClick: this.changeMode(Modes.View),
             className: utils_1.applyStyles(buttonStyle)
           }, "Save Column Order")), React.createElement(columnReorder_1.ColumnReorder, {
-            columns: columns,
+            columns: visibleColumns,
             saveNewOrder: this.saveNewOrder,
             styles: styles
           }));
@@ -61010,10 +61071,24 @@ function (_React$Component) {
             onClick: this.changeMode(Modes.View),
             className: utils_1.applyStyles(buttonStyle)
           }, "Save Column Sizes")), React.createElement(columnResize_1.ColumnResize, {
-            columns: columns,
+            columns: visibleColumns,
             styles: styles,
             resize: this.resizeColumns
           }));
+          break;
+
+        case Modes.PickColumns:
+          component = React.createElement(React.Fragment, null, React.createElement(actions_1.Actions, {
+            styles: styles
+          }, React.createElement("button", {
+            onClick: this.changeMode(Modes.View),
+            className: utils_1.applyStyles(buttonStyle)
+          }, "Save Column Visibility")), React.createElement(columnPicker_1.ColumnPicker, {
+            columns: allColumns,
+            styles: styles,
+            toggle: this.toggleColumn
+          }));
+          break;
       }
 
       return React.createElement(wrapper_1.Wrapper, {
@@ -61026,7 +61101,7 @@ function (_React$Component) {
 }(React.Component);
 
 exports.Table = Table;
-},{"ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","./actions":"../src/actions.tsx","./columnReorder":"../src/columnReorder.tsx","./columnResize":"../src/columnResize.tsx","./defaultStyles":"../src/defaultStyles.ts","./errorBoundary":"../src/errorBoundary.tsx","./grid":"../src/grid.tsx","./utils":"../src/utils.ts","./wrapper":"../src/wrapper.tsx"}],"config.ts":[function(require,module,exports) {
+},{"ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","./actions":"../src/actions.tsx","./columnPicker":"../src/columnPicker.tsx","./columnReorder":"../src/columnReorder.tsx","./columnResize":"../src/columnResize.tsx","./defaultStyles":"../src/defaultStyles.ts","./errorBoundary":"../src/errorBoundary.tsx","./grid":"../src/grid.tsx","./utils":"../src/utils.ts","./wrapper":"../src/wrapper.tsx"}],"config.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -61176,7 +61251,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58026" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59533" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

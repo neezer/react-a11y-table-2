@@ -1,15 +1,6 @@
-import { css } from "emotion";
+import { css, Interpolation } from "emotion";
 import { murmur3 } from "murmurhash-js";
-import {
-  complement,
-  curryN,
-  is,
-  isEmpty,
-  isNil,
-  keys,
-  map,
-  propOr
-} from "ramda";
+import { complement, curryN, is, isEmpty, isNil, map, propOr } from "ramda";
 import { IConfig, Styles } from ".";
 import { Column } from "./column";
 
@@ -42,19 +33,14 @@ export const makeColumns = curryN(2, (config: IConfig, fields: string[]) => {
       new Column({
         config: config.properties[field],
         id: hash(field),
-        text: field
+        text: field,
+        visible: true
       })
   );
 
-  const defaultFields = config.order || map(String, keys(config.properties));
-
-  if (isNotEmpty(fields)) {
-    return mapColumns(fields);
-  }
-
-  return mapColumns(defaultFields);
+  return mapColumns(fields);
 });
 
-export function applyStyles(styles: Styles) {
+export function applyStyles(styles: Interpolation) {
   return css(styles);
 }
