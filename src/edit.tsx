@@ -11,17 +11,20 @@ interface IProps {
   reorder: T.ReorderColumns;
   resize: T.ResizeColumns;
   toggle: T.ToggleColumn;
+  changeMode: T.ChangeMode;
 }
 
 export const Edit: React.FunctionComponent<IProps> = props => {
-  const { styles, columns: allColumns, toggle, reorder, resize } = props;
-  const visibleColumns = Column.getVisible(allColumns);
+  const { styles, columns, toggle, reorder, resize, changeMode } = props;
+  const visibleColumns = Column.getVisible(columns);
 
   return (
     <div>
-      <Pick columns={allColumns} styles={styles} toggle={toggle} />
+      <Pick columns={columns} styles={styles} toggle={toggle} />
       <Reorder columns={visibleColumns} styles={styles} reorder={reorder} />
       <Resize columns={visibleColumns} styles={styles} resize={resize} />
+
+      <button onClick={_ => changeMode(T.Modes.View)}>Save Changes</button>
     </div>
   );
 };

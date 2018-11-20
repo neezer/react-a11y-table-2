@@ -60518,6 +60518,8 @@ Object.defineProperty(exports, "__esModule", {
 
 var React = __importStar(require("react"));
 
+var T = __importStar(require("."));
+
 var column_1 = require("./column");
 
 var pick_1 = require("./pick");
@@ -60528,13 +60530,14 @@ var resize_1 = require("./resize");
 
 exports.Edit = function (props) {
   var styles = props.styles,
-      allColumns = props.columns,
+      columns = props.columns,
       toggle = props.toggle,
       reorder = props.reorder,
-      resize = props.resize;
-  var visibleColumns = column_1.Column.getVisible(allColumns);
+      resize = props.resize,
+      changeMode = props.changeMode;
+  var visibleColumns = column_1.Column.getVisible(columns);
   return React.createElement("div", null, React.createElement(pick_1.Pick, {
-    columns: allColumns,
+    columns: columns,
     styles: styles,
     toggle: toggle
   }), React.createElement(reorder_1.Reorder, {
@@ -60545,9 +60548,13 @@ exports.Edit = function (props) {
     columns: visibleColumns,
     styles: styles,
     resize: resize
-  }));
+  }), React.createElement("button", {
+    onClick: function onClick(_) {
+      return changeMode(T.Modes.View);
+    }
+  }, "Save Changes"));
 };
-},{"react":"../node_modules/react/index.js","./column":"../src/column.ts","./pick":"../src/pick.tsx","./reorder":"../src/reorder.tsx","./resize":"../src/resize.tsx"}],"../src/errorBoundary.tsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js",".":"../src/index.tsx","./column":"../src/column.ts","./pick":"../src/pick.tsx","./reorder":"../src/reorder.tsx","./resize":"../src/resize.tsx"}],"../src/errorBoundary.tsx":[function(require,module,exports) {
 "use strict";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -60628,7 +60635,1877 @@ function (_React$Component) {
 }(React.Component);
 
 exports.ErrorBoundary = ErrorBoundary;
-},{"react":"../node_modules/react/index.js"}],"../src/body.tsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js"}],"../node_modules/classnames/index.js":[function(require,module,exports) {
+var define;
+/*!
+  Copyright (c) 2017 Jed Watson.
+  Licensed under the MIT License (MIT), see
+  http://jedwatson.github.io/classnames
+*/
+/* global define */
+
+(function () {
+	'use strict';
+
+	var hasOwn = {}.hasOwnProperty;
+
+	function classNames () {
+		var classes = [];
+
+		for (var i = 0; i < arguments.length; i++) {
+			var arg = arguments[i];
+			if (!arg) continue;
+
+			var argType = typeof arg;
+
+			if (argType === 'string' || argType === 'number') {
+				classes.push(arg);
+			} else if (Array.isArray(arg) && arg.length) {
+				var inner = classNames.apply(null, arg);
+				if (inner) {
+					classes.push(inner);
+				}
+			} else if (argType === 'object') {
+				for (var key in arg) {
+					if (hasOwn.call(arg, key) && arg[key]) {
+						classes.push(key);
+					}
+				}
+			}
+		}
+
+		return classes.join(' ');
+	}
+
+	if (typeof module !== 'undefined' && module.exports) {
+		classNames.default = classNames;
+		module.exports = classNames;
+	} else if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {
+		// register as 'classnames', consistent with npm package name
+		define('classnames', [], function () {
+			return classNames;
+		});
+	} else {
+		window.classNames = classNames;
+	}
+}());
+
+},{}],"../node_modules/react-contextmenu/es6/helpers.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.callIfExists = callIfExists;
+exports.hasOwnProp = hasOwnProp;
+exports.uniqueId = uniqueId;
+exports.canUseDOM = exports.store = exports.cssClasses = void 0;
+
+function callIfExists(func) {
+  for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    args[_key - 1] = arguments[_key];
+  }
+
+  return typeof func === 'function' && func.apply(undefined, args);
+}
+
+function hasOwnProp(obj, prop) {
+  return Object.prototype.hasOwnProperty.call(obj, prop);
+}
+
+function uniqueId() {
+  return Math.random().toString(36).substring(7);
+}
+
+var cssClasses = {
+  menu: 'react-contextmenu',
+  menuVisible: 'react-contextmenu--visible',
+  menuWrapper: 'react-contextmenu-wrapper',
+  menuItem: 'react-contextmenu-item',
+  menuItemActive: 'react-contextmenu-item--active',
+  menuItemDisabled: 'react-contextmenu-item--disabled',
+  menuItemDivider: 'react-contextmenu-item--divider',
+  menuItemSelected: 'react-contextmenu-item--selected',
+  subMenu: 'react-contextmenu-submenu'
+};
+exports.cssClasses = cssClasses;
+var store = {};
+exports.store = store;
+var canUseDOM = Boolean(typeof window !== 'undefined' && window.document && window.document.createElement);
+exports.canUseDOM = canUseDOM;
+},{}],"../node_modules/react-contextmenu/es6/actions.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.dispatchGlobalEvent = dispatchGlobalEvent;
+exports.showMenu = showMenu;
+exports.hideMenu = hideMenu;
+exports.MENU_HIDE = exports.MENU_SHOW = void 0;
+
+var _objectAssign = _interopRequireDefault(require("object-assign"));
+
+var _helpers = require("./helpers");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var MENU_SHOW = 'REACT_CONTEXTMENU_SHOW';
+exports.MENU_SHOW = MENU_SHOW;
+var MENU_HIDE = 'REACT_CONTEXTMENU_HIDE';
+exports.MENU_HIDE = MENU_HIDE;
+
+function dispatchGlobalEvent(eventName, opts) {
+  var target = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : window; // Compatibale with IE
+  // @see http://stackoverflow.com/questions/26596123/internet-explorer-9-10-11-event-constructor-doesnt-work
+
+  var event = void 0;
+
+  if (typeof window.CustomEvent === 'function') {
+    event = new window.CustomEvent(eventName, {
+      detail: opts
+    });
+  } else {
+    event = document.createEvent('CustomEvent');
+    event.initCustomEvent(eventName, false, true, opts);
+  }
+
+  if (target) {
+    target.dispatchEvent(event);
+    (0, _objectAssign.default)(_helpers.store, opts);
+  }
+}
+
+function showMenu() {
+  var opts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var target = arguments[1];
+  dispatchGlobalEvent(MENU_SHOW, (0, _objectAssign.default)({}, opts, {
+    type: MENU_SHOW
+  }), target);
+}
+
+function hideMenu() {
+  var opts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var target = arguments[1];
+  dispatchGlobalEvent(MENU_HIDE, (0, _objectAssign.default)({}, opts, {
+    type: MENU_HIDE
+  }), target);
+}
+},{"object-assign":"../node_modules/object-assign/index.js","./helpers":"../node_modules/react-contextmenu/es6/helpers.js"}],"../node_modules/react-contextmenu/es6/globalEventListener.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _actions = require("./actions");
+
+var _helpers = require("./helpers");
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+var GlobalEventListener = function GlobalEventListener() {
+  var _this = this;
+
+  _classCallCheck(this, GlobalEventListener);
+
+  this.handleShowEvent = function (event) {
+    for (var id in _this.callbacks) {
+      if ((0, _helpers.hasOwnProp)(_this.callbacks, id)) _this.callbacks[id].show(event);
+    }
+  };
+
+  this.handleHideEvent = function (event) {
+    for (var id in _this.callbacks) {
+      if ((0, _helpers.hasOwnProp)(_this.callbacks, id)) _this.callbacks[id].hide(event);
+    }
+  };
+
+  this.register = function (showCallback, hideCallback) {
+    var id = (0, _helpers.uniqueId)();
+    _this.callbacks[id] = {
+      show: showCallback,
+      hide: hideCallback
+    };
+    return id;
+  };
+
+  this.unregister = function (id) {
+    if (id && _this.callbacks[id]) {
+      delete _this.callbacks[id];
+    }
+  };
+
+  this.callbacks = {};
+
+  if (_helpers.canUseDOM) {
+    window.addEventListener(_actions.MENU_SHOW, this.handleShowEvent);
+    window.addEventListener(_actions.MENU_HIDE, this.handleHideEvent);
+  }
+};
+
+var _default = new GlobalEventListener();
+
+exports.default = _default;
+},{"./actions":"../node_modules/react-contextmenu/es6/actions.js","./helpers":"../node_modules/react-contextmenu/es6/helpers.js"}],"../node_modules/react-contextmenu/es6/MenuItem.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _objectAssign = _interopRequireDefault(require("object-assign"));
+
+var _actions = require("./actions");
+
+var _helpers = require("./helpers");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+var _createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var MenuItem = function (_Component) {
+  _inherits(MenuItem, _Component);
+
+  function MenuItem() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    _classCallCheck(this, MenuItem);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = MenuItem.__proto__ || Object.getPrototypeOf(MenuItem)).call.apply(_ref, [this].concat(args))), _this), _this.handleClick = function (event) {
+      event.preventDefault();
+      if (_this.props.disabled || _this.props.divider) return;
+      (0, _helpers.callIfExists)(_this.props.onClick, event, (0, _objectAssign.default)({}, _this.props.data, _helpers.store.data), _helpers.store.target);
+      if (_this.props.preventClose) return;
+      (0, _actions.hideMenu)();
+    }, _temp), _possibleConstructorReturn(_this, _ret);
+  }
+
+  _createClass(MenuItem, [{
+    key: 'render',
+    value: function render() {
+      var _cx,
+          _this2 = this;
+
+      var _props = this.props,
+          disabled = _props.disabled,
+          divider = _props.divider,
+          children = _props.children,
+          attributes = _props.attributes,
+          selected = _props.selected;
+      var menuItemClassNames = (0, _classnames.default)(_helpers.cssClasses.menuItem, attributes.className, (_cx = {}, _defineProperty(_cx, (0, _classnames.default)(_helpers.cssClasses.menuItemDisabled, attributes.disabledClassName), disabled), _defineProperty(_cx, (0, _classnames.default)(_helpers.cssClasses.menuItemDivider, attributes.dividerClassName), divider), _defineProperty(_cx, (0, _classnames.default)(_helpers.cssClasses.menuItemSelected, attributes.selectedClassName), selected), _cx));
+      return _react.default.createElement('div', _extends({}, attributes, {
+        className: menuItemClassNames,
+        role: 'menuitem',
+        tabIndex: '-1',
+        'aria-disabled': disabled ? 'true' : 'false',
+        'aria-orientation': divider ? 'horizontal' : null,
+        ref: function ref(_ref2) {
+          _this2.ref = _ref2;
+        },
+        onMouseMove: this.props.onMouseMove,
+        onMouseLeave: this.props.onMouseLeave,
+        onTouchEnd: this.handleClick,
+        onClick: this.handleClick
+      }), divider ? null : children);
+    }
+  }]);
+
+  return MenuItem;
+}(_react.Component);
+
+MenuItem.propTypes = {
+  children: _propTypes.default.node,
+  attributes: _propTypes.default.object,
+  data: _propTypes.default.object,
+  disabled: _propTypes.default.bool,
+  divider: _propTypes.default.bool,
+  preventClose: _propTypes.default.bool,
+  onClick: _propTypes.default.func,
+  selected: _propTypes.default.bool,
+  onMouseMove: _propTypes.default.func,
+  onMouseLeave: _propTypes.default.func
+};
+MenuItem.defaultProps = {
+  disabled: false,
+  data: {},
+  divider: false,
+  attributes: {},
+  preventClose: false,
+  onClick: function onClick() {
+    return null;
+  },
+  children: null,
+  selected: false,
+  onMouseMove: function onMouseMove() {
+    return null;
+  },
+  onMouseLeave: function onMouseLeave() {
+    return null;
+  }
+};
+var _default = MenuItem;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","classnames":"../node_modules/classnames/index.js","object-assign":"../node_modules/object-assign/index.js","./actions":"../node_modules/react-contextmenu/es6/actions.js","./helpers":"../node_modules/react-contextmenu/es6/helpers.js"}],"../node_modules/react-contextmenu/es6/AbstractMenu.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _MenuItem = _interopRequireDefault(require("./MenuItem"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var AbstractMenu = function (_Component) {
+  _inherits(AbstractMenu, _Component);
+
+  function AbstractMenu(props) {
+    _classCallCheck(this, AbstractMenu);
+
+    var _this = _possibleConstructorReturn(this, (AbstractMenu.__proto__ || Object.getPrototypeOf(AbstractMenu)).call(this, props));
+
+    _initialiseProps.call(_this);
+
+    _this.seletedItemRef = null;
+    _this.state = {
+      selectedItem: null,
+      forceSubMenuOpen: false
+    };
+    return _this;
+  }
+
+  return AbstractMenu;
+}(_react.Component);
+
+AbstractMenu.propTypes = {
+  children: _propTypes.default.node.isRequired
+};
+
+var _initialiseProps = function _initialiseProps() {
+  var _this2 = this;
+
+  this.handleKeyNavigation = function (e) {
+    // check for isVisible strictly here as it might be undefined when this code executes in the context of SubMenu
+    // but we only need to check when it runs in the ContextMenu context
+    if (_this2.state.isVisible === false) {
+      return;
+    }
+
+    switch (e.keyCode) {
+      case 37: // left arrow
+
+      case 27:
+        // escape
+        e.preventDefault();
+
+        _this2.hideMenu(e);
+
+        break;
+
+      case 38:
+        // up arrow
+        e.preventDefault();
+
+        _this2.selectChildren(true);
+
+        break;
+
+      case 40:
+        // down arrow
+        e.preventDefault();
+
+        _this2.selectChildren(false);
+
+        break;
+
+      case 39:
+        // right arrow
+        _this2.tryToOpenSubMenu(e);
+
+        break;
+
+      case 13:
+        // enter
+        e.preventDefault();
+
+        _this2.tryToOpenSubMenu(e);
+
+        {
+          // determine the selected item is disabled or not
+          var disabled = _this2.seletedItemRef && _this2.seletedItemRef.props && _this2.seletedItemRef.props.disabled;
+
+          if (_this2.seletedItemRef && _this2.seletedItemRef.ref instanceof HTMLElement && !disabled) {
+            _this2.seletedItemRef.ref.click();
+          } else {
+            _this2.hideMenu(e);
+          }
+        }
+        break;
+
+      default: // do nothing
+
+    }
+  };
+
+  this.handleForceClose = function () {
+    _this2.setState({
+      forceSubMenuOpen: false
+    });
+  };
+
+  this.tryToOpenSubMenu = function (e) {
+    if (_this2.state.selectedItem && _this2.state.selectedItem.type === _this2.getSubMenuType()) {
+      e.preventDefault();
+
+      _this2.setState({
+        forceSubMenuOpen: true
+      });
+    }
+  };
+
+  this.selectChildren = function (forward) {
+    var selectedItem = _this2.state.selectedItem;
+    var children = [];
+
+    var childCollector = function childCollector(child) {
+      // child can be empty in case you do conditional rendering of components, in which
+      // case it should not be accounted for as a real child
+      if (!child) {
+        return;
+      }
+
+      if ([_MenuItem.default, _this2.getSubMenuType()].indexOf(child.type) < 0) {
+        // Maybe the MenuItem or SubMenu is capsuled in a wrapper div or something else
+        _react.default.Children.forEach(child.props.children, childCollector);
+      } else if (!child.props.divider) {
+        children.push(child);
+      }
+    };
+
+    _react.default.Children.forEach(_this2.props.children, childCollector);
+
+    var currentIndex = children.indexOf(selectedItem);
+
+    if (currentIndex < 0) {
+      _this2.setState({
+        selectedItem: forward ? children[children.length - 1] : children[0],
+        forceSubMenuOpen: false
+      });
+    } else if (forward) {
+      _this2.setState({
+        selectedItem: children[currentIndex - 1 < 0 ? children.length - 1 : currentIndex - 1],
+        forceSubMenuOpen: false
+      });
+    } else {
+      _this2.setState({
+        selectedItem: children[currentIndex + 1 < children.length ? currentIndex + 1 : 0],
+        forceSubMenuOpen: false
+      });
+    }
+  };
+
+  this.onChildMouseMove = function (child) {
+    if (_this2.state.selectedItem !== child) {
+      _this2.setState({
+        selectedItem: child,
+        forceSubMenuOpen: false
+      });
+    }
+  };
+
+  this.onChildMouseLeave = function () {
+    _this2.setState({
+      selectedItem: null,
+      forceSubMenuOpen: false
+    });
+  };
+
+  this.renderChildren = function (children) {
+    return _react.default.Children.map(children, function (child) {
+      var props = {};
+      if (!_react.default.isValidElement(child)) return child;
+
+      if ([_MenuItem.default, _this2.getSubMenuType()].indexOf(child.type) < 0) {
+        // Maybe the MenuItem or SubMenu is capsuled in a wrapper div or something else
+        props.children = _this2.renderChildren(child.props.children);
+        return _react.default.cloneElement(child, props);
+      }
+
+      props.onMouseLeave = _this2.onChildMouseLeave.bind(_this2);
+
+      if (child.type === _this2.getSubMenuType()) {
+        // special props for SubMenu only
+        props.forceOpen = _this2.state.forceSubMenuOpen && _this2.state.selectedItem === child;
+        props.forceClose = _this2.handleForceClose;
+        props.parentKeyNavigationHandler = _this2.handleKeyNavigation;
+      }
+
+      if (!child.props.divider && _this2.state.selectedItem === child) {
+        // special props for selected item only
+        props.selected = true;
+
+        props.ref = function (ref) {
+          _this2.seletedItemRef = ref;
+        };
+
+        return _react.default.cloneElement(child, props);
+      } // onMouseMove is only needed for non selected items
+
+
+      props.onMouseMove = function () {
+        return _this2.onChildMouseMove(child);
+      };
+
+      return _react.default.cloneElement(child, props);
+    });
+  };
+};
+
+var _default = AbstractMenu;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","./MenuItem":"../node_modules/react-contextmenu/es6/MenuItem.js"}],"../node_modules/react-contextmenu/es6/SubMenu.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _objectAssign = _interopRequireDefault(require("object-assign"));
+
+var _AbstractMenu2 = _interopRequireDefault(require("./AbstractMenu"));
+
+var _helpers = require("./helpers");
+
+var _globalEventListener = _interopRequireDefault(require("./globalEventListener"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+var _createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var SubMenu = function (_AbstractMenu) {
+  _inherits(SubMenu, _AbstractMenu);
+
+  function SubMenu(props) {
+    _classCallCheck(this, SubMenu);
+
+    var _this = _possibleConstructorReturn(this, (SubMenu.__proto__ || Object.getPrototypeOf(SubMenu)).call(this, props));
+
+    _this.getMenuPosition = function () {
+      var _window = window,
+          innerWidth = _window.innerWidth,
+          innerHeight = _window.innerHeight;
+
+      var rect = _this.subMenu.getBoundingClientRect();
+
+      var position = {};
+
+      if (rect.bottom > innerHeight) {
+        position.bottom = 0;
+      } else {
+        position.top = 0;
+      }
+
+      if (rect.right < innerWidth) {
+        position.left = '100%';
+      } else {
+        position.right = '100%';
+      }
+
+      return position;
+    };
+
+    _this.getRTLMenuPosition = function () {
+      var _window2 = window,
+          innerHeight = _window2.innerHeight;
+
+      var rect = _this.subMenu.getBoundingClientRect();
+
+      var position = {};
+
+      if (rect.bottom > innerHeight) {
+        position.bottom = 0;
+      } else {
+        position.top = 0;
+      }
+
+      if (rect.left < 0) {
+        position.left = '100%';
+      } else {
+        position.right = '100%';
+      }
+
+      return position;
+    };
+
+    _this.hideMenu = function (e) {
+      // avoid closing submenus of a different menu tree
+      if (e.detail && e.detail.id && _this.menu && e.detail.id !== _this.menu.id) {
+        return;
+      }
+
+      if (_this.props.forceOpen) {
+        _this.props.forceClose();
+      }
+
+      _this.setState({
+        visible: false,
+        selectedItem: null
+      });
+
+      _this.unregisterHandlers();
+    };
+
+    _this.handleClick = function (event) {
+      event.preventDefault();
+      if (_this.props.disabled) return;
+      (0, _helpers.callIfExists)(_this.props.onClick, event, (0, _objectAssign.default)({}, _this.props.data, _helpers.store.data), _helpers.store.target);
+    };
+
+    _this.handleMouseEnter = function () {
+      if (_this.closetimer) clearTimeout(_this.closetimer);
+      if (_this.props.disabled || _this.state.visible) return;
+      _this.opentimer = setTimeout(function () {
+        return _this.setState({
+          visible: true,
+          selectedItem: null
+        });
+      }, _this.props.hoverDelay);
+    };
+
+    _this.handleMouseLeave = function () {
+      if (_this.opentimer) clearTimeout(_this.opentimer);
+      if (!_this.state.visible) return;
+      _this.closetimer = setTimeout(function () {
+        return _this.setState({
+          visible: false,
+          selectedItem: null
+        });
+      }, _this.props.hoverDelay);
+    };
+
+    _this.menuRef = function (c) {
+      _this.menu = c;
+    };
+
+    _this.subMenuRef = function (c) {
+      _this.subMenu = c;
+    };
+
+    _this.registerHandlers = function () {
+      document.removeEventListener('keydown', _this.props.parentKeyNavigationHandler);
+      document.addEventListener('keydown', _this.handleKeyNavigation);
+    };
+
+    _this.unregisterHandlers = function (dismounting) {
+      document.removeEventListener('keydown', _this.handleKeyNavigation);
+
+      if (!dismounting) {
+        document.addEventListener('keydown', _this.props.parentKeyNavigationHandler);
+      }
+    };
+
+    _this.state = (0, _objectAssign.default)({}, _this.state, {
+      visible: false
+    });
+    return _this;
+  }
+
+  _createClass(SubMenu, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.listenId = _globalEventListener.default.register(function () {}, this.hideMenu);
+    }
+  }, {
+    key: 'getSubMenuType',
+    value: function getSubMenuType() {
+      // eslint-disable-line class-methods-use-this
+      return SubMenu;
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextState) {
+      this.isVisibilityChange = (this.state.visible !== nextState.visible || this.props.forceOpen !== nextProps.forceOpen) && !(this.state.visible && nextProps.forceOpen) && !(this.props.forceOpen && nextState.visible);
+      return true;
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      var _this2 = this;
+
+      if (!this.isVisibilityChange) return;
+
+      if (this.props.forceOpen || this.state.visible) {
+        var wrapper = window.requestAnimationFrame || setTimeout;
+        wrapper(function () {
+          var styles = _this2.props.rtl ? _this2.getRTLMenuPosition() : _this2.getMenuPosition();
+
+          _this2.subMenu.style.removeProperty('top');
+
+          _this2.subMenu.style.removeProperty('bottom');
+
+          _this2.subMenu.style.removeProperty('left');
+
+          _this2.subMenu.style.removeProperty('right');
+
+          if ((0, _helpers.hasOwnProp)(styles, 'top')) _this2.subMenu.style.top = styles.top;
+          if ((0, _helpers.hasOwnProp)(styles, 'left')) _this2.subMenu.style.left = styles.left;
+          if ((0, _helpers.hasOwnProp)(styles, 'bottom')) _this2.subMenu.style.bottom = styles.bottom;
+          if ((0, _helpers.hasOwnProp)(styles, 'right')) _this2.subMenu.style.right = styles.right;
+
+          _this2.subMenu.classList.add(_helpers.cssClasses.menuVisible);
+
+          _this2.registerHandlers();
+
+          _this2.setState({
+            selectedItem: null
+          });
+        });
+      } else {
+        var cleanup = function cleanup() {
+          _this2.subMenu.removeEventListener('transitionend', cleanup);
+
+          _this2.subMenu.style.removeProperty('bottom');
+
+          _this2.subMenu.style.removeProperty('right');
+
+          _this2.subMenu.style.top = 0;
+          _this2.subMenu.style.left = '100%';
+
+          _this2.unregisterHandlers();
+        };
+
+        this.subMenu.addEventListener('transitionend', cleanup);
+        this.subMenu.classList.remove(_helpers.cssClasses.menuVisible);
+      }
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      if (this.listenId) {
+        _globalEventListener.default.unregister(this.listenId);
+      }
+
+      if (this.opentimer) clearTimeout(this.opentimer);
+      if (this.closetimer) clearTimeout(this.closetimer);
+      this.unregisterHandlers(true);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _cx;
+
+      var _props = this.props,
+          children = _props.children,
+          attributes = _props.attributes,
+          disabled = _props.disabled,
+          title = _props.title,
+          selected = _props.selected;
+      var visible = this.state.visible;
+      var menuProps = {
+        ref: this.menuRef,
+        onMouseEnter: this.handleMouseEnter,
+        onMouseLeave: this.handleMouseLeave,
+        className: (0, _classnames.default)(_helpers.cssClasses.menuItem, _helpers.cssClasses.subMenu, attributes.listClassName),
+        style: {
+          position: 'relative'
+        }
+      };
+      var menuItemProps = {
+        className: (0, _classnames.default)(_helpers.cssClasses.menuItem, attributes.className, (_cx = {}, _defineProperty(_cx, (0, _classnames.default)(_helpers.cssClasses.menuItemDisabled, attributes.disabledClassName), disabled), _defineProperty(_cx, (0, _classnames.default)(_helpers.cssClasses.menuItemActive, attributes.visibleClassName), visible), _defineProperty(_cx, (0, _classnames.default)(_helpers.cssClasses.menuItemSelected, attributes.selectedClassName), selected), _cx)),
+        onMouseMove: this.props.onMouseMove,
+        onMouseOut: this.props.onMouseOut,
+        onClick: this.handleClick
+      };
+      var subMenuProps = {
+        ref: this.subMenuRef,
+        style: {
+          position: 'absolute',
+          transition: 'opacity 1ms',
+          // trigger transitionend event
+          top: 0,
+          left: '100%'
+        },
+        className: (0, _classnames.default)(_helpers.cssClasses.menu, this.props.className)
+      };
+      return _react.default.createElement('nav', _extends({}, menuProps, {
+        role: 'menuitem',
+        tabIndex: '-1',
+        'aria-haspopup': 'true'
+      }), _react.default.createElement('div', _extends({}, attributes, menuItemProps), title), _react.default.createElement('nav', _extends({}, subMenuProps, {
+        role: 'menu',
+        tabIndex: '-1'
+      }), this.renderChildren(children)));
+    }
+  }]);
+
+  return SubMenu;
+}(_AbstractMenu2.default);
+
+SubMenu.propTypes = {
+  children: _propTypes.default.node.isRequired,
+  attributes: _propTypes.default.object,
+  title: _propTypes.default.node.isRequired,
+  className: _propTypes.default.string,
+  disabled: _propTypes.default.bool,
+  hoverDelay: _propTypes.default.number,
+  rtl: _propTypes.default.bool,
+  selected: _propTypes.default.bool,
+  onMouseMove: _propTypes.default.func,
+  onMouseOut: _propTypes.default.func,
+  forceOpen: _propTypes.default.bool,
+  forceClose: _propTypes.default.func,
+  parentKeyNavigationHandler: _propTypes.default.func
+};
+SubMenu.defaultProps = {
+  disabled: false,
+  hoverDelay: 500,
+  attributes: {},
+  className: '',
+  rtl: false,
+  selected: false,
+  onMouseMove: function onMouseMove() {
+    return null;
+  },
+  onMouseOut: function onMouseOut() {
+    return null;
+  },
+  forceOpen: false,
+  forceClose: function forceClose() {
+    return null;
+  },
+  parentKeyNavigationHandler: function parentKeyNavigationHandler() {
+    return null;
+  }
+};
+var _default = SubMenu;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","classnames":"../node_modules/classnames/index.js","object-assign":"../node_modules/object-assign/index.js","./AbstractMenu":"../node_modules/react-contextmenu/es6/AbstractMenu.js","./helpers":"../node_modules/react-contextmenu/es6/helpers.js","./globalEventListener":"../node_modules/react-contextmenu/es6/globalEventListener.js"}],"../node_modules/react-contextmenu/es6/ContextMenu.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _objectAssign = _interopRequireDefault(require("object-assign"));
+
+var _globalEventListener = _interopRequireDefault(require("./globalEventListener"));
+
+var _AbstractMenu2 = _interopRequireDefault(require("./AbstractMenu"));
+
+var _SubMenu = _interopRequireDefault(require("./SubMenu"));
+
+var _actions = require("./actions");
+
+var _helpers = require("./helpers");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var ContextMenu = function (_AbstractMenu) {
+  _inherits(ContextMenu, _AbstractMenu);
+
+  function ContextMenu(props) {
+    _classCallCheck(this, ContextMenu);
+
+    var _this = _possibleConstructorReturn(this, (ContextMenu.__proto__ || Object.getPrototypeOf(ContextMenu)).call(this, props));
+
+    _this.registerHandlers = function () {
+      document.addEventListener('mousedown', _this.handleOutsideClick);
+      document.addEventListener('touchstart', _this.handleOutsideClick);
+      document.addEventListener('scroll', _this.handleHide);
+      document.addEventListener('contextmenu', _this.handleHide);
+      document.addEventListener('keydown', _this.handleKeyNavigation);
+      window.addEventListener('resize', _this.handleHide);
+    };
+
+    _this.unregisterHandlers = function () {
+      document.removeEventListener('mousedown', _this.handleOutsideClick);
+      document.removeEventListener('touchstart', _this.handleOutsideClick);
+      document.removeEventListener('scroll', _this.handleHide);
+      document.removeEventListener('contextmenu', _this.handleHide);
+      document.removeEventListener('keydown', _this.handleKeyNavigation);
+      window.removeEventListener('resize', _this.handleHide);
+    };
+
+    _this.handleShow = function (e) {
+      if (e.detail.id !== _this.props.id || _this.state.isVisible) return;
+      var _e$detail$position = e.detail.position,
+          x = _e$detail$position.x,
+          y = _e$detail$position.y;
+
+      _this.setState({
+        isVisible: true,
+        x: x,
+        y: y
+      });
+
+      _this.registerHandlers();
+
+      (0, _helpers.callIfExists)(_this.props.onShow, e);
+    };
+
+    _this.handleHide = function (e) {
+      if (_this.state.isVisible && (!e.detail || !e.detail.id || e.detail.id === _this.props.id)) {
+        _this.unregisterHandlers();
+
+        _this.setState({
+          isVisible: false,
+          selectedItem: null,
+          forceSubMenuOpen: false
+        });
+
+        (0, _helpers.callIfExists)(_this.props.onHide, e);
+      }
+    };
+
+    _this.handleOutsideClick = function (e) {
+      if (!_this.menu.contains(e.target)) (0, _actions.hideMenu)();
+    };
+
+    _this.handleMouseLeave = function (event) {
+      event.preventDefault();
+      (0, _helpers.callIfExists)(_this.props.onMouseLeave, event, (0, _objectAssign.default)({}, _this.props.data, _helpers.store.data), _helpers.store.target);
+      if (_this.props.hideOnLeave) (0, _actions.hideMenu)();
+    };
+
+    _this.handleContextMenu = function (e) {
+      if ("development" === 'production') {
+        e.preventDefault();
+      }
+
+      _this.handleHide(e);
+    };
+
+    _this.hideMenu = function (e) {
+      if (e.keyCode === 27 || e.keyCode === 13) {
+        // ECS or enter
+        (0, _actions.hideMenu)();
+      }
+    };
+
+    _this.getMenuPosition = function () {
+      var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+      var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+      var menuStyles = {
+        top: y,
+        left: x
+      };
+      if (!_this.menu) return menuStyles;
+      var _window = window,
+          innerWidth = _window.innerWidth,
+          innerHeight = _window.innerHeight;
+
+      var rect = _this.menu.getBoundingClientRect();
+
+      if (y + rect.height > innerHeight) {
+        menuStyles.top -= rect.height;
+      }
+
+      if (x + rect.width > innerWidth) {
+        menuStyles.left -= rect.width;
+      }
+
+      if (menuStyles.top < 0) {
+        menuStyles.top = rect.height < innerHeight ? (innerHeight - rect.height) / 2 : 0;
+      }
+
+      if (menuStyles.left < 0) {
+        menuStyles.left = rect.width < innerWidth ? (innerWidth - rect.width) / 2 : 0;
+      }
+
+      return menuStyles;
+    };
+
+    _this.getRTLMenuPosition = function () {
+      var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+      var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+      var menuStyles = {
+        top: y,
+        left: x
+      };
+      if (!_this.menu) return menuStyles;
+      var _window2 = window,
+          innerWidth = _window2.innerWidth,
+          innerHeight = _window2.innerHeight;
+
+      var rect = _this.menu.getBoundingClientRect(); // Try to position the menu on the left side of the cursor
+
+
+      menuStyles.left = x - rect.width;
+
+      if (y + rect.height > innerHeight) {
+        menuStyles.top -= rect.height;
+      }
+
+      if (menuStyles.left < 0) {
+        menuStyles.left += rect.width;
+      }
+
+      if (menuStyles.top < 0) {
+        menuStyles.top = rect.height < innerHeight ? (innerHeight - rect.height) / 2 : 0;
+      }
+
+      if (menuStyles.left + rect.width > innerWidth) {
+        menuStyles.left = rect.width < innerWidth ? (innerWidth - rect.width) / 2 : 0;
+      }
+
+      return menuStyles;
+    };
+
+    _this.menuRef = function (c) {
+      _this.menu = c;
+    };
+
+    _this.state = (0, _objectAssign.default)({}, _this.state, {
+      x: 0,
+      y: 0,
+      isVisible: false
+    });
+    return _this;
+  }
+
+  _createClass(ContextMenu, [{
+    key: 'getSubMenuType',
+    value: function getSubMenuType() {
+      // eslint-disable-line class-methods-use-this
+      return _SubMenu.default;
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.listenId = _globalEventListener.default.register(this.handleShow, this.handleHide);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      var _this2 = this;
+
+      if (this.state.isVisible) {
+        var wrapper = window.requestAnimationFrame || setTimeout;
+        wrapper(function () {
+          var _state = _this2.state,
+              x = _state.x,
+              y = _state.y;
+
+          var _ref = _this2.props.rtl ? _this2.getRTLMenuPosition(x, y) : _this2.getMenuPosition(x, y),
+              top = _ref.top,
+              left = _ref.left;
+
+          wrapper(function () {
+            if (!_this2.menu) return;
+            _this2.menu.style.top = top + 'px';
+            _this2.menu.style.left = left + 'px';
+            _this2.menu.style.opacity = 1;
+            _this2.menu.style.pointerEvents = 'auto';
+          });
+        });
+      } else {
+        if (!this.menu) return;
+        this.menu.style.opacity = 0;
+        this.menu.style.pointerEvents = 'none';
+      }
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      if (this.listenId) {
+        _globalEventListener.default.unregister(this.listenId);
+      }
+
+      this.unregisterHandlers();
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          children = _props.children,
+          className = _props.className,
+          style = _props.style;
+      var isVisible = this.state.isVisible;
+      var inlineStyle = (0, _objectAssign.default)({}, style, {
+        position: 'fixed',
+        opacity: 0,
+        pointerEvents: 'none'
+      });
+      var menuClassnames = (0, _classnames.default)(_helpers.cssClasses.menu, className, _defineProperty({}, _helpers.cssClasses.menuVisible, isVisible));
+      return _react.default.createElement('nav', {
+        role: 'menu',
+        tabIndex: '-1',
+        ref: this.menuRef,
+        style: inlineStyle,
+        className: menuClassnames,
+        onContextMenu: this.handleContextMenu,
+        onMouseLeave: this.handleMouseLeave
+      }, this.renderChildren(children));
+    }
+  }]);
+
+  return ContextMenu;
+}(_AbstractMenu2.default);
+
+ContextMenu.propTypes = {
+  id: _propTypes.default.string.isRequired,
+  children: _propTypes.default.node.isRequired,
+  data: _propTypes.default.object,
+  className: _propTypes.default.string,
+  hideOnLeave: _propTypes.default.bool,
+  rtl: _propTypes.default.bool,
+  onHide: _propTypes.default.func,
+  onMouseLeave: _propTypes.default.func,
+  onShow: _propTypes.default.func,
+  style: _propTypes.default.object
+};
+ContextMenu.defaultProps = {
+  className: '',
+  data: {},
+  hideOnLeave: false,
+  rtl: false,
+  onHide: function onHide() {
+    return null;
+  },
+  onMouseLeave: function onMouseLeave() {
+    return null;
+  },
+  onShow: function onShow() {
+    return null;
+  },
+  style: {}
+};
+var _default = ContextMenu;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","classnames":"../node_modules/classnames/index.js","object-assign":"../node_modules/object-assign/index.js","./globalEventListener":"../node_modules/react-contextmenu/es6/globalEventListener.js","./AbstractMenu":"../node_modules/react-contextmenu/es6/AbstractMenu.js","./SubMenu":"../node_modules/react-contextmenu/es6/SubMenu.js","./actions":"../node_modules/react-contextmenu/es6/actions.js","./helpers":"../node_modules/react-contextmenu/es6/helpers.js"}],"../node_modules/react-contextmenu/es6/ContextMenuTrigger.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _objectAssign = _interopRequireDefault(require("object-assign"));
+
+var _actions = require("./actions");
+
+var _helpers = require("./helpers");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+var _createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var ContextMenuTrigger = function (_Component) {
+  _inherits(ContextMenuTrigger, _Component);
+
+  function ContextMenuTrigger() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    _classCallCheck(this, ContextMenuTrigger);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ContextMenuTrigger.__proto__ || Object.getPrototypeOf(ContextMenuTrigger)).call.apply(_ref, [this].concat(args))), _this), _this.touchHandled = false, _this.handleMouseDown = function (event) {
+      if (_this.props.holdToDisplay >= 0 && event.button === 0) {
+        event.persist();
+        event.stopPropagation();
+        _this.mouseDownTimeoutId = setTimeout(function () {
+          return _this.handleContextClick(event);
+        }, _this.props.holdToDisplay);
+      }
+
+      (0, _helpers.callIfExists)(_this.props.attributes.onMouseDown, event);
+    }, _this.handleMouseUp = function (event) {
+      if (event.button === 0) {
+        clearTimeout(_this.mouseDownTimeoutId);
+      }
+
+      (0, _helpers.callIfExists)(_this.props.attributes.onMouseUp, event);
+    }, _this.handleMouseOut = function (event) {
+      if (event.button === 0) {
+        clearTimeout(_this.mouseDownTimeoutId);
+      }
+
+      (0, _helpers.callIfExists)(_this.props.attributes.onMouseOut, event);
+    }, _this.handleTouchstart = function (event) {
+      _this.touchHandled = false;
+
+      if (_this.props.holdToDisplay >= 0) {
+        event.persist();
+        event.stopPropagation();
+        _this.touchstartTimeoutId = setTimeout(function () {
+          _this.handleContextClick(event);
+
+          _this.touchHandled = true;
+        }, _this.props.holdToDisplay);
+      }
+
+      (0, _helpers.callIfExists)(_this.props.attributes.onTouchStart, event);
+    }, _this.handleTouchEnd = function (event) {
+      if (_this.touchHandled) {
+        event.preventDefault();
+      }
+
+      clearTimeout(_this.touchstartTimeoutId);
+      (0, _helpers.callIfExists)(_this.props.attributes.onTouchEnd, event);
+    }, _this.handleContextMenu = function (event) {
+      _this.handleContextClick(event);
+
+      (0, _helpers.callIfExists)(_this.props.attributes.onContextMenu, event);
+    }, _this.handleContextClick = function (event) {
+      if (_this.props.disable) return;
+      event.preventDefault();
+      event.stopPropagation();
+      var x = event.clientX || event.touches && event.touches[0].pageX;
+      var y = event.clientY || event.touches && event.touches[0].pageY;
+
+      if (_this.props.posX) {
+        x -= _this.props.posX;
+      }
+
+      if (_this.props.posY) {
+        y -= _this.props.posY;
+      }
+
+      (0, _actions.hideMenu)();
+      var data = (0, _helpers.callIfExists)(_this.props.collect, _this.props);
+      var showMenuConfig = {
+        position: {
+          x: x,
+          y: y
+        },
+        target: _this.elem,
+        id: _this.props.id,
+        data: data
+      };
+
+      if (data && typeof data.then === 'function') {
+        // it's promise
+        data.then(function (resp) {
+          showMenuConfig.data = resp;
+          (0, _actions.showMenu)(showMenuConfig);
+        });
+      } else {
+        (0, _actions.showMenu)(showMenuConfig);
+      }
+    }, _this.elemRef = function (c) {
+      _this.elem = c;
+    }, _temp), _possibleConstructorReturn(_this, _ret);
+  }
+
+  _createClass(ContextMenuTrigger, [{
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          renderTag = _props.renderTag,
+          attributes = _props.attributes,
+          children = _props.children;
+      var newAttrs = (0, _objectAssign.default)({}, attributes, {
+        className: (0, _classnames.default)(_helpers.cssClasses.menuWrapper, attributes.className),
+        onContextMenu: this.handleContextMenu,
+        onMouseDown: this.handleMouseDown,
+        onMouseUp: this.handleMouseUp,
+        onTouchStart: this.handleTouchstart,
+        onTouchEnd: this.handleTouchEnd,
+        onMouseOut: this.handleMouseOut,
+        ref: this.elemRef
+      });
+      return _react.default.createElement(renderTag, newAttrs, children);
+    }
+  }]);
+
+  return ContextMenuTrigger;
+}(_react.Component);
+
+ContextMenuTrigger.propTypes = {
+  id: _propTypes.default.string.isRequired,
+  children: _propTypes.default.node.isRequired,
+  attributes: _propTypes.default.object,
+  collect: _propTypes.default.func,
+  disable: _propTypes.default.bool,
+  holdToDisplay: _propTypes.default.number,
+  posX: _propTypes.default.number,
+  posY: _propTypes.default.number,
+  renderTag: _propTypes.default.oneOfType([_propTypes.default.node, _propTypes.default.func])
+};
+ContextMenuTrigger.defaultProps = {
+  attributes: {},
+  collect: function collect() {
+    return null;
+  },
+  disable: false,
+  holdToDisplay: 1000,
+  renderTag: 'div',
+  posX: 0,
+  posY: 0
+};
+var _default = ContextMenuTrigger;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","classnames":"../node_modules/classnames/index.js","object-assign":"../node_modules/object-assign/index.js","./actions":"../node_modules/react-contextmenu/es6/actions.js","./helpers":"../node_modules/react-contextmenu/es6/helpers.js"}],"../node_modules/react-contextmenu/es6/connectMenu.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _ContextMenuTrigger = _interopRequireDefault(require("./ContextMenuTrigger"));
+
+var _globalEventListener = _interopRequireDefault(require("./globalEventListener"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+var _createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+function _toConsumableArray(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+      arr2[i] = arr[i];
+    }
+
+    return arr2;
+  } else {
+    return Array.from(arr);
+  }
+}
+
+// collect ContextMenuTrigger's expected props to NOT pass them on as part of the context
+var ignoredTriggerProps = [].concat(_toConsumableArray(Object.keys(_ContextMenuTrigger.default.propTypes)), ['children']); // expect the id of the menu to be responsible for as outer parameter
+
+function _default(menuId) {
+  // expect menu component to connect as inner parameter
+  // <Child/> is presumably a wrapper of <ContextMenu/>
+  return function (Child) {
+    // return wrapper for <Child/> that forwards the ContextMenuTrigger's additional props
+    return function (_Component) {
+      _inherits(ConnectMenu, _Component);
+
+      function ConnectMenu(props) {
+        _classCallCheck(this, ConnectMenu);
+
+        var _this = _possibleConstructorReturn(this, (ConnectMenu.__proto__ || Object.getPrototypeOf(ConnectMenu)).call(this, props));
+
+        _this.handleShow = function (e) {
+          if (e.detail.id !== menuId) return; // the onShow event's detail.data object holds all ContextMenuTrigger props
+
+          var data = e.detail.data;
+          var filteredData = {};
+
+          for (var key in data) {
+            // exclude props the ContextMenuTrigger is expecting itself
+            if (!ignoredTriggerProps.includes(key)) {
+              filteredData[key] = data[key];
+            }
+          }
+
+          _this.setState({
+            trigger: filteredData
+          });
+        };
+
+        _this.handleHide = function () {
+          _this.setState({
+            trigger: null
+          });
+        };
+
+        _this.state = {
+          trigger: null
+        };
+        return _this;
+      }
+
+      _createClass(ConnectMenu, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+          this.listenId = _globalEventListener.default.register(this.handleShow, this.handleHide);
+        }
+      }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+          if (this.listenId) {
+            _globalEventListener.default.unregister(this.listenId);
+          }
+        }
+      }, {
+        key: 'render',
+        value: function render() {
+          return _react.default.createElement(Child, _extends({}, this.props, {
+            id: menuId,
+            trigger: this.state.trigger
+          }));
+        }
+      }]);
+
+      return ConnectMenu;
+    }(_react.Component);
+  };
+}
+},{"react":"../node_modules/react/index.js","./ContextMenuTrigger":"../node_modules/react-contextmenu/es6/ContextMenuTrigger.js","./globalEventListener":"../node_modules/react-contextmenu/es6/globalEventListener.js"}],"../node_modules/react-contextmenu/es6/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "ContextMenu", {
+  enumerable: true,
+  get: function () {
+    return _ContextMenu.default;
+  }
+});
+Object.defineProperty(exports, "ContextMenuTrigger", {
+  enumerable: true,
+  get: function () {
+    return _ContextMenuTrigger.default;
+  }
+});
+Object.defineProperty(exports, "MenuItem", {
+  enumerable: true,
+  get: function () {
+    return _MenuItem.default;
+  }
+});
+Object.defineProperty(exports, "SubMenu", {
+  enumerable: true,
+  get: function () {
+    return _SubMenu.default;
+  }
+});
+Object.defineProperty(exports, "connectMenu", {
+  enumerable: true,
+  get: function () {
+    return _connectMenu.default;
+  }
+});
+Object.defineProperty(exports, "hideMenu", {
+  enumerable: true,
+  get: function () {
+    return _actions.hideMenu;
+  }
+});
+Object.defineProperty(exports, "showMenu", {
+  enumerable: true,
+  get: function () {
+    return _actions.showMenu;
+  }
+});
+
+var _ContextMenu = _interopRequireDefault(require("./ContextMenu"));
+
+var _ContextMenuTrigger = _interopRequireDefault(require("./ContextMenuTrigger"));
+
+var _MenuItem = _interopRequireDefault(require("./MenuItem"));
+
+var _SubMenu = _interopRequireDefault(require("./SubMenu"));
+
+var _connectMenu = _interopRequireDefault(require("./connectMenu"));
+
+var _actions = require("./actions");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./ContextMenu":"../node_modules/react-contextmenu/es6/ContextMenu.js","./ContextMenuTrigger":"../node_modules/react-contextmenu/es6/ContextMenuTrigger.js","./MenuItem":"../node_modules/react-contextmenu/es6/MenuItem.js","./SubMenu":"../node_modules/react-contextmenu/es6/SubMenu.js","./connectMenu":"../node_modules/react-contextmenu/es6/connectMenu.js","./actions":"../node_modules/react-contextmenu/es6/actions.js"}],"../src/body.tsx":[function(require,module,exports) {
 "use strict";
 
 var __importStar = this && this.__importStar || function (mod) {
@@ -60915,6 +62792,10 @@ var ramda_1 = require("ramda");
 
 var React = __importStar(require("react"));
 
+var react_contextmenu_1 = require("react-contextmenu");
+
+var T = __importStar(require("."));
+
 var body_1 = require("./body");
 
 var colgroup_1 = require("./colgroup");
@@ -60932,7 +62813,8 @@ exports.Grid = function (props) {
       data = props.data,
       config = props.config,
       styles = props.styles,
-      sticky = props.sticky;
+      sticky = props.sticky,
+      changeMode = props.changeMode;
   var theadRef = React.createRef();
 
   if (ramda_1.isEmpty(data)) {
@@ -60950,7 +62832,8 @@ exports.Grid = function (props) {
     columns: columns,
     sticky: sticky,
     styles: styles,
-    theadRef: theadRef
+    theadRef: theadRef,
+    changeMode: changeMode
   };
   var bodyProps = {
     columns: columns,
@@ -60964,9 +62847,17 @@ exports.Grid = function (props) {
     columns: columns,
     styles: styles
   };
-  return React.createElement(gridWrapper_1.GridWrapper, Object.assign({}, wrapperProps), React.createElement(table_1.Table, Object.assign({}, tableProps), React.createElement(colgroup_1.Colgroup, Object.assign({}, colGroupProps)), React.createElement(head_1.Head, Object.assign({}, headProps)), React.createElement(body_1.Body, Object.assign({}, bodyProps))));
+  return React.createElement(gridWrapper_1.GridWrapper, Object.assign({}, wrapperProps), React.createElement(react_contextmenu_1.ContextMenuTrigger, {
+    id: "edit-table-headers"
+  }, React.createElement(table_1.Table, Object.assign({}, tableProps), React.createElement(colgroup_1.Colgroup, Object.assign({}, colGroupProps)), React.createElement(head_1.Head, Object.assign({}, headProps)), React.createElement(body_1.Body, Object.assign({}, bodyProps)))), React.createElement(react_contextmenu_1.ContextMenu, {
+    id: "edit-table-headers"
+  }, React.createElement(react_contextmenu_1.MenuItem, {
+    onClick: function onClick(_) {
+      return changeMode(T.Modes.Edit);
+    }
+  }, "Edit")));
 };
-},{"ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","./body":"../src/body.tsx","./colgroup":"../src/colgroup.tsx","./empty":"../src/empty.tsx","./gridWrapper":"../src/gridWrapper.tsx","./head":"../src/head.tsx","./table":"../src/table.tsx"}],"../src/wrapper.tsx":[function(require,module,exports) {
+},{"ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","react-contextmenu":"../node_modules/react-contextmenu/es6/index.js",".":"../src/index.tsx","./body":"../src/body.tsx","./colgroup":"../src/colgroup.tsx","./empty":"../src/empty.tsx","./gridWrapper":"../src/gridWrapper.tsx","./head":"../src/head.tsx","./table":"../src/table.tsx"}],"../src/wrapper.tsx":[function(require,module,exports) {
 "use strict";
 
 var __importStar = this && this.__importStar || function (mod) {
@@ -61109,18 +63000,20 @@ function (_React$Component) {
       var reorder = utils.reorderColumns(updateProps);
       var toggle = utils.toggleColumn(updateProps);
       var editProps = {
-        styles: styles,
-        toggle: toggle,
-        resize: resize,
+        changeMode: this.changeMode,
+        columns: allColumns,
         reorder: reorder,
-        columns: allColumns
+        resize: resize,
+        styles: styles,
+        toggle: toggle
       };
       var gridProps = {
-        styles: styles,
+        changeMode: this.changeMode,
+        columns: visibleColumns,
         config: config,
         data: data,
         sticky: sticky,
-        columns: visibleColumns
+        styles: styles
       };
       return React.createElement(wrapper_1.Wrapper, {
         styles: styles
@@ -61282,7 +63175,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63594" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65134" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

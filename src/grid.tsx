@@ -1,6 +1,7 @@
 import { isEmpty } from "ramda";
 import * as React from "react";
-import { Columns, Datum, IConfig, IStickyConfig, Styles } from ".";
+import { ContextMenu, ContextMenuTrigger, MenuItem } from "react-contextmenu";
+import * as T from ".";
 import { Body } from "./body";
 import { Colgroup } from "./colgroup";
 import { Empty } from "./empty";
@@ -9,15 +10,16 @@ import { Head, Ref } from "./head";
 import { Table } from "./table";
 
 interface IProps {
-  config: IConfig;
-  data: Datum[];
-  styles: Styles;
-  sticky: IStickyConfig;
-  columns: Columns;
+  config: T.IConfig;
+  data: T.Datum[];
+  styles: T.Styles;
+  sticky: T.IStickyConfig;
+  columns: T.Columns;
+  changeMode: T.ChangeMode;
 }
 
 export const Grid: React.FunctionComponent<IProps> = props => {
-  const { columns, data, config, styles, sticky } = props;
+  const { columns, data, config, styles, sticky, changeMode } = props;
   const theadRef = React.createRef<Ref>();
 
   if (isEmpty(data)) {
@@ -25,18 +27,23 @@ export const Grid: React.FunctionComponent<IProps> = props => {
   }
 
   const wrapperProps = { sticky, styles, theadRef };
-  const headProps = { columns, sticky, styles, theadRef };
+  const headProps = { columns, sticky, styles, theadRef, changeMode };
   const bodyProps = { columns, data, styles };
   const colGroupProps = { columns };
   const tableProps = { columns, styles };
 
   return (
     <GridWrapper {...wrapperProps}>
-      <Table {...tableProps}>
-        <Colgroup {...colGroupProps} />
-        <Head {...headProps} />
-        <Body {...bodyProps} />
-      </Table>
+      <ContextMenuTrigger id="edit-table-headers">
+        <Table {...tableProps}>
+          <Colgroup {...colGroupProps} />
+          <Head {...headProps} />
+          <Body {...bodyProps} />
+        </Table>
+      </ContextMenuTrigger>
+      <ContextMenu id="edit-table-headers">
+        <MenuItem onClick={_ => changeMode(T.Modes.Edit)}>Edit</MenuItem>
+      </ContextMenu>
     </GridWrapper>
   );
 };

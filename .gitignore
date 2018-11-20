@@ -1,6 +1,7 @@
 node_modules
 .env
 .cache
+*.log
 
 # use yarn
 package-lock.json

@@ -49,6 +49,7 @@
     "@most/scheduler": "^1.2.1",
     "emotion": "^9.2.12",
     "murmurhash-js": "^1.0.0",
-    "react-beautiful-dnd": "^10.0.1"
+    "react-beautiful-dnd": "^10.0.1",
+    "react-contextmenu": "^2.10.0"
   }
 }

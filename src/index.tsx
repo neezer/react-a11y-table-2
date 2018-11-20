@@ -51,8 +51,24 @@ export class Table extends React.Component<IProps, IState> {
     const resize = utils.resizeColumns(updateProps);
     const reorder = utils.reorderColumns(updateProps);
     const toggle = utils.toggleColumn(updateProps);
-    const editProps = { styles, toggle, resize, reorder, columns: allColumns };
-    const gridProps = { styles, config, data, sticky, columns: visibleColumns };
+
+    const editProps = {
+      changeMode: this.changeMode,
+      columns: allColumns,
+      reorder,
+      resize,
+      styles,
+      toggle
+    };
+
+    const gridProps = {
+      changeMode: this.changeMode,
+      columns: visibleColumns,
+      config,
+      data,
+      sticky,
+      styles
+    };
 
     return (
       <Wrapper styles={styles}>
@@ -64,7 +80,7 @@ export class Table extends React.Component<IProps, IState> {
     );
   }
 
-  public changeMode = (newMode: Modes) => {
+  public changeMode: ChangeMode = (newMode: Modes) => {
     this.setState(set(this.modeLens, newMode));
   };
 }
@@ -98,3 +114,4 @@ export type Columns = Column[];
 export type ResizeColumns = (newWidths: number[]) => void;
 export type ReorderColumns = (dropResult: DropResult) => void;
 export type ToggleColumn = (column: Column) => void;
+export type ChangeMode = (mode: Modes) => void;
