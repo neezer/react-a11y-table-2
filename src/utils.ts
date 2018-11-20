@@ -99,26 +99,66 @@ export function reorderColumns(props: IUpdateColumnsProps) {
       return;
     }
 
-    const { index: toIndex } = destination as DraggableLocation;
-    const { index: fromIndex } = source;
-    const destinationChanged = toIndex !== fromIndex;
+    const {
+      index: toIndex,
+      droppableId: toDroppable
+    } = destination as DraggableLocation;
+
+    const { index: fromIndex, droppableId: fromDroppable } = source;
+    const isSameDroppable = toDroppable === fromDroppable;
+    const droppableChanged = !isSameDroppable;
+    const indexChanged = toIndex !== fromIndex;
+    const destinationChanged = indexChanged || droppableChanged;
+    const visibleChanged = toDroppable === "enabled-columns";
+    const hiddenChanged = toDroppable === "disabled-columns";
 
     if (destinationChanged === false) {
       return;
     }
 
-    const column = R.find(R.propEq("id", columnId), visibleColumns) as Column;
-    const addAtIndex = R.insert(toIndex, column);
-    const removeAtIndex = R.remove<Column>(fromIndex, 1);
+    if (indexChanged && isSameDroppable && visibleChanged) {
+      const column = R.find(R.propEq("id", columnId), visibleColumns) as Column;
+      const addAtIndex = R.insert(toIndex, column);
+      const removeAtIndex = R.remove<Column>(fromIndex, 1);
 
-    const update = R.pipe(
-      removeAtIndex,
-      addAtIndex
-    );
+      const update = R.pipe(
+        removeAtIndex,
+        addAtIndex
+      );
 
-    const newColumns = update(visibleColumns);
+      const newVisibleColumns = update(visibleColumns);
+      const newColumns = R.concat(newVisibleColumns, hiddenColumns);
 
-    setState(R.set(lens, R.concat(newColumns, hiddenColumns)));
+      setState(R.set(lens, newColumns));
+    } else if (droppableChanged && visibleChanged) {
+      const column = R.find(R.propEq("id", columnId), hiddenColumns) as Column;
+      const addAtIndex = R.insert(toIndex, column.toggleVisibility());
+      const removeAtIndex = R.remove<Column>(fromIndex, 1);
+
+      const newHiddenColumns = R.pipe(
+        removeAtIndex,
+        Column.sort
+      )(hiddenColumns);
+
+      const newVisibleColumns = addAtIndex(visibleColumns);
+      const newColumns = R.concat(newVisibleColumns, newHiddenColumns);
+
+      setState(R.set(lens, newColumns));
+    } else if (droppableChanged && hiddenChanged) {
+      const column = R.find(R.propEq("id", columnId), visibleColumns) as Column;
+      const addAtIndex = R.insert(toIndex, column.toggleVisibility());
+      const removeAtIndex = R.remove<Column>(fromIndex, 1);
+      const newVisibleColumns = removeAtIndex(visibleColumns);
+
+      const newHiddenColumns = R.pipe(
+        addAtIndex,
+        Column.sort
+      )(hiddenColumns);
+
+      const newColumns = R.concat(newVisibleColumns, newHiddenColumns);
+
+      setState(R.set(lens, newColumns));
+    }
   };
 }
 

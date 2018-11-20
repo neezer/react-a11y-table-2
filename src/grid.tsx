@@ -43,7 +43,7 @@ export const Grid: React.FunctionComponent<IProps> = props => {
         </Table>
       </ContextMenuTrigger>
       <ContextMenu id="edit-table-headers">
-        <MenuItem onClick={_ => changeMode(Modes.Edit)}>Edit</MenuItem>
+        <MenuItem onClick={_ => changeMode(Modes.Edit)}>Edit Columns</MenuItem>
       </ContextMenu>
     </GridWrapper>
   );

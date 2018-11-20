@@ -1,4 +1,4 @@
-import { filter, propEq } from "ramda";
+import { filter, prop, propEq, sortBy } from "ramda";
 
 interface IFieldConfig {
   values?: string[];
@@ -18,6 +18,7 @@ interface IProps {
 export class Column {
   public static getVisible = filter(propEq("visible", true));
   public static getHidden = filter(propEq("visible", false));
+  public static sort = sortBy(prop("text"));
 
   public id: string;
   public text: string;

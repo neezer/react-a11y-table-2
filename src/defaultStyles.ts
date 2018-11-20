@@ -1,49 +1,16 @@
 export const defaultStyles = {
-  actions: {
-    button: {
-      "&:first-of-type": {
-        borderBottomLeftRadius: "4px",
-        borderTopLeftRadius: "4px"
-      },
-      "&:hover": {
-        backgroundColor: "#485460"
-      },
-      "&:last-of-type": {
-        borderBottomRightRadius: "4px",
-        borderTopRightRadius: "4px"
-      },
-      backgroundColor: "#1e272e",
-      border: 0,
-      color: "#fff",
-      cursor: "pointer",
-      fontSize: ".8rem",
-      fontWeight: "bold",
-      padding: "10px"
-    },
-    wrapper: {
-      display: "flex",
-      justifyContent: "right",
-      padding: "20px 0"
-    }
-  },
   columnReorder: {
     column: {
       display: "flex",
       flex: "0 0 auto",
       padding: "0 10px"
     },
-    container: {
-      backgroundColor: "rgb(225, 227, 231)",
-      borderRadius: "4px",
-      flex: "1 auto",
-      overflow: "scroll",
-      padding: "20px"
-    },
     controlContainer: {
       backgroundColor: "#fff",
-      border: "1px solid #808e9b",
       borderRadius: "4px",
       display: "flex",
+      flex: "0 0 50%",
+      flexDirection: "column",
       flexWrap: "nowrap",
       padding: "10px"
     },
@@ -53,19 +20,17 @@ export const defaultStyles = {
       color: "#fff",
       display: "flex",
       fontWeight: "bold",
-      padding: "10px 20px"
+      padding: "10px 20px",
+      width: "100%"
+    },
+    wrapper: {
+      display: "flex"
     }
   },
   columnResize: {
     column: {
       display: "inline-flex",
       flex: "0 0 auto"
-    },
-    container: {
-      backgroundColor: "rgb(225, 227, 231)",
-      borderRadius: "4px",
-      flex: "1 auto",
-      padding: "20px"
     },
     controlContainer: {
       backgroundColor: "transparent",

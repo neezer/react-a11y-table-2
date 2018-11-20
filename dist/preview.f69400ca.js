@@ -42335,6 +42335,7 @@ function () {
 
 Column.getVisible = ramda_1.filter(ramda_1.propEq("visible", true));
 Column.getHidden = ramda_1.filter(ramda_1.propEq("visible", false));
+Column.sort = ramda_1.sortBy(ramda_1.prop("text"));
 exports.Column = Column;
 },{"ramda":"../node_modules/ramda/es/index.js"}],"../src/defaultStyles.ts":[function(require,module,exports) {
 "use strict";
@@ -42343,51 +42344,18 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.defaultStyles = {
-  actions: {
-    button: {
-      "&:first-of-type": {
-        borderBottomLeftRadius: "4px",
-        borderTopLeftRadius: "4px"
-      },
-      "&:hover": {
-        backgroundColor: "#485460"
-      },
-      "&:last-of-type": {
-        borderBottomRightRadius: "4px",
-        borderTopRightRadius: "4px"
-      },
-      backgroundColor: "#1e272e",
-      border: 0,
-      color: "#fff",
-      cursor: "pointer",
-      fontSize: ".8rem",
-      fontWeight: "bold",
-      padding: "10px"
-    },
-    wrapper: {
-      display: "flex",
-      justifyContent: "right",
-      padding: "20px 0"
-    }
-  },
   columnReorder: {
     column: {
       display: "flex",
       flex: "0 0 auto",
       padding: "0 10px"
     },
-    container: {
-      backgroundColor: "rgb(225, 227, 231)",
-      borderRadius: "4px",
-      flex: "1 auto",
-      overflow: "scroll",
-      padding: "20px"
-    },
     controlContainer: {
       backgroundColor: "#fff",
-      border: "1px solid #808e9b",
       borderRadius: "4px",
       display: "flex",
+      flex: "0 0 50%",
+      flexDirection: "column",
       flexWrap: "nowrap",
       padding: "10px"
     },
@@ -42397,19 +42365,17 @@ exports.defaultStyles = {
       color: "#fff",
       display: "flex",
       fontWeight: "bold",
-      padding: "10px 20px"
+      padding: "10px 20px",
+      width: "100%"
+    },
+    wrapper: {
+      display: "flex"
     }
   },
   columnResize: {
     column: {
       display: "inline-flex",
       flex: "0 0 auto"
-    },
-    container: {
-      backgroundColor: "rgb(225, 227, 231)",
-      borderRadius: "4px",
-      flex: "1 auto",
-      padding: "20px"
     },
     controlContainer: {
       backgroundColor: "transparent",
@@ -42521,7 +42487,7 @@ exports.Pick = function (props) {
       }
     }), column.text);
   });
-  return React.createElement("ol", null, columnComponents);
+  return React.createElement("section", null, React.createElement("ol", null, columnComponents));
 };
 },{"react":"../node_modules/react/index.js"}],"../node_modules/symbol-observable/es/ponyfill.js":[function(require,module,exports) {
 "use strict";
@@ -54263,20 +54229,58 @@ function reorderColumns(props) {
       return;
     }
 
-    var toIndex = destination.index;
-    var fromIndex = source.index;
-    var destinationChanged = toIndex !== fromIndex;
+    var toIndex = destination.index,
+        toDroppable = destination.droppableId;
+    var fromIndex = source.index,
+        fromDroppable = source.droppableId;
+    var isSameDroppable = toDroppable === fromDroppable;
+    var droppableChanged = !isSameDroppable;
+    var indexChanged = toIndex !== fromIndex;
+    var destinationChanged = indexChanged || droppableChanged;
+    var visibleChanged = toDroppable === "enabled-columns";
+    var hiddenChanged = toDroppable === "disabled-columns";
 
     if (destinationChanged === false) {
       return;
     }
 
-    var column = R.find(R.propEq("id", columnId), visibleColumns);
-    var addAtIndex = R.insert(toIndex, column);
-    var removeAtIndex = R.remove(fromIndex, 1);
-    var update = R.pipe(removeAtIndex, addAtIndex);
-    var newColumns = update(visibleColumns);
-    setState(R.set(lens, R.concat(newColumns, hiddenColumns)));
+    if (indexChanged && isSameDroppable && visibleChanged) {
+      var column = R.find(R.propEq("id", columnId), visibleColumns);
+      var addAtIndex = R.insert(toIndex, column);
+      var removeAtIndex = R.remove(fromIndex, 1);
+      var update = R.pipe(removeAtIndex, addAtIndex);
+      var newVisibleColumns = update(visibleColumns);
+      var newColumns = R.concat(newVisibleColumns, hiddenColumns);
+      setState(R.set(lens, newColumns));
+    } else if (droppableChanged && visibleChanged) {
+      var _column = R.find(R.propEq("id", columnId), hiddenColumns);
+
+      var _addAtIndex = R.insert(toIndex, _column.toggleVisibility());
+
+      var _removeAtIndex = R.remove(fromIndex, 1);
+
+      var newHiddenColumns = R.pipe(_removeAtIndex, column_1.Column.sort)(hiddenColumns);
+
+      var _newVisibleColumns = _addAtIndex(visibleColumns);
+
+      var _newColumns = R.concat(_newVisibleColumns, newHiddenColumns);
+
+      setState(R.set(lens, _newColumns));
+    } else if (droppableChanged && hiddenChanged) {
+      var _column2 = R.find(R.propEq("id", columnId), visibleColumns);
+
+      var _addAtIndex2 = R.insert(toIndex, _column2.toggleVisibility());
+
+      var _removeAtIndex2 = R.remove(fromIndex, 1);
+
+      var _newVisibleColumns2 = _removeAtIndex2(visibleColumns);
+
+      var _newHiddenColumns = R.pipe(_addAtIndex2, column_1.Column.sort)(hiddenColumns);
+
+      var _newColumns2 = R.concat(_newVisibleColumns2, _newHiddenColumns);
+
+      setState(R.set(lens, _newColumns2));
+    }
   };
 }
 
@@ -54344,45 +54348,59 @@ var React = __importStar(require("react"));
 
 var DnD = __importStar(require("react-beautiful-dnd"));
 
+var column_1 = require("./column");
+
 var utils_1 = require("./utils");
 
 exports.Reorder = function (props) {
-  var columns = props.columns,
-      styles = props.styles;
+  var styles = props.styles;
   var editStyle = utils_1.getStyleFrom(styles, "columnReorder");
-  var containerStyle = utils_1.getStyleFrom(editStyle, "container");
-  var columnStyle = utils_1.getStyleFrom(editStyle, "column");
-  var controlContainerStyle = utils_1.getStyleFrom(editStyle, "controlContainer");
-  var textStyle = utils_1.getStyleFrom(editStyle, "text");
-  var columnComponents = columns.map(function (column, index) {
-    return React.createElement(DnD.Draggable, {
-      key: column.id,
-      draggableId: column.id,
-      index: index
-    }, function (provided, snapshot) {
-      return React.createElement("div", Object.assign({
-        className: utils_1.applyStyles(columnStyle)
-      }, provided.draggableProps, provided.dragHandleProps, {
-        style: getDraggingStyle(provided.draggableProps.style, snapshot.isDragging),
-        ref: provided.innerRef
-      }), React.createElement("span", {
-        className: utils_1.applyStyles(textStyle)
-      }, column.text));
+  var getEditStyle = utils_1.getStyleFrom(editStyle);
+  var columnStyle = getEditStyle("column");
+  var controlContainerStyle = getEditStyle("controlContainer");
+  var textStyle = getEditStyle("text");
+  var wrapperStyle = getEditStyle("wrapper");
+  var visibleColumns = column_1.Column.getVisible(props.columns);
+  var hiddenColumns = column_1.Column.getHidden(props.columns);
+
+  var columnComponents = function columnComponents(columns) {
+    return columns.map(function (column, index) {
+      return React.createElement(DnD.Draggable, {
+        key: column.id,
+        draggableId: column.id,
+        index: index
+      }, function (provided, snapshot) {
+        return React.createElement("div", Object.assign({
+          className: utils_1.applyStyles(columnStyle)
+        }, provided.draggableProps, provided.dragHandleProps, {
+          style: getDraggingStyle(provided.draggableProps.style, snapshot.isDragging),
+          ref: provided.innerRef
+        }), React.createElement("span", {
+          className: utils_1.applyStyles(textStyle)
+        }, column.text));
+      });
     });
-  });
-  return React.createElement("div", {
-    className: utils_1.applyStyles(containerStyle)
-  }, React.createElement("p", null, "Here you can change the display order of the columns."), React.createElement(DnD.DragDropContext, {
+  };
+
+  return React.createElement("section", null, React.createElement("p", null, "Here you can change the display order of the columns."), React.createElement("div", {
+    className: utils_1.applyStyles(wrapperStyle)
+  }, React.createElement(DnD.DragDropContext, {
     onDragEnd: props.reorder
   }, React.createElement(DnD.Droppable, {
-    droppableId: "columns",
-    direction: "horizontal"
+    droppableId: "enabled-columns"
   }, function (provided) {
     return React.createElement("div", Object.assign({}, provided.droppableProps, {
       ref: provided.innerRef,
       className: utils_1.applyStyles(controlContainerStyle)
-    }), columnComponents, provided.placeholder);
-  })));
+    }), columnComponents(visibleColumns), provided.placeholder);
+  }), React.createElement(DnD.Droppable, {
+    droppableId: "disabled-columns"
+  }, function (provided) {
+    return React.createElement("div", Object.assign({}, provided.droppableProps, {
+      ref: provided.innerRef,
+      className: utils_1.applyStyles(controlContainerStyle)
+    }), columnComponents(hiddenColumns), provided.placeholder);
+  }))));
 };
 
 function getDraggingStyle(dragStyle, isDragging) {
@@ -54402,7 +54420,7 @@ function getDraggingStyle(dragStyle, isDragging) {
       }
 
       return Object.assign({}, dragStyle, {
-        transform: "".concat(transform, " rotate(10deg)")
+        transform: "".concat(transform, " rotate(3deg)")
       });
     }
   }
@@ -54417,7 +54435,7 @@ function transitionIncludesTransform(transition) {
 
   return /transform/.test(transition);
 }
-},{"react":"../node_modules/react/index.js","react-beautiful-dnd":"../node_modules/react-beautiful-dnd/dist/react-beautiful-dnd.esm.js","./utils":"../src/utils.ts"}],"../node_modules/@most/prelude/dist/index.es.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-beautiful-dnd":"../node_modules/react-beautiful-dnd/dist/react-beautiful-dnd.esm.js","./column":"../src/column.ts","./utils":"../src/utils.ts"}],"../node_modules/@most/prelude/dist/index.es.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -60475,7 +60493,6 @@ function (_React$Component) {
       var getEditStyle = utils.getStyleFrom(editStyles);
       var textStyle = getEditStyle("text");
       var dragHandleStyle = getEditStyle("dragHandle");
-      var containerStyle = getEditStyle("container");
       var controlContainerStyle = getEditStyle("controlContainer");
       var columnComponents = columns.map(function (column) {
         var width = "".concat(column.width + 20, "px !important");
@@ -60498,9 +60515,7 @@ function (_React$Component) {
           "data-id": column.id
         }));
       });
-      return React.createElement("div", {
-        className: utils.applyStyles(containerStyle)
-      }, React.createElement("div", {
+      return React.createElement("section", null, React.createElement("div", {
         className: utils.applyStyles(controlContainerStyle)
       }, columnComponents));
     }
@@ -60597,7 +60612,7 @@ exports.Edit = function (props) {
     styles: styles,
     toggle: toggle
   }), React.createElement(reorder_1.Reorder, {
-    columns: visibleColumns,
+    columns: columns,
     styles: styles,
     reorder: reorder
   }), React.createElement(resize_1.Resize, {
@@ -62911,7 +62926,7 @@ exports.Grid = function (props) {
     onClick: function onClick(_) {
       return changeMode(types_1.Modes.Edit);
     }
-  }, "Edit")));
+  }, "Edit Columns")));
 };
 },{"ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","react-contextmenu":"../node_modules/react-contextmenu/es6/index.js","./body":"../src/body.tsx","./colgroup":"../src/colgroup.tsx","./empty":"../src/empty.tsx","./gridWrapper":"../src/gridWrapper.tsx","./head":"../src/head.tsx","./table":"../src/table.tsx","./types":"../src/types.ts"}],"../src/wrapper.tsx":[function(require,module,exports) {
 "use strict";
@@ -63226,7 +63241,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55804" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56124" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

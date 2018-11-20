@@ -33,7 +33,7 @@ export const Edit: React.FunctionComponent<IProps> = props => {
   return (
     <div className={applyStyles(containerStyle)}>
       <Pick columns={columns} styles={styles} toggle={toggle} />
-      <Reorder columns={visibleColumns} styles={styles} reorder={reorder} />
+      <Reorder columns={columns} styles={styles} reorder={reorder} />
       <Resize columns={visibleColumns} styles={styles} resize={resize} />
 
       <button onClick={_ => changeMode(Modes.View)}>Save Changes</button>

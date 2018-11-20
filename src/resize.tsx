@@ -76,7 +76,6 @@ export class Resize extends React.Component<IProps> {
     const getEditStyle = utils.getStyleFrom(editStyles);
     const textStyle = getEditStyle("text");
     const dragHandleStyle = getEditStyle("dragHandle");
-    const containerStyle = getEditStyle("container");
     const controlContainerStyle = getEditStyle("controlContainer");
 
     const columnComponents = columns.map(column => {
@@ -105,11 +104,11 @@ export class Resize extends React.Component<IProps> {
     });
 
     return (
-      <div className={utils.applyStyles(containerStyle)}>
+      <section>
         <div className={utils.applyStyles(controlContainerStyle)}>
           {columnComponents}
         </div>
-      </div>
+      </section>
     );
   }
 }

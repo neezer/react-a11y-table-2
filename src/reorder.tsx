@@ -1,6 +1,7 @@
 import * as React from "react";
 import * as DnD from "react-beautiful-dnd";
 import { Columns, ReorderColumns, Styles } from ".";
+import { Column } from "./column";
 import { applyStyles, getStyleFrom } from "./utils";
 
 interface IProps {
@@ -10,50 +11,68 @@ interface IProps {
 }
 
 export const Reorder: React.FunctionComponent<IProps> = props => {
-  const { columns, styles } = props;
+  const { styles } = props;
   const editStyle = getStyleFrom(styles, "columnReorder");
-  const containerStyle = getStyleFrom(editStyle, "container");
-  const columnStyle = getStyleFrom(editStyle, "column");
-  const controlContainerStyle = getStyleFrom(editStyle, "controlContainer");
-  const textStyle = getStyleFrom(editStyle, "text");
+  const getEditStyle = getStyleFrom(editStyle);
+  const columnStyle = getEditStyle("column");
+  const controlContainerStyle = getEditStyle("controlContainer");
+  const textStyle = getEditStyle("text");
+  const wrapperStyle = getEditStyle("wrapper");
+  const visibleColumns = Column.getVisible(props.columns);
+  const hiddenColumns = Column.getHidden(props.columns);
 
-  const columnComponents = columns.map((column, index) => (
-    <DnD.Draggable key={column.id} draggableId={column.id} index={index}>
-      {(provided, snapshot) => (
-        <div
-          className={applyStyles(columnStyle)}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-          style={getDraggingStyle(
-            provided.draggableProps.style,
-            snapshot.isDragging
-          )}
-          ref={provided.innerRef}
-        >
-          <span className={applyStyles(textStyle)}>{column.text}</span>
-        </div>
-      )}
-    </DnD.Draggable>
-  ));
+  const columnComponents = (columns: Columns) =>
+    columns.map((column, index) => (
+      <DnD.Draggable key={column.id} draggableId={column.id} index={index}>
+        {(provided, snapshot) => (
+          <div
+            className={applyStyles(columnStyle)}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            style={getDraggingStyle(
+              provided.draggableProps.style,
+              snapshot.isDragging
+            )}
+            ref={provided.innerRef}
+          >
+            <span className={applyStyles(textStyle)}>{column.text}</span>
+          </div>
+        )}
+      </DnD.Draggable>
+    ));
 
   return (
-    <div className={applyStyles(containerStyle)}>
+    <section>
       <p>Here you can change the display order of the columns.</p>
-      <DnD.DragDropContext onDragEnd={props.reorder}>
-        <DnD.Droppable droppableId="columns" direction="horizontal">
-          {provided => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              className={applyStyles(controlContainerStyle)}
-            >
-              {columnComponents}
-              {provided.placeholder}
-            </div>
-          )}
-        </DnD.Droppable>
-      </DnD.DragDropContext>
-    </div>
+      <div className={applyStyles(wrapperStyle)}>
+        <DnD.DragDropContext onDragEnd={props.reorder}>
+          <DnD.Droppable droppableId="enabled-columns">
+            {provided => (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className={applyStyles(controlContainerStyle)}
+              >
+                {columnComponents(visibleColumns)}
+                {provided.placeholder}
+              </div>
+            )}
+          </DnD.Droppable>
+          <DnD.Droppable droppableId="disabled-columns">
+            {provided => (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className={applyStyles(controlContainerStyle)}
+              >
+                {columnComponents(hiddenColumns)}
+                {provided.placeholder}
+              </div>
+            )}
+          </DnD.Droppable>
+        </DnD.DragDropContext>
+      </div>
+    </section>
   );
 };
 
@@ -76,7 +95,7 @@ function getDraggingStyle(
         return { ...dragStyle, transform: `${transform} rotate(0)` };
       }
 
-      return { ...dragStyle, transform: `${transform} rotate(10deg)` };
+      return { ...dragStyle, transform: `${transform} rotate(3deg)` };
     }
   }
 

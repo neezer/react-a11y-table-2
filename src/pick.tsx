@@ -21,5 +21,9 @@ export const Pick: React.FunctionComponent<IProps> = props => {
     </li>
   ));
 
-  return <ol>{columnComponents}</ol>;
+  return (
+    <section>
+      <ol>{columnComponents}</ol>
+    </section>
+  );
 };
