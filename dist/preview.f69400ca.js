@@ -54105,8 +54105,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var ramda_1 = require("ramda");
-
 var React = __importStar(require("react"));
 
 var react_beautiful_dnd_1 = require("react-beautiful-dnd");
@@ -54116,12 +54114,11 @@ var utils_1 = require("./utils");
 exports.ColumnReorder = function (props) {
   var columns = props.columns,
       styles = props.styles;
-  var reorderStyle = utils_1.getStyleFrom(styles, "columnEdit");
-  var containerStyle = utils_1.getStyleFrom(reorderStyle, "container");
-  var columnStyle = utils_1.getStyleFrom(reorderStyle, "column");
-  var textStyle = ramda_1.mergeDeepLeft(utils_1.getStyleFrom(reorderStyle, "text"), {
-    margin: "10px"
-  });
+  var editStyle = utils_1.getStyleFrom(styles, "columnReorder");
+  var containerStyle = utils_1.getStyleFrom(editStyle, "container");
+  var columnStyle = utils_1.getStyleFrom(editStyle, "column");
+  var controlContainerStyle = utils_1.getStyleFrom(editStyle, "controlContainer");
+  var textStyle = utils_1.getStyleFrom(editStyle, "text");
   var columnComponents = columns.map(function (column, index) {
     return React.createElement(react_beautiful_dnd_1.Draggable, {
       key: column.id,
@@ -54138,7 +54135,9 @@ exports.ColumnReorder = function (props) {
       }, column.text));
     });
   });
-  return React.createElement(react_beautiful_dnd_1.DragDropContext, {
+  return React.createElement("div", {
+    className: utils_1.applyStyles(containerStyle)
+  }, React.createElement("p", null, "Here you can change the display order of the columns."), React.createElement(react_beautiful_dnd_1.DragDropContext, {
     onDragEnd: props.saveNewOrder
   }, React.createElement(react_beautiful_dnd_1.Droppable, {
     droppableId: "columns",
@@ -54146,9 +54145,9 @@ exports.ColumnReorder = function (props) {
   }, function (provided) {
     return React.createElement("div", Object.assign({}, provided.droppableProps, {
       ref: provided.innerRef,
-      className: utils_1.applyStyles(containerStyle)
+      className: utils_1.applyStyles(controlContainerStyle)
     }), columnComponents, provided.placeholder);
-  }));
+  })));
 };
 
 function getDraggingStyle(dragStyle, isDragging) {
@@ -54183,7 +54182,7 @@ function transitionIncludesTransform(transition) {
 
   return /transform/.test(transition);
 }
-},{"ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","react-beautiful-dnd":"../node_modules/react-beautiful-dnd/dist/react-beautiful-dnd.esm.js","./utils":"../src/utils.ts"}],"../node_modules/@most/prelude/dist/index.es.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-beautiful-dnd":"../node_modules/react-beautiful-dnd/dist/react-beautiful-dnd.esm.js","./utils":"../src/utils.ts"}],"../node_modules/@most/prelude/dist/index.es.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -60257,21 +60256,21 @@ function (_React$Component) {
           columns = _this$props.columns,
           styles = _this$props.styles;
       var columnWidths = this.state.columnWidths;
-      var editStyle = utils_1.getStyleFrom(styles, "columnEdit");
-      var textStyle = utils_1.getStyleFrom(editStyle, "text");
-      var dragHandleStyle = utils_1.getStyleFrom(editStyle, "dragHandle");
-      var containerStyle = ramda_1.mergeDeepLeft(utils_1.getStyleFrom(editStyle, "container"), {
-        padding: "10px"
-      });
+      var editStyles = utils_1.getStyleFrom(styles, "columnResize");
+      var getEditStyle = utils_1.getStyleFrom(editStyles);
+      var textStyle = getEditStyle("text");
+      var dragHandleStyle = getEditStyle("dragHandle");
+      var containerStyle = getEditStyle("container");
+      var controlContainerStyle = getEditStyle("controlContainer");
       var columnComponents = columns.map(function (column, index) {
-        var width = "".concat(columnWidths[index], "px !important");
+        var width = "".concat(columnWidths[index] + 20, "px !important");
         var ref = React.createRef();
+        var columnStyle = ramda_1.mergeDeepLeft({
+          flexBasis: width
+        }, getEditStyle("column"));
 
         _this3.dragRefs.push(ref);
 
-        var columnStyle = ramda_1.mergeDeepLeft({
-          flexBasis: width
-        }, utils_1.getStyleFrom(editStyle, "column"));
         return React.createElement(React.Fragment, {
           key: column.id
         }, React.createElement("div", {
@@ -60281,11 +60280,13 @@ function (_React$Component) {
         }, column.text)), React.createElement("button", {
           ref: ref,
           className: utils_1.applyStyles(dragHandleStyle)
-        }, "Drag handle"));
+        }));
       });
       return React.createElement("div", {
         className: utils_1.applyStyles(containerStyle)
-      }, columnComponents);
+      }, React.createElement("div", {
+        className: utils_1.applyStyles(controlContainerStyle)
+      }, columnComponents));
     }
   }]);
 
@@ -60337,37 +60338,69 @@ exports.defaultStyles = {
       padding: "20px 0"
     }
   },
-  columnEdit: {
+  columnReorder: {
     column: {
       display: "flex",
-      flex: "0 0 100px",
-      height: "calc(100px - 10px)"
+      flex: "0 0 auto",
+      padding: "0 10px"
     },
     container: {
       backgroundColor: "rgb(225, 227, 231)",
       borderRadius: "4px",
-      display: "flex",
       flex: "1 auto",
-      flexWrap: "nowrap",
-      overflow: "scroll"
+      overflow: "scroll",
+      padding: "20px"
     },
-    dragHandle: {
-      backgroundColor: "transparent",
-      border: "1px solid red",
-      cursor: "ew-resize",
+    controlContainer: {
+      backgroundColor: "#fff",
+      border: "1px solid #808e9b",
+      borderRadius: "4px",
+      display: "flex",
       flexWrap: "nowrap",
-      height: "calc(100px - 10px)",
-      margin: "0 10px"
+      padding: "10px"
     },
     text: {
-      alignItems: "center",
       backgroundColor: "#575fcf",
       borderRadius: "10px",
       color: "#fff",
       display: "flex",
       fontWeight: "bold",
-      height: "100%",
-      justifyContent: "center",
+      padding: "10px 20px"
+    }
+  },
+  columnResize: {
+    column: {
+      display: "inline-flex",
+      flex: "0 0 auto"
+    },
+    container: {
+      backgroundColor: "rgb(225, 227, 231)",
+      borderRadius: "4px",
+      flex: "1 auto",
+      padding: "20px"
+    },
+    controlContainer: {
+      backgroundColor: "transparent",
+      borderRadius: "4px",
+      display: "flex",
+      flexWrap: "nowrap",
+      overflowX: "scroll",
+      paddingBottom: "15px"
+    },
+    dragHandle: {
+      backgroundColor: "#575fcf",
+      border: 0,
+      borderRadius: "4px",
+      cursor: "ew-resize",
+      flex: "0 0 2px",
+      flexWrap: "nowrap"
+    },
+    text: {
+      backgroundColor: "#fff",
+      color: "#575fcf",
+      display: "flex",
+      fontWeight: "bold",
+      padding: "10px 20px",
       width: "100%"
     }
   },
@@ -60926,6 +60959,9 @@ var Modes;
   Modes["PickColumns"] = "PickColumns";
 })(Modes = exports.Modes || (exports.Modes = {}));
 
+var getVisibleColumns = ramda_1.filter(ramda_1.propEq("visible", true));
+var getHiddenColumns = ramda_1.filter(ramda_1.propEq("visible", false));
+
 var Table =
 /*#__PURE__*/
 function (_React$Component) {
@@ -60959,7 +60995,9 @@ function (_React$Component) {
     };
 
     _this.saveNewOrder = function (dropResult) {
-      var columns = _this.state.columns;
+      var allColumns = _this.state.columns;
+      var visibleColumns = getVisibleColumns(allColumns);
+      var hiddenColumns = getHiddenColumns(allColumns);
       var destination = dropResult.destination,
           source = dropResult.source,
           columnId = dropResult.draggableId;
@@ -60977,22 +61015,24 @@ function (_React$Component) {
         return;
       }
 
-      var column = ramda_1.find(ramda_1.propEq("id", columnId), columns);
+      var column = ramda_1.find(ramda_1.propEq("id", columnId), visibleColumns);
       var addAtIndex = ramda_1.insert(toIndex, column);
       var removeAtIndex = ramda_1.remove(fromIndex, 1);
       var update = ramda_1.pipe(removeAtIndex, addAtIndex);
-      var newColumns = update(columns);
+      var newColumns = update(visibleColumns);
 
-      _this.setState(ramda_1.set(_this.columnsLens, newColumns));
+      _this.setState(ramda_1.set(_this.columnsLens, ramda_1.concat(newColumns, hiddenColumns)));
     };
 
     _this.resizeColumns = function (newColumnWidths) {
-      var columns = _this.state.columns;
-      var newColumns = columns.map(function (column, index) {
+      var allColumns = _this.state.columns;
+      var visibleColumns = getVisibleColumns(allColumns);
+      var hiddenColumns = getHiddenColumns(allColumns);
+      var newColumns = visibleColumns.map(function (column, index) {
         return column.setWidth(newColumnWidths[index]);
       });
 
-      _this.setState(ramda_1.set(_this.columnsLens, newColumns));
+      _this.setState(ramda_1.set(_this.columnsLens, ramda_1.concat(newColumns, hiddenColumns)));
     };
 
     var config = props.config;
@@ -61021,9 +61061,7 @@ function (_React$Component) {
           allColumns = _this$state.columns,
           mode = _this$state.mode,
           sticky = _this$state.sticky;
-      var visibleColumns = allColumns.filter(function (column) {
-        return column.visible;
-      });
+      var visibleColumns = getVisibleColumns(allColumns);
       var styles = ramda_1.mergeDeepLeft(this.props.styles, defaultStyles_1.defaultStyles);
       var actionsStyle = utils_1.getStyleFrom(styles, "actions");
       var buttonStyle = utils_1.getStyleFrom(actionsStyle, "button");
@@ -61251,7 +61289,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59533" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59873" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

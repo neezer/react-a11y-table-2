@@ -70,39 +70,40 @@ export class ColumnResize extends React.Component<IProps, IState> {
   public render() {
     const { columns, styles } = this.props;
     const { columnWidths } = this.state;
-    const editStyle = getStyleFrom(styles, "columnEdit");
-    const textStyle = getStyleFrom(editStyle, "text");
-    const dragHandleStyle = getStyleFrom(editStyle, "dragHandle");
-
-    const containerStyle = mergeDeepLeft(getStyleFrom(editStyle, "container"), {
-      padding: "10px"
-    });
+    const editStyles = getStyleFrom(styles, "columnResize");
+    const getEditStyle = getStyleFrom(editStyles);
+    const textStyle = getEditStyle("text");
+    const dragHandleStyle = getEditStyle("dragHandle");
+    const containerStyle = getEditStyle("container");
+    const controlContainerStyle = getEditStyle("controlContainer");
 
     const columnComponents = columns.map((column, index) => {
-      const width = `${columnWidths[index]}px !important`;
+      const width = `${columnWidths[index] + 20}px !important`;
       const ref = React.createRef<HTMLButtonElement>();
-
-      this.dragRefs.push(ref);
 
       const columnStyle = mergeDeepLeft(
         { flexBasis: width },
-        getStyleFrom(editStyle, "column")
+        getEditStyle("column")
       );
+
+      this.dragRefs.push(ref);
 
       return (
         <React.Fragment key={column.id}>
           <div className={applyStyles(columnStyle)}>
             <span className={applyStyles(textStyle)}>{column.text}</span>
           </div>
-          <button ref={ref} className={applyStyles(dragHandleStyle)}>
-            Drag handle
-          </button>
+          <button ref={ref} className={applyStyles(dragHandleStyle)} />
         </React.Fragment>
       );
     });
 
     return (
-      <div className={applyStyles(containerStyle)}>{columnComponents}</div>
+      <div className={applyStyles(containerStyle)}>
+        <div className={applyStyles(controlContainerStyle)}>
+          {columnComponents}
+        </div>
+      </div>
     );
   }
 

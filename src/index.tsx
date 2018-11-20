@@ -1,4 +1,6 @@
 import {
+  concat,
+  filter,
   find,
   findIndex,
   insert,
@@ -41,6 +43,9 @@ interface IProps {
   mode?: Modes;
 }
 
+const getVisibleColumns = filter(propEq("visible", true));
+const getHiddenColumns = filter(propEq("visible", false));
+
 export class Table extends React.Component<IProps, IState> {
   private columnsLens = lensProp("columns");
   private modeLens = lensProp("mode");
@@ -64,7 +69,7 @@ export class Table extends React.Component<IProps, IState> {
   public render() {
     const { config, data } = this.props;
     const { columns: allColumns, mode, sticky } = this.state;
-    const visibleColumns = allColumns.filter(column => column.visible);
+    const visibleColumns = getVisibleColumns(allColumns);
     const styles = mergeDeepLeft(this.props.styles, defaultStyles);
     const actionsStyle = getStyleFrom(styles, "actions");
     const buttonStyle = getStyleFrom(actionsStyle, "button");
@@ -195,7 +200,9 @@ export class Table extends React.Component<IProps, IState> {
   };
 
   public saveNewOrder = (dropResult: DropResult) => {
-    const { columns } = this.state;
+    const { columns: allColumns } = this.state;
+    const visibleColumns = getVisibleColumns(allColumns);
+    const hiddenColumns = getHiddenColumns(allColumns);
     const { destination, source, draggableId: columnId } = dropResult;
     const lacksDestination = isNil(destination);
 
@@ -211,7 +218,7 @@ export class Table extends React.Component<IProps, IState> {
       return;
     }
 
-    const column = find(propEq("id", columnId), columns) as Column;
+    const column = find(propEq("id", columnId), visibleColumns) as Column;
     const addAtIndex = insert(toIndex, column);
     const removeAtIndex = remove<Column>(fromIndex, 1);
 
@@ -220,19 +227,21 @@ export class Table extends React.Component<IProps, IState> {
       addAtIndex
     );
 
-    const newColumns = update(columns);
+    const newColumns = update(visibleColumns);
 
-    this.setState(set(this.columnsLens, newColumns));
+    this.setState(set(this.columnsLens, concat(newColumns, hiddenColumns)));
   };
 
   public resizeColumns = (newColumnWidths: number[]) => {
-    const { columns } = this.state;
+    const { columns: allColumns } = this.state;
+    const visibleColumns = getVisibleColumns(allColumns);
+    const hiddenColumns = getHiddenColumns(allColumns);
 
-    const newColumns = columns.map((column, index) =>
+    const newColumns = visibleColumns.map((column, index) =>
       column.setWidth(newColumnWidths[index])
     );
 
-    this.setState(set(this.columnsLens, newColumns));
+    this.setState(set(this.columnsLens, concat(newColumns, hiddenColumns)));
   };
 }
 

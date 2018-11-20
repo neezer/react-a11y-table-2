@@ -26,37 +26,69 @@ export const defaultStyles = {
       padding: "20px 0"
     }
   },
-  columnEdit: {
+  columnReorder: {
     column: {
       display: "flex",
-      flex: "0 0 100px",
-      height: "calc(100px - 10px)"
+      flex: "0 0 auto",
+      padding: "0 10px"
     },
     container: {
       backgroundColor: "rgb(225, 227, 231)",
       borderRadius: "4px",
-      display: "flex",
       flex: "1 auto",
-      flexWrap: "nowrap",
-      overflow: "scroll"
+      overflow: "scroll",
+      padding: "20px"
     },
-    dragHandle: {
-      backgroundColor: "transparent",
-      border: "1px solid red",
-      cursor: "ew-resize",
+    controlContainer: {
+      backgroundColor: "#fff",
+      border: "1px solid #808e9b",
+      borderRadius: "4px",
+      display: "flex",
       flexWrap: "nowrap",
-      height: "calc(100px - 10px)",
-      margin: "0 10px"
+      padding: "10px"
     },
     text: {
-      alignItems: "center",
       backgroundColor: "#575fcf",
       borderRadius: "10px",
       color: "#fff",
       display: "flex",
       fontWeight: "bold",
-      height: "100%",
-      justifyContent: "center",
+      padding: "10px 20px"
+    }
+  },
+  columnResize: {
+    column: {
+      display: "inline-flex",
+      flex: "0 0 auto"
+    },
+    container: {
+      backgroundColor: "rgb(225, 227, 231)",
+      borderRadius: "4px",
+      flex: "1 auto",
+      padding: "20px"
+    },
+    controlContainer: {
+      backgroundColor: "transparent",
+      borderRadius: "4px",
+      display: "flex",
+      flexWrap: "nowrap",
+      overflowX: "scroll",
+      paddingBottom: "15px"
+    },
+    dragHandle: {
+      backgroundColor: "#575fcf",
+      border: 0,
+      borderRadius: "4px",
+      cursor: "ew-resize",
+      flex: "0 0 2px",
+      flexWrap: "nowrap"
+    },
+    text: {
+      backgroundColor: "#fff",
+      color: "#575fcf",
+      display: "flex",
+      fontWeight: "bold",
+      padding: "10px 20px",
       width: "100%"
     }
   },
