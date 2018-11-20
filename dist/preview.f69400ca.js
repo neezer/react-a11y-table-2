@@ -42278,140 +42278,7 @@ var _zipObj = _interopRequireDefault(require("./zipObj"));
 var _zipWith = _interopRequireDefault(require("./zipWith"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-},{"./F":"../node_modules/ramda/es/F.js","./T":"../node_modules/ramda/es/T.js","./__":"../node_modules/ramda/es/__.js","./add":"../node_modules/ramda/es/add.js","./addIndex":"../node_modules/ramda/es/addIndex.js","./adjust":"../node_modules/ramda/es/adjust.js","./all":"../node_modules/ramda/es/all.js","./allPass":"../node_modules/ramda/es/allPass.js","./always":"../node_modules/ramda/es/always.js","./and":"../node_modules/ramda/es/and.js","./any":"../node_modules/ramda/es/any.js","./anyPass":"../node_modules/ramda/es/anyPass.js","./ap":"../node_modules/ramda/es/ap.js","./aperture":"../node_modules/ramda/es/aperture.js","./append":"../node_modules/ramda/es/append.js","./apply":"../node_modules/ramda/es/apply.js","./applySpec":"../node_modules/ramda/es/applySpec.js","./applyTo":"../node_modules/ramda/es/applyTo.js","./ascend":"../node_modules/ramda/es/ascend.js","./assoc":"../node_modules/ramda/es/assoc.js","./assocPath":"../node_modules/ramda/es/assocPath.js","./binary":"../node_modules/ramda/es/binary.js","./bind":"../node_modules/ramda/es/bind.js","./both":"../node_modules/ramda/es/both.js","./call":"../node_modules/ramda/es/call.js","./chain":"../node_modules/ramda/es/chain.js","./clamp":"../node_modules/ramda/es/clamp.js","./clone":"../node_modules/ramda/es/clone.js","./comparator":"../node_modules/ramda/es/comparator.js","./complement":"../node_modules/ramda/es/complement.js","./compose":"../node_modules/ramda/es/compose.js","./composeK":"../node_modules/ramda/es/composeK.js","./composeP":"../node_modules/ramda/es/composeP.js","./concat":"../node_modules/ramda/es/concat.js","./cond":"../node_modules/ramda/es/cond.js","./construct":"../node_modules/ramda/es/construct.js","./constructN":"../node_modules/ramda/es/constructN.js","./contains":"../node_modules/ramda/es/contains.js","./converge":"../node_modules/ramda/es/converge.js","./countBy":"../node_modules/ramda/es/countBy.js","./curry":"../node_modules/ramda/es/curry.js","./curryN":"../node_modules/ramda/es/curryN.js","./dec":"../node_modules/ramda/es/dec.js","./defaultTo":"../node_modules/ramda/es/defaultTo.js","./descend":"../node_modules/ramda/es/descend.js","./difference":"../node_modules/ramda/es/difference.js","./differenceWith":"../node_modules/ramda/es/differenceWith.js","./dissoc":"../node_modules/ramda/es/dissoc.js","./dissocPath":"../node_modules/ramda/es/dissocPath.js","./divide":"../node_modules/ramda/es/divide.js","./drop":"../node_modules/ramda/es/drop.js","./dropLast":"../node_modules/ramda/es/dropLast.js","./dropLastWhile":"../node_modules/ramda/es/dropLastWhile.js","./dropRepeats":"../node_modules/ramda/es/dropRepeats.js","./dropRepeatsWith":"../node_modules/ramda/es/dropRepeatsWith.js","./dropWhile":"../node_modules/ramda/es/dropWhile.js","./either":"../node_modules/ramda/es/either.js","./empty":"../node_modules/ramda/es/empty.js","./endsWith":"../node_modules/ramda/es/endsWith.js","./eqBy":"../node_modules/ramda/es/eqBy.js","./eqProps":"../node_modules/ramda/es/eqProps.js","./equals":"../node_modules/ramda/es/equals.js","./evolve":"../node_modules/ramda/es/evolve.js","./filter":"../node_modules/ramda/es/filter.js","./find":"../node_modules/ramda/es/find.js","./findIndex":"../node_modules/ramda/es/findIndex.js","./findLast":"../node_modules/ramda/es/findLast.js","./findLastIndex":"../node_modules/ramda/es/findLastIndex.js","./flatten":"../node_modules/ramda/es/flatten.js","./flip":"../node_modules/ramda/es/flip.js","./forEach":"../node_modules/ramda/es/forEach.js","./forEachObjIndexed":"../node_modules/ramda/es/forEachObjIndexed.js","./fromPairs":"../node_modules/ramda/es/fromPairs.js","./groupBy":"../node_modules/ramda/es/groupBy.js","./groupWith":"../node_modules/ramda/es/groupWith.js","./gt":"../node_modules/ramda/es/gt.js","./gte":"../node_modules/ramda/es/gte.js","./has":"../node_modules/ramda/es/has.js","./hasIn":"../node_modules/ramda/es/hasIn.js","./head":"../node_modules/ramda/es/head.js","./identical":"../node_modules/ramda/es/identical.js","./identity":"../node_modules/ramda/es/identity.js","./ifElse":"../node_modules/ramda/es/ifElse.js","./inc":"../node_modules/ramda/es/inc.js","./indexBy":"../node_modules/ramda/es/indexBy.js","./indexOf":"../node_modules/ramda/es/indexOf.js","./init":"../node_modules/ramda/es/init.js","./innerJoin":"../node_modules/ramda/es/innerJoin.js","./insert":"../node_modules/ramda/es/insert.js","./insertAll":"../node_modules/ramda/es/insertAll.js","./intersection":"../node_modules/ramda/es/intersection.js","./intersperse":"../node_modules/ramda/es/intersperse.js","./into":"../node_modules/ramda/es/into.js","./invert":"../node_modules/ramda/es/invert.js","./invertObj":"../node_modules/ramda/es/invertObj.js","./invoker":"../node_modules/ramda/es/invoker.js","./is":"../node_modules/ramda/es/is.js","./isEmpty":"../node_modules/ramda/es/isEmpty.js","./isNil":"../node_modules/ramda/es/isNil.js","./join":"../node_modules/ramda/es/join.js","./juxt":"../node_modules/ramda/es/juxt.js","./keys":"../node_modules/ramda/es/keys.js","./keysIn":"../node_modules/ramda/es/keysIn.js","./last":"../node_modules/ramda/es/last.js","./lastIndexOf":"../node_modules/ramda/es/lastIndexOf.js","./length":"../node_modules/ramda/es/length.js","./lens":"../node_modules/ramda/es/lens.js","./lensIndex":"../node_modules/ramda/es/lensIndex.js","./lensPath":"../node_modules/ramda/es/lensPath.js","./lensProp":"../node_modules/ramda/es/lensProp.js","./lift":"../node_modules/ramda/es/lift.js","./liftN":"../node_modules/ramda/es/liftN.js","./lt":"../node_modules/ramda/es/lt.js","./lte":"../node_modules/ramda/es/lte.js","./map":"../node_modules/ramda/es/map.js","./mapAccum":"../node_modules/ramda/es/mapAccum.js","./mapAccumRight":"../node_modules/ramda/es/mapAccumRight.js","./mapObjIndexed":"../node_modules/ramda/es/mapObjIndexed.js","./match":"../node_modules/ramda/es/match.js","./mathMod":"../node_modules/ramda/es/mathMod.js","./max":"../node_modules/ramda/es/max.js","./maxBy":"../node_modules/ramda/es/maxBy.js","./mean":"../node_modules/ramda/es/mean.js","./median":"../node_modules/ramda/es/median.js","./memoize":"../node_modules/ramda/es/memoize.js","./memoizeWith":"../node_modules/ramda/es/memoizeWith.js","./merge":"../node_modules/ramda/es/merge.js","./mergeAll":"../node_modules/ramda/es/mergeAll.js","./mergeDeepLeft":"../node_modules/ramda/es/mergeDeepLeft.js","./mergeDeepRight":"../node_modules/ramda/es/mergeDeepRight.js","./mergeDeepWith":"../node_modules/ramda/es/mergeDeepWith.js","./mergeDeepWithKey":"../node_modules/ramda/es/mergeDeepWithKey.js","./mergeWith":"../node_modules/ramda/es/mergeWith.js","./mergeWithKey":"../node_modules/ramda/es/mergeWithKey.js","./min":"../node_modules/ramda/es/min.js","./minBy":"../node_modules/ramda/es/minBy.js","./modulo":"../node_modules/ramda/es/modulo.js","./multiply":"../node_modules/ramda/es/multiply.js","./nAry":"../node_modules/ramda/es/nAry.js","./negate":"../node_modules/ramda/es/negate.js","./none":"../node_modules/ramda/es/none.js","./not":"../node_modules/ramda/es/not.js","./nth":"../node_modules/ramda/es/nth.js","./nthArg":"../node_modules/ramda/es/nthArg.js","./o":"../node_modules/ramda/es/o.js","./objOf":"../node_modules/ramda/es/objOf.js","./of":"../node_modules/ramda/es/of.js","./omit":"../node_modules/ramda/es/omit.js","./once":"../node_modules/ramda/es/once.js","./or":"../node_modules/ramda/es/or.js","./over":"../node_modules/ramda/es/over.js","./pair":"../node_modules/ramda/es/pair.js","./partial":"../node_modules/ramda/es/partial.js","./partialRight":"../node_modules/ramda/es/partialRight.js","./partition":"../node_modules/ramda/es/partition.js","./path":"../node_modules/ramda/es/path.js","./pathEq":"../node_modules/ramda/es/pathEq.js","./pathOr":"../node_modules/ramda/es/pathOr.js","./pathSatisfies":"../node_modules/ramda/es/pathSatisfies.js","./pick":"../node_modules/ramda/es/pick.js","./pickAll":"../node_modules/ramda/es/pickAll.js","./pickBy":"../node_modules/ramda/es/pickBy.js","./pipe":"../node_modules/ramda/es/pipe.js","./pipeK":"../node_modules/ramda/es/pipeK.js","./pipeP":"../node_modules/ramda/es/pipeP.js","./pluck":"../node_modules/ramda/es/pluck.js","./prepend":"../node_modules/ramda/es/prepend.js","./product":"../node_modules/ramda/es/product.js","./project":"../node_modules/ramda/es/project.js","./prop":"../node_modules/ramda/es/prop.js","./propEq":"../node_modules/ramda/es/propEq.js","./propIs":"../node_modules/ramda/es/propIs.js","./propOr":"../node_modules/ramda/es/propOr.js","./propSatisfies":"../node_modules/ramda/es/propSatisfies.js","./props":"../node_modules/ramda/es/props.js","./range":"../node_modules/ramda/es/range.js","./reduce":"../node_modules/ramda/es/reduce.js","./reduceBy":"../node_modules/ramda/es/reduceBy.js","./reduceRight":"../node_modules/ramda/es/reduceRight.js","./reduceWhile":"../node_modules/ramda/es/reduceWhile.js","./reduced":"../node_modules/ramda/es/reduced.js","./reject":"../node_modules/ramda/es/reject.js","./remove":"../node_modules/ramda/es/remove.js","./repeat":"../node_modules/ramda/es/repeat.js","./replace":"../node_modules/ramda/es/replace.js","./reverse":"../node_modules/ramda/es/reverse.js","./scan":"../node_modules/ramda/es/scan.js","./sequence":"../node_modules/ramda/es/sequence.js","./set":"../node_modules/ramda/es/set.js","./slice":"../node_modules/ramda/es/slice.js","./sort":"../node_modules/ramda/es/sort.js","./sortBy":"../node_modules/ramda/es/sortBy.js","./sortWith":"../node_modules/ramda/es/sortWith.js","./split":"../node_modules/ramda/es/split.js","./splitAt":"../node_modules/ramda/es/splitAt.js","./splitEvery":"../node_modules/ramda/es/splitEvery.js","./splitWhen":"../node_modules/ramda/es/splitWhen.js","./startsWith":"../node_modules/ramda/es/startsWith.js","./subtract":"../node_modules/ramda/es/subtract.js","./sum":"../node_modules/ramda/es/sum.js","./symmetricDifference":"../node_modules/ramda/es/symmetricDifference.js","./symmetricDifferenceWith":"../node_modules/ramda/es/symmetricDifferenceWith.js","./tail":"../node_modules/ramda/es/tail.js","./take":"../node_modules/ramda/es/take.js","./takeLast":"../node_modules/ramda/es/takeLast.js","./takeLastWhile":"../node_modules/ramda/es/takeLastWhile.js","./takeWhile":"../node_modules/ramda/es/takeWhile.js","./tap":"../node_modules/ramda/es/tap.js","./test":"../node_modules/ramda/es/test.js","./times":"../node_modules/ramda/es/times.js","./toLower":"../node_modules/ramda/es/toLower.js","./toPairs":"../node_modules/ramda/es/toPairs.js","./toPairsIn":"../node_modules/ramda/es/toPairsIn.js","./toString":"../node_modules/ramda/es/toString.js","./toUpper":"../node_modules/ramda/es/toUpper.js","./transduce":"../node_modules/ramda/es/transduce.js","./transpose":"../node_modules/ramda/es/transpose.js","./traverse":"../node_modules/ramda/es/traverse.js","./trim":"../node_modules/ramda/es/trim.js","./tryCatch":"../node_modules/ramda/es/tryCatch.js","./type":"../node_modules/ramda/es/type.js","./unapply":"../node_modules/ramda/es/unapply.js","./unary":"../node_modules/ramda/es/unary.js","./uncurryN":"../node_modules/ramda/es/uncurryN.js","./unfold":"../node_modules/ramda/es/unfold.js","./union":"../node_modules/ramda/es/union.js","./unionWith":"../node_modules/ramda/es/unionWith.js","./uniq":"../node_modules/ramda/es/uniq.js","./uniqBy":"../node_modules/ramda/es/uniqBy.js","./uniqWith":"../node_modules/ramda/es/uniqWith.js","./unless":"../node_modules/ramda/es/unless.js","./unnest":"../node_modules/ramda/es/unnest.js","./until":"../node_modules/ramda/es/until.js","./update":"../node_modules/ramda/es/update.js","./useWith":"../node_modules/ramda/es/useWith.js","./values":"../node_modules/ramda/es/values.js","./valuesIn":"../node_modules/ramda/es/valuesIn.js","./view":"../node_modules/ramda/es/view.js","./when":"../node_modules/ramda/es/when.js","./where":"../node_modules/ramda/es/where.js","./whereEq":"../node_modules/ramda/es/whereEq.js","./without":"../node_modules/ramda/es/without.js","./xprod":"../node_modules/ramda/es/xprod.js","./zip":"../node_modules/ramda/es/zip.js","./zipObj":"../node_modules/ramda/es/zipObj.js","./zipWith":"../node_modules/ramda/es/zipWith.js"}],"../node_modules/murmurhash-js/murmurhash3_gc.js":[function(require,module,exports) {
-/**
- * JS Implementation of MurmurHash3 (r136) (as of May 20, 2011)
- * 
- * @author <a href="mailto:gary.court@gmail.com">Gary Court</a>
- * @see http://github.com/garycourt/murmurhash-js
- * @author <a href="mailto:aappleby@gmail.com">Austin Appleby</a>
- * @see http://sites.google.com/site/murmurhash/
- * 
- * @param {string} key ASCII only
- * @param {number} seed Positive integer only
- * @return {number} 32-bit positive integer hash 
- */
-
-function murmurhash3_32_gc(key, seed) {
-	var remainder, bytes, h1, h1b, c1, c1b, c2, c2b, k1, i;
-	
-	remainder = key.length & 3; // key.length % 4
-	bytes = key.length - remainder;
-	h1 = seed;
-	c1 = 0xcc9e2d51;
-	c2 = 0x1b873593;
-	i = 0;
-	
-	while (i < bytes) {
-	  	k1 = 
-	  	  ((key.charCodeAt(i) & 0xff)) |
-	  	  ((key.charCodeAt(++i) & 0xff) << 8) |
-	  	  ((key.charCodeAt(++i) & 0xff) << 16) |
-	  	  ((key.charCodeAt(++i) & 0xff) << 24);
-		++i;
-		
-		k1 = ((((k1 & 0xffff) * c1) + ((((k1 >>> 16) * c1) & 0xffff) << 16))) & 0xffffffff;
-		k1 = (k1 << 15) | (k1 >>> 17);
-		k1 = ((((k1 & 0xffff) * c2) + ((((k1 >>> 16) * c2) & 0xffff) << 16))) & 0xffffffff;
-
-		h1 ^= k1;
-        h1 = (h1 << 13) | (h1 >>> 19);
-		h1b = ((((h1 & 0xffff) * 5) + ((((h1 >>> 16) * 5) & 0xffff) << 16))) & 0xffffffff;
-		h1 = (((h1b & 0xffff) + 0x6b64) + ((((h1b >>> 16) + 0xe654) & 0xffff) << 16));
-	}
-	
-	k1 = 0;
-	
-	switch (remainder) {
-		case 3: k1 ^= (key.charCodeAt(i + 2) & 0xff) << 16;
-		case 2: k1 ^= (key.charCodeAt(i + 1) & 0xff) << 8;
-		case 1: k1 ^= (key.charCodeAt(i) & 0xff);
-		
-		k1 = (((k1 & 0xffff) * c1) + ((((k1 >>> 16) * c1) & 0xffff) << 16)) & 0xffffffff;
-		k1 = (k1 << 15) | (k1 >>> 17);
-		k1 = (((k1 & 0xffff) * c2) + ((((k1 >>> 16) * c2) & 0xffff) << 16)) & 0xffffffff;
-		h1 ^= k1;
-	}
-	
-	h1 ^= key.length;
-
-	h1 ^= h1 >>> 16;
-	h1 = (((h1 & 0xffff) * 0x85ebca6b) + ((((h1 >>> 16) * 0x85ebca6b) & 0xffff) << 16)) & 0xffffffff;
-	h1 ^= h1 >>> 13;
-	h1 = ((((h1 & 0xffff) * 0xc2b2ae35) + ((((h1 >>> 16) * 0xc2b2ae35) & 0xffff) << 16))) & 0xffffffff;
-	h1 ^= h1 >>> 16;
-
-	return h1 >>> 0;
-}
-
-if(typeof module !== "undefined") {
-  module.exports = murmurhash3_32_gc
-}
-},{}],"../node_modules/murmurhash-js/murmurhash2_gc.js":[function(require,module,exports) {
-/**
- * JS Implementation of MurmurHash2
- * 
- * @author <a href="mailto:gary.court@gmail.com">Gary Court</a>
- * @see http://github.com/garycourt/murmurhash-js
- * @author <a href="mailto:aappleby@gmail.com">Austin Appleby</a>
- * @see http://sites.google.com/site/murmurhash/
- * 
- * @param {string} str ASCII only
- * @param {number} seed Positive integer only
- * @return {number} 32-bit positive integer hash
- */
-
-function murmurhash2_32_gc(str, seed) {
-  var
-    l = str.length,
-    h = seed ^ l,
-    i = 0,
-    k;
-  
-  while (l >= 4) {
-  	k = 
-  	  ((str.charCodeAt(i) & 0xff)) |
-  	  ((str.charCodeAt(++i) & 0xff) << 8) |
-  	  ((str.charCodeAt(++i) & 0xff) << 16) |
-  	  ((str.charCodeAt(++i) & 0xff) << 24);
-    
-    k = (((k & 0xffff) * 0x5bd1e995) + ((((k >>> 16) * 0x5bd1e995) & 0xffff) << 16));
-    k ^= k >>> 24;
-    k = (((k & 0xffff) * 0x5bd1e995) + ((((k >>> 16) * 0x5bd1e995) & 0xffff) << 16));
-
-	h = (((h & 0xffff) * 0x5bd1e995) + ((((h >>> 16) * 0x5bd1e995) & 0xffff) << 16)) ^ k;
-
-    l -= 4;
-    ++i;
-  }
-  
-  switch (l) {
-  case 3: h ^= (str.charCodeAt(i + 2) & 0xff) << 16;
-  case 2: h ^= (str.charCodeAt(i + 1) & 0xff) << 8;
-  case 1: h ^= (str.charCodeAt(i) & 0xff);
-          h = (((h & 0xffff) * 0x5bd1e995) + ((((h >>> 16) * 0x5bd1e995) & 0xffff) << 16));
-  }
-
-  h ^= h >>> 13;
-  h = (((h & 0xffff) * 0x5bd1e995) + ((((h >>> 16) * 0x5bd1e995) & 0xffff) << 16));
-  h ^= h >>> 15;
-
-  return h >>> 0;
-}
-
-if(typeof module !== undefined) {
-  module.exports = murmurhash2_32_gc
-}
-
-},{}],"../node_modules/murmurhash-js/index.js":[function(require,module,exports) {
-var murmur3 = require("./murmurhash3_gc.js")
-var murmur2 = require("./murmurhash2_gc.js")
-
-module.exports = murmur3
-module.exports.murmur3 = murmur3
-module.exports.murmur2 = murmur2
-
-},{"./murmurhash3_gc.js":"../node_modules/murmurhash-js/murmurhash3_gc.js","./murmurhash2_gc.js":"../node_modules/murmurhash-js/murmurhash2_gc.js"}],"../src/column.ts":[function(require,module,exports) {
+},{"./F":"../node_modules/ramda/es/F.js","./T":"../node_modules/ramda/es/T.js","./__":"../node_modules/ramda/es/__.js","./add":"../node_modules/ramda/es/add.js","./addIndex":"../node_modules/ramda/es/addIndex.js","./adjust":"../node_modules/ramda/es/adjust.js","./all":"../node_modules/ramda/es/all.js","./allPass":"../node_modules/ramda/es/allPass.js","./always":"../node_modules/ramda/es/always.js","./and":"../node_modules/ramda/es/and.js","./any":"../node_modules/ramda/es/any.js","./anyPass":"../node_modules/ramda/es/anyPass.js","./ap":"../node_modules/ramda/es/ap.js","./aperture":"../node_modules/ramda/es/aperture.js","./append":"../node_modules/ramda/es/append.js","./apply":"../node_modules/ramda/es/apply.js","./applySpec":"../node_modules/ramda/es/applySpec.js","./applyTo":"../node_modules/ramda/es/applyTo.js","./ascend":"../node_modules/ramda/es/ascend.js","./assoc":"../node_modules/ramda/es/assoc.js","./assocPath":"../node_modules/ramda/es/assocPath.js","./binary":"../node_modules/ramda/es/binary.js","./bind":"../node_modules/ramda/es/bind.js","./both":"../node_modules/ramda/es/both.js","./call":"../node_modules/ramda/es/call.js","./chain":"../node_modules/ramda/es/chain.js","./clamp":"../node_modules/ramda/es/clamp.js","./clone":"../node_modules/ramda/es/clone.js","./comparator":"../node_modules/ramda/es/comparator.js","./complement":"../node_modules/ramda/es/complement.js","./compose":"../node_modules/ramda/es/compose.js","./composeK":"../node_modules/ramda/es/composeK.js","./composeP":"../node_modules/ramda/es/composeP.js","./concat":"../node_modules/ramda/es/concat.js","./cond":"../node_modules/ramda/es/cond.js","./construct":"../node_modules/ramda/es/construct.js","./constructN":"../node_modules/ramda/es/constructN.js","./contains":"../node_modules/ramda/es/contains.js","./converge":"../node_modules/ramda/es/converge.js","./countBy":"../node_modules/ramda/es/countBy.js","./curry":"../node_modules/ramda/es/curry.js","./curryN":"../node_modules/ramda/es/curryN.js","./dec":"../node_modules/ramda/es/dec.js","./defaultTo":"../node_modules/ramda/es/defaultTo.js","./descend":"../node_modules/ramda/es/descend.js","./difference":"../node_modules/ramda/es/difference.js","./differenceWith":"../node_modules/ramda/es/differenceWith.js","./dissoc":"../node_modules/ramda/es/dissoc.js","./dissocPath":"../node_modules/ramda/es/dissocPath.js","./divide":"../node_modules/ramda/es/divide.js","./drop":"../node_modules/ramda/es/drop.js","./dropLast":"../node_modules/ramda/es/dropLast.js","./dropLastWhile":"../node_modules/ramda/es/dropLastWhile.js","./dropRepeats":"../node_modules/ramda/es/dropRepeats.js","./dropRepeatsWith":"../node_modules/ramda/es/dropRepeatsWith.js","./dropWhile":"../node_modules/ramda/es/dropWhile.js","./either":"../node_modules/ramda/es/either.js","./empty":"../node_modules/ramda/es/empty.js","./endsWith":"../node_modules/ramda/es/endsWith.js","./eqBy":"../node_modules/ramda/es/eqBy.js","./eqProps":"../node_modules/ramda/es/eqProps.js","./equals":"../node_modules/ramda/es/equals.js","./evolve":"../node_modules/ramda/es/evolve.js","./filter":"../node_modules/ramda/es/filter.js","./find":"../node_modules/ramda/es/find.js","./findIndex":"../node_modules/ramda/es/findIndex.js","./findLast":"../node_modules/ramda/es/findLast.js","./findLastIndex":"../node_modules/ramda/es/findLastIndex.js","./flatten":"../node_modules/ramda/es/flatten.js","./flip":"../node_modules/ramda/es/flip.js","./forEach":"../node_modules/ramda/es/forEach.js","./forEachObjIndexed":"../node_modules/ramda/es/forEachObjIndexed.js","./fromPairs":"../node_modules/ramda/es/fromPairs.js","./groupBy":"../node_modules/ramda/es/groupBy.js","./groupWith":"../node_modules/ramda/es/groupWith.js","./gt":"../node_modules/ramda/es/gt.js","./gte":"../node_modules/ramda/es/gte.js","./has":"../node_modules/ramda/es/has.js","./hasIn":"../node_modules/ramda/es/hasIn.js","./head":"../node_modules/ramda/es/head.js","./identical":"../node_modules/ramda/es/identical.js","./identity":"../node_modules/ramda/es/identity.js","./ifElse":"../node_modules/ramda/es/ifElse.js","./inc":"../node_modules/ramda/es/inc.js","./indexBy":"../node_modules/ramda/es/indexBy.js","./indexOf":"../node_modules/ramda/es/indexOf.js","./init":"../node_modules/ramda/es/init.js","./innerJoin":"../node_modules/ramda/es/innerJoin.js","./insert":"../node_modules/ramda/es/insert.js","./insertAll":"../node_modules/ramda/es/insertAll.js","./intersection":"../node_modules/ramda/es/intersection.js","./intersperse":"../node_modules/ramda/es/intersperse.js","./into":"../node_modules/ramda/es/into.js","./invert":"../node_modules/ramda/es/invert.js","./invertObj":"../node_modules/ramda/es/invertObj.js","./invoker":"../node_modules/ramda/es/invoker.js","./is":"../node_modules/ramda/es/is.js","./isEmpty":"../node_modules/ramda/es/isEmpty.js","./isNil":"../node_modules/ramda/es/isNil.js","./join":"../node_modules/ramda/es/join.js","./juxt":"../node_modules/ramda/es/juxt.js","./keys":"../node_modules/ramda/es/keys.js","./keysIn":"../node_modules/ramda/es/keysIn.js","./last":"../node_modules/ramda/es/last.js","./lastIndexOf":"../node_modules/ramda/es/lastIndexOf.js","./length":"../node_modules/ramda/es/length.js","./lens":"../node_modules/ramda/es/lens.js","./lensIndex":"../node_modules/ramda/es/lensIndex.js","./lensPath":"../node_modules/ramda/es/lensPath.js","./lensProp":"../node_modules/ramda/es/lensProp.js","./lift":"../node_modules/ramda/es/lift.js","./liftN":"../node_modules/ramda/es/liftN.js","./lt":"../node_modules/ramda/es/lt.js","./lte":"../node_modules/ramda/es/lte.js","./map":"../node_modules/ramda/es/map.js","./mapAccum":"../node_modules/ramda/es/mapAccum.js","./mapAccumRight":"../node_modules/ramda/es/mapAccumRight.js","./mapObjIndexed":"../node_modules/ramda/es/mapObjIndexed.js","./match":"../node_modules/ramda/es/match.js","./mathMod":"../node_modules/ramda/es/mathMod.js","./max":"../node_modules/ramda/es/max.js","./maxBy":"../node_modules/ramda/es/maxBy.js","./mean":"../node_modules/ramda/es/mean.js","./median":"../node_modules/ramda/es/median.js","./memoize":"../node_modules/ramda/es/memoize.js","./memoizeWith":"../node_modules/ramda/es/memoizeWith.js","./merge":"../node_modules/ramda/es/merge.js","./mergeAll":"../node_modules/ramda/es/mergeAll.js","./mergeDeepLeft":"../node_modules/ramda/es/mergeDeepLeft.js","./mergeDeepRight":"../node_modules/ramda/es/mergeDeepRight.js","./mergeDeepWith":"../node_modules/ramda/es/mergeDeepWith.js","./mergeDeepWithKey":"../node_modules/ramda/es/mergeDeepWithKey.js","./mergeWith":"../node_modules/ramda/es/mergeWith.js","./mergeWithKey":"../node_modules/ramda/es/mergeWithKey.js","./min":"../node_modules/ramda/es/min.js","./minBy":"../node_modules/ramda/es/minBy.js","./modulo":"../node_modules/ramda/es/modulo.js","./multiply":"../node_modules/ramda/es/multiply.js","./nAry":"../node_modules/ramda/es/nAry.js","./negate":"../node_modules/ramda/es/negate.js","./none":"../node_modules/ramda/es/none.js","./not":"../node_modules/ramda/es/not.js","./nth":"../node_modules/ramda/es/nth.js","./nthArg":"../node_modules/ramda/es/nthArg.js","./o":"../node_modules/ramda/es/o.js","./objOf":"../node_modules/ramda/es/objOf.js","./of":"../node_modules/ramda/es/of.js","./omit":"../node_modules/ramda/es/omit.js","./once":"../node_modules/ramda/es/once.js","./or":"../node_modules/ramda/es/or.js","./over":"../node_modules/ramda/es/over.js","./pair":"../node_modules/ramda/es/pair.js","./partial":"../node_modules/ramda/es/partial.js","./partialRight":"../node_modules/ramda/es/partialRight.js","./partition":"../node_modules/ramda/es/partition.js","./path":"../node_modules/ramda/es/path.js","./pathEq":"../node_modules/ramda/es/pathEq.js","./pathOr":"../node_modules/ramda/es/pathOr.js","./pathSatisfies":"../node_modules/ramda/es/pathSatisfies.js","./pick":"../node_modules/ramda/es/pick.js","./pickAll":"../node_modules/ramda/es/pickAll.js","./pickBy":"../node_modules/ramda/es/pickBy.js","./pipe":"../node_modules/ramda/es/pipe.js","./pipeK":"../node_modules/ramda/es/pipeK.js","./pipeP":"../node_modules/ramda/es/pipeP.js","./pluck":"../node_modules/ramda/es/pluck.js","./prepend":"../node_modules/ramda/es/prepend.js","./product":"../node_modules/ramda/es/product.js","./project":"../node_modules/ramda/es/project.js","./prop":"../node_modules/ramda/es/prop.js","./propEq":"../node_modules/ramda/es/propEq.js","./propIs":"../node_modules/ramda/es/propIs.js","./propOr":"../node_modules/ramda/es/propOr.js","./propSatisfies":"../node_modules/ramda/es/propSatisfies.js","./props":"../node_modules/ramda/es/props.js","./range":"../node_modules/ramda/es/range.js","./reduce":"../node_modules/ramda/es/reduce.js","./reduceBy":"../node_modules/ramda/es/reduceBy.js","./reduceRight":"../node_modules/ramda/es/reduceRight.js","./reduceWhile":"../node_modules/ramda/es/reduceWhile.js","./reduced":"../node_modules/ramda/es/reduced.js","./reject":"../node_modules/ramda/es/reject.js","./remove":"../node_modules/ramda/es/remove.js","./repeat":"../node_modules/ramda/es/repeat.js","./replace":"../node_modules/ramda/es/replace.js","./reverse":"../node_modules/ramda/es/reverse.js","./scan":"../node_modules/ramda/es/scan.js","./sequence":"../node_modules/ramda/es/sequence.js","./set":"../node_modules/ramda/es/set.js","./slice":"../node_modules/ramda/es/slice.js","./sort":"../node_modules/ramda/es/sort.js","./sortBy":"../node_modules/ramda/es/sortBy.js","./sortWith":"../node_modules/ramda/es/sortWith.js","./split":"../node_modules/ramda/es/split.js","./splitAt":"../node_modules/ramda/es/splitAt.js","./splitEvery":"../node_modules/ramda/es/splitEvery.js","./splitWhen":"../node_modules/ramda/es/splitWhen.js","./startsWith":"../node_modules/ramda/es/startsWith.js","./subtract":"../node_modules/ramda/es/subtract.js","./sum":"../node_modules/ramda/es/sum.js","./symmetricDifference":"../node_modules/ramda/es/symmetricDifference.js","./symmetricDifferenceWith":"../node_modules/ramda/es/symmetricDifferenceWith.js","./tail":"../node_modules/ramda/es/tail.js","./take":"../node_modules/ramda/es/take.js","./takeLast":"../node_modules/ramda/es/takeLast.js","./takeLastWhile":"../node_modules/ramda/es/takeLastWhile.js","./takeWhile":"../node_modules/ramda/es/takeWhile.js","./tap":"../node_modules/ramda/es/tap.js","./test":"../node_modules/ramda/es/test.js","./times":"../node_modules/ramda/es/times.js","./toLower":"../node_modules/ramda/es/toLower.js","./toPairs":"../node_modules/ramda/es/toPairs.js","./toPairsIn":"../node_modules/ramda/es/toPairsIn.js","./toString":"../node_modules/ramda/es/toString.js","./toUpper":"../node_modules/ramda/es/toUpper.js","./transduce":"../node_modules/ramda/es/transduce.js","./transpose":"../node_modules/ramda/es/transpose.js","./traverse":"../node_modules/ramda/es/traverse.js","./trim":"../node_modules/ramda/es/trim.js","./tryCatch":"../node_modules/ramda/es/tryCatch.js","./type":"../node_modules/ramda/es/type.js","./unapply":"../node_modules/ramda/es/unapply.js","./unary":"../node_modules/ramda/es/unary.js","./uncurryN":"../node_modules/ramda/es/uncurryN.js","./unfold":"../node_modules/ramda/es/unfold.js","./union":"../node_modules/ramda/es/union.js","./unionWith":"../node_modules/ramda/es/unionWith.js","./uniq":"../node_modules/ramda/es/uniq.js","./uniqBy":"../node_modules/ramda/es/uniqBy.js","./uniqWith":"../node_modules/ramda/es/uniqWith.js","./unless":"../node_modules/ramda/es/unless.js","./unnest":"../node_modules/ramda/es/unnest.js","./until":"../node_modules/ramda/es/until.js","./update":"../node_modules/ramda/es/update.js","./useWith":"../node_modules/ramda/es/useWith.js","./values":"../node_modules/ramda/es/values.js","./valuesIn":"../node_modules/ramda/es/valuesIn.js","./view":"../node_modules/ramda/es/view.js","./when":"../node_modules/ramda/es/when.js","./where":"../node_modules/ramda/es/where.js","./whereEq":"../node_modules/ramda/es/whereEq.js","./without":"../node_modules/ramda/es/without.js","./xprod":"../node_modules/ramda/es/xprod.js","./zip":"../node_modules/ramda/es/zip.js","./zipObj":"../node_modules/ramda/es/zipObj.js","./zipWith":"../node_modules/ramda/es/zipWith.js"}],"../src/column.ts":[function(require,module,exports) {
 "use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -42423,6 +42290,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var ramda_1 = require("ramda");
 
 var Column =
 /*#__PURE__*/
@@ -42463,65 +42332,152 @@ function () {
   return Column;
 }();
 
+Column.getVisible = ramda_1.filter(ramda_1.propEq("visible", true));
+Column.getHidden = ramda_1.filter(ramda_1.propEq("visible", false));
 exports.Column = Column;
-},{}],"../src/utils.ts":[function(require,module,exports) {
+},{"ramda":"../node_modules/ramda/es/index.js"}],"../src/defaultStyles.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var emotion_1 = require("emotion");
-
-var murmurhash_js_1 = require("murmurhash-js");
-
-var ramda_1 = require("ramda");
-
-var column_1 = require("./column");
-
-exports.getStyleFrom = ramda_1.curryN(2, function (styles, name) {
-  if (ramda_1.isNil(styles)) {
-    return undefined;
+exports.defaultStyles = {
+  actions: {
+    button: {
+      "&:first-of-type": {
+        borderBottomLeftRadius: "4px",
+        borderTopLeftRadius: "4px"
+      },
+      "&:hover": {
+        backgroundColor: "#485460"
+      },
+      "&:last-of-type": {
+        borderBottomRightRadius: "4px",
+        borderTopRightRadius: "4px"
+      },
+      backgroundColor: "#1e272e",
+      border: 0,
+      color: "#fff",
+      cursor: "pointer",
+      fontSize: ".8rem",
+      fontWeight: "bold",
+      padding: "10px"
+    },
+    wrapper: {
+      display: "flex",
+      justifyContent: "right",
+      padding: "20px 0"
+    }
+  },
+  columnReorder: {
+    column: {
+      display: "flex",
+      flex: "0 0 auto",
+      padding: "0 10px"
+    },
+    container: {
+      backgroundColor: "rgb(225, 227, 231)",
+      borderRadius: "4px",
+      flex: "1 auto",
+      overflow: "scroll",
+      padding: "20px"
+    },
+    controlContainer: {
+      backgroundColor: "#fff",
+      border: "1px solid #808e9b",
+      borderRadius: "4px",
+      display: "flex",
+      flexWrap: "nowrap",
+      padding: "10px"
+    },
+    text: {
+      backgroundColor: "#575fcf",
+      borderRadius: "10px",
+      color: "#fff",
+      display: "flex",
+      fontWeight: "bold",
+      padding: "10px 20px"
+    }
+  },
+  columnResize: {
+    column: {
+      display: "inline-flex",
+      flex: "0 0 auto"
+    },
+    container: {
+      backgroundColor: "rgb(225, 227, 231)",
+      borderRadius: "4px",
+      flex: "1 auto",
+      padding: "20px"
+    },
+    controlContainer: {
+      backgroundColor: "transparent",
+      borderRadius: "4px",
+      display: "flex",
+      flexWrap: "nowrap",
+      overflowX: "scroll",
+      paddingBottom: "15px"
+    },
+    dragHandle: {
+      backgroundColor: "#575fcf",
+      border: 0,
+      borderRadius: "4px",
+      cursor: "ew-resize",
+      flex: "0 0 2px",
+      flexWrap: "nowrap"
+    },
+    text: {
+      backgroundColor: "#fff",
+      color: "#575fcf",
+      display: "flex",
+      fontWeight: "bold",
+      padding: "10px 20px",
+      width: "100%"
+    }
+  },
+  grid: {
+    cell: {
+      backgroundColor: "#fff",
+      boxSizing: "border-box",
+      overflow: "hidden",
+      padding: "10px 6px",
+      whiteSpace: "nowrap"
+    },
+    headers: {
+      backgroundColor: "rgb(247, 248, 249)",
+      borderBottom: "1px solid rgb(225, 227, 231)",
+      boxSizing: "border-box",
+      color: "rgb(148, 157, 173)",
+      fontSize: "0.9rem",
+      padding: "16px 6px 10px",
+      textAlign: "left",
+      textTransform: "uppercase"
+    },
+    row: {
+      "& + *": {
+        borderTop: "1px solid rgb(225, 227, 231)"
+      }
+    },
+    table: {
+      borderCollapse: "collapse",
+      tableLayout: "fixed"
+    },
+    wrapper: {
+      backgroundColor: "rgb(225, 227, 231)",
+      border: "1px solid rgb(225, 227, 231)",
+      borderRadius: "4px",
+      boxSizing: "border-box",
+      display: "inline-block",
+      overflow: "scroll"
+    }
+  },
+  wrapper: {
+    display: "flex",
+    flexDirection: "column",
+    height: "inherit"
   }
-
-  return ramda_1.propOr(undefined, name, styles);
-});
-
-function supports(property, value) {
-  return supportsFeatureDetection() && CSS.supports(property, value);
-}
-
-exports.supports = supports;
-
-function supportsFeatureDetection() {
-  return ramda_1.is(Function, CSS.supports);
-}
-
-function hash(value) {
-  return String(murmurhash_js_1.murmur3(value));
-}
-
-exports.hash = hash;
-exports.isNotEmpty = ramda_1.complement(ramda_1.isEmpty);
-exports.isNotNil = ramda_1.complement(ramda_1.isNil);
-exports.makeColumns = ramda_1.curryN(2, function (config, fields) {
-  var mapColumns = ramda_1.map(function (field) {
-    return new column_1.Column({
-      config: config.properties[field],
-      id: hash(field),
-      text: field,
-      visible: true
-    });
-  });
-  return mapColumns(fields);
-});
-
-function applyStyles(styles) {
-  return emotion_1.css(styles);
-}
-
-exports.applyStyles = applyStyles;
-},{"emotion":"../node_modules/emotion/dist/index.esm.js","murmurhash-js":"../node_modules/murmurhash-js/index.js","ramda":"../node_modules/ramda/es/index.js","./column":"../src/column.ts"}],"../src/actions.tsx":[function(require,module,exports) {
+};
+},{}],"../src/pick.tsx":[function(require,module,exports) {
 "use strict";
 
 var __importStar = this && this.__importStar || function (mod) {
@@ -42540,35 +42496,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var React = __importStar(require("react"));
 
-var utils_1 = require("./utils");
-
-exports.Actions = function (props) {
-  var actionsStyles = utils_1.getStyleFrom(props.styles, "actions");
-  var wrapperStyle = utils_1.getStyleFrom(actionsStyles, "wrapper");
-  return React.createElement("div", {
-    className: utils_1.applyStyles(wrapperStyle)
-  }, props.children);
-};
-},{"react":"../node_modules/react/index.js","./utils":"../src/utils.ts"}],"../src/columnPicker.tsx":[function(require,module,exports) {
-"use strict";
-
-var __importStar = this && this.__importStar || function (mod) {
-  if (mod && mod.__esModule) return mod;
-  var result = {};
-  if (mod != null) for (var k in mod) {
-    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-  }
-  result["default"] = mod;
-  return result;
-};
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var React = __importStar(require("react"));
-
-exports.ColumnPicker = function (props) {
+exports.Pick = function (props) {
   var columns = props.columns,
       toggle = props.toggle;
   var columnComponents = columns.map(function (column) {
@@ -42577,7 +42505,9 @@ exports.ColumnPicker = function (props) {
     }, React.createElement("input", {
       type: "checkbox",
       checked: column.visible,
-      onChange: toggle(column)
+      onChange: function onChange(_) {
+        return toggle(column);
+      }
     }), column.text);
   });
   return React.createElement("ol", null, columnComponents);
@@ -54088,7 +54018,273 @@ var ConnectedDraggable = (0, _reactRedux.connect)(makeMapStateToProps$1, mapDisp
 })(Draggable);
 exports.Draggable = ConnectedDraggable;
 ConnectedDraggable.defaultProps = defaultProps$1;
-},{"redux":"../node_modules/redux/es/redux.js","@babel/runtime-corejs2/core-js/object/values":"../node_modules/@babel/runtime-corejs2/core-js/object/values.js","@babel/runtime-corejs2/core-js/object/keys":"../node_modules/@babel/runtime-corejs2/core-js/object/keys.js","@babel/runtime-corejs2/core-js/object/assign":"../node_modules/@babel/runtime-corejs2/core-js/object/assign.js","react-redux":"../node_modules/react-redux/es/index.js","@babel/runtime-corejs2/helpers/esm/inheritsLoose":"../node_modules/@babel/runtime-corejs2/helpers/esm/inheritsLoose.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","memoize-one":"../node_modules/memoize-one/dist/memoize-one.esm.js","raf-schd":"../node_modules/raf-schd/dist/raf-schd.esm.js","css-box-model":"../node_modules/css-box-model/dist/css-box-model.esm.js","@babel/runtime-corejs2/helpers/esm/extends":"../node_modules/@babel/runtime-corejs2/helpers/esm/extends.js","@babel/runtime-corejs2/core-js/number/is-integer":"../node_modules/@babel/runtime-corejs2/core-js/number/is-integer.js","tiny-invariant":"../node_modules/tiny-invariant/dist/tiny-invariant.esm.js"}],"../src/columnReorder.tsx":[function(require,module,exports) {
+},{"redux":"../node_modules/redux/es/redux.js","@babel/runtime-corejs2/core-js/object/values":"../node_modules/@babel/runtime-corejs2/core-js/object/values.js","@babel/runtime-corejs2/core-js/object/keys":"../node_modules/@babel/runtime-corejs2/core-js/object/keys.js","@babel/runtime-corejs2/core-js/object/assign":"../node_modules/@babel/runtime-corejs2/core-js/object/assign.js","react-redux":"../node_modules/react-redux/es/index.js","@babel/runtime-corejs2/helpers/esm/inheritsLoose":"../node_modules/@babel/runtime-corejs2/helpers/esm/inheritsLoose.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","memoize-one":"../node_modules/memoize-one/dist/memoize-one.esm.js","raf-schd":"../node_modules/raf-schd/dist/raf-schd.esm.js","css-box-model":"../node_modules/css-box-model/dist/css-box-model.esm.js","@babel/runtime-corejs2/helpers/esm/extends":"../node_modules/@babel/runtime-corejs2/helpers/esm/extends.js","@babel/runtime-corejs2/core-js/number/is-integer":"../node_modules/@babel/runtime-corejs2/core-js/number/is-integer.js","tiny-invariant":"../node_modules/tiny-invariant/dist/tiny-invariant.esm.js"}],"../node_modules/murmurhash-js/murmurhash3_gc.js":[function(require,module,exports) {
+/**
+ * JS Implementation of MurmurHash3 (r136) (as of May 20, 2011)
+ * 
+ * @author <a href="mailto:gary.court@gmail.com">Gary Court</a>
+ * @see http://github.com/garycourt/murmurhash-js
+ * @author <a href="mailto:aappleby@gmail.com">Austin Appleby</a>
+ * @see http://sites.google.com/site/murmurhash/
+ * 
+ * @param {string} key ASCII only
+ * @param {number} seed Positive integer only
+ * @return {number} 32-bit positive integer hash 
+ */
+
+function murmurhash3_32_gc(key, seed) {
+	var remainder, bytes, h1, h1b, c1, c1b, c2, c2b, k1, i;
+	
+	remainder = key.length & 3; // key.length % 4
+	bytes = key.length - remainder;
+	h1 = seed;
+	c1 = 0xcc9e2d51;
+	c2 = 0x1b873593;
+	i = 0;
+	
+	while (i < bytes) {
+	  	k1 = 
+	  	  ((key.charCodeAt(i) & 0xff)) |
+	  	  ((key.charCodeAt(++i) & 0xff) << 8) |
+	  	  ((key.charCodeAt(++i) & 0xff) << 16) |
+	  	  ((key.charCodeAt(++i) & 0xff) << 24);
+		++i;
+		
+		k1 = ((((k1 & 0xffff) * c1) + ((((k1 >>> 16) * c1) & 0xffff) << 16))) & 0xffffffff;
+		k1 = (k1 << 15) | (k1 >>> 17);
+		k1 = ((((k1 & 0xffff) * c2) + ((((k1 >>> 16) * c2) & 0xffff) << 16))) & 0xffffffff;
+
+		h1 ^= k1;
+        h1 = (h1 << 13) | (h1 >>> 19);
+		h1b = ((((h1 & 0xffff) * 5) + ((((h1 >>> 16) * 5) & 0xffff) << 16))) & 0xffffffff;
+		h1 = (((h1b & 0xffff) + 0x6b64) + ((((h1b >>> 16) + 0xe654) & 0xffff) << 16));
+	}
+	
+	k1 = 0;
+	
+	switch (remainder) {
+		case 3: k1 ^= (key.charCodeAt(i + 2) & 0xff) << 16;
+		case 2: k1 ^= (key.charCodeAt(i + 1) & 0xff) << 8;
+		case 1: k1 ^= (key.charCodeAt(i) & 0xff);
+		
+		k1 = (((k1 & 0xffff) * c1) + ((((k1 >>> 16) * c1) & 0xffff) << 16)) & 0xffffffff;
+		k1 = (k1 << 15) | (k1 >>> 17);
+		k1 = (((k1 & 0xffff) * c2) + ((((k1 >>> 16) * c2) & 0xffff) << 16)) & 0xffffffff;
+		h1 ^= k1;
+	}
+	
+	h1 ^= key.length;
+
+	h1 ^= h1 >>> 16;
+	h1 = (((h1 & 0xffff) * 0x85ebca6b) + ((((h1 >>> 16) * 0x85ebca6b) & 0xffff) << 16)) & 0xffffffff;
+	h1 ^= h1 >>> 13;
+	h1 = ((((h1 & 0xffff) * 0xc2b2ae35) + ((((h1 >>> 16) * 0xc2b2ae35) & 0xffff) << 16))) & 0xffffffff;
+	h1 ^= h1 >>> 16;
+
+	return h1 >>> 0;
+}
+
+if(typeof module !== "undefined") {
+  module.exports = murmurhash3_32_gc
+}
+},{}],"../node_modules/murmurhash-js/murmurhash2_gc.js":[function(require,module,exports) {
+/**
+ * JS Implementation of MurmurHash2
+ * 
+ * @author <a href="mailto:gary.court@gmail.com">Gary Court</a>
+ * @see http://github.com/garycourt/murmurhash-js
+ * @author <a href="mailto:aappleby@gmail.com">Austin Appleby</a>
+ * @see http://sites.google.com/site/murmurhash/
+ * 
+ * @param {string} str ASCII only
+ * @param {number} seed Positive integer only
+ * @return {number} 32-bit positive integer hash
+ */
+
+function murmurhash2_32_gc(str, seed) {
+  var
+    l = str.length,
+    h = seed ^ l,
+    i = 0,
+    k;
+  
+  while (l >= 4) {
+  	k = 
+  	  ((str.charCodeAt(i) & 0xff)) |
+  	  ((str.charCodeAt(++i) & 0xff) << 8) |
+  	  ((str.charCodeAt(++i) & 0xff) << 16) |
+  	  ((str.charCodeAt(++i) & 0xff) << 24);
+    
+    k = (((k & 0xffff) * 0x5bd1e995) + ((((k >>> 16) * 0x5bd1e995) & 0xffff) << 16));
+    k ^= k >>> 24;
+    k = (((k & 0xffff) * 0x5bd1e995) + ((((k >>> 16) * 0x5bd1e995) & 0xffff) << 16));
+
+	h = (((h & 0xffff) * 0x5bd1e995) + ((((h >>> 16) * 0x5bd1e995) & 0xffff) << 16)) ^ k;
+
+    l -= 4;
+    ++i;
+  }
+  
+  switch (l) {
+  case 3: h ^= (str.charCodeAt(i + 2) & 0xff) << 16;
+  case 2: h ^= (str.charCodeAt(i + 1) & 0xff) << 8;
+  case 1: h ^= (str.charCodeAt(i) & 0xff);
+          h = (((h & 0xffff) * 0x5bd1e995) + ((((h >>> 16) * 0x5bd1e995) & 0xffff) << 16));
+  }
+
+  h ^= h >>> 13;
+  h = (((h & 0xffff) * 0x5bd1e995) + ((((h >>> 16) * 0x5bd1e995) & 0xffff) << 16));
+  h ^= h >>> 15;
+
+  return h >>> 0;
+}
+
+if(typeof module !== undefined) {
+  module.exports = murmurhash2_32_gc
+}
+
+},{}],"../node_modules/murmurhash-js/index.js":[function(require,module,exports) {
+var murmur3 = require("./murmurhash3_gc.js")
+var murmur2 = require("./murmurhash2_gc.js")
+
+module.exports = murmur3
+module.exports.murmur3 = murmur3
+module.exports.murmur2 = murmur2
+
+},{"./murmurhash3_gc.js":"../node_modules/murmurhash-js/murmurhash3_gc.js","./murmurhash2_gc.js":"../node_modules/murmurhash-js/murmurhash2_gc.js"}],"../src/utils.ts":[function(require,module,exports) {
+"use strict";
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+  }
+  result["default"] = mod;
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var emotion_1 = require("emotion");
+
+var murmurhash_js_1 = require("murmurhash-js");
+
+var R = __importStar(require("ramda"));
+
+var column_1 = require("./column");
+
+exports.getStyleFrom = R.curryN(2, function (styles, name) {
+  if (R.isNil(styles)) {
+    return undefined;
+  }
+
+  return R.propOr(undefined, name, styles);
+});
+
+function supports(property, value) {
+  return supportsFeatureDetection() && CSS.supports(property, value);
+}
+
+exports.supports = supports;
+
+function supportsFeatureDetection() {
+  return R.is(Function, CSS.supports);
+}
+
+function hash(value) {
+  return String(murmurhash_js_1.murmur3(value));
+}
+
+exports.hash = hash;
+exports.isNotEmpty = R.complement(R.isEmpty);
+exports.isNotNil = R.complement(R.isNil);
+exports.makeColumns = R.curryN(2, function (config, fields) {
+  var mapColumns = R.map(function (field) {
+    return new column_1.Column({
+      config: config.properties[field],
+      id: hash(field),
+      text: field,
+      visible: true
+    });
+  });
+  return mapColumns(fields);
+});
+
+function applyStyles(styles) {
+  return emotion_1.css(styles);
+}
+
+exports.applyStyles = applyStyles;
+
+function resizeColumns(props) {
+  var allColumns = props.allColumns,
+      lens = props.lens,
+      setState = props.setState;
+  return function (newColumnWidths) {
+    var visibleColumns = column_1.Column.getVisible(allColumns);
+    var hiddenColumns = column_1.Column.getHidden(allColumns);
+    var newColumns = visibleColumns.map(function (column, index) {
+      return column.setWidth(newColumnWidths[index]);
+    });
+    setState(R.set(lens, R.concat(newColumns, hiddenColumns)));
+  };
+}
+
+exports.resizeColumns = resizeColumns;
+
+function reorderColumns(props) {
+  var allColumns = props.allColumns,
+      lens = props.lens,
+      setState = props.setState;
+  return function (dropResult) {
+    var visibleColumns = column_1.Column.getVisible(allColumns);
+    var hiddenColumns = column_1.Column.getHidden(allColumns);
+    var destination = dropResult.destination,
+        source = dropResult.source,
+        columnId = dropResult.draggableId;
+    var lacksDestination = R.isNil(destination);
+
+    if (lacksDestination) {
+      return;
+    }
+
+    var toIndex = destination.index;
+    var fromIndex = source.index;
+    var destinationChanged = toIndex !== fromIndex;
+
+    if (destinationChanged === false) {
+      return;
+    }
+
+    var column = R.find(R.propEq("id", columnId), visibleColumns);
+    var addAtIndex = R.insert(toIndex, column);
+    var removeAtIndex = R.remove(fromIndex, 1);
+    var update = R.pipe(removeAtIndex, addAtIndex);
+    var newColumns = update(visibleColumns);
+    setState(R.set(lens, R.concat(newColumns, hiddenColumns)));
+  };
+}
+
+exports.reorderColumns = reorderColumns;
+
+function toggleColumn(props) {
+  var allColumns = props.allColumns,
+      lens = props.lens,
+      setState = props.setState;
+  return function (column) {
+    var index = R.findIndex(function (col) {
+      return col.id === column.id;
+    }, allColumns);
+    var newColumns = R.set(R.lensIndex(index), column.toggleVisibility(), allColumns);
+    setState(R.set(lens, newColumns));
+  };
+}
+
+exports.toggleColumn = toggleColumn;
+},{"emotion":"../node_modules/emotion/dist/index.esm.js","murmurhash-js":"../node_modules/murmurhash-js/index.js","ramda":"../node_modules/ramda/es/index.js","./column":"../src/column.ts"}],"../src/reorder.tsx":[function(require,module,exports) {
 "use strict";
 
 var __importStar = this && this.__importStar || function (mod) {
@@ -54107,11 +54303,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var React = __importStar(require("react"));
 
-var react_beautiful_dnd_1 = require("react-beautiful-dnd");
+var DnD = __importStar(require("react-beautiful-dnd"));
 
 var utils_1 = require("./utils");
 
-exports.ColumnReorder = function (props) {
+exports.Reorder = function (props) {
   var columns = props.columns,
       styles = props.styles;
   var editStyle = utils_1.getStyleFrom(styles, "columnReorder");
@@ -54120,7 +54316,7 @@ exports.ColumnReorder = function (props) {
   var controlContainerStyle = utils_1.getStyleFrom(editStyle, "controlContainer");
   var textStyle = utils_1.getStyleFrom(editStyle, "text");
   var columnComponents = columns.map(function (column, index) {
-    return React.createElement(react_beautiful_dnd_1.Draggable, {
+    return React.createElement(DnD.Draggable, {
       key: column.id,
       draggableId: column.id,
       index: index
@@ -54137,9 +54333,9 @@ exports.ColumnReorder = function (props) {
   });
   return React.createElement("div", {
     className: utils_1.applyStyles(containerStyle)
-  }, React.createElement("p", null, "Here you can change the display order of the columns."), React.createElement(react_beautiful_dnd_1.DragDropContext, {
-    onDragEnd: props.saveNewOrder
-  }, React.createElement(react_beautiful_dnd_1.Droppable, {
+  }, React.createElement("p", null, "Here you can change the display order of the columns."), React.createElement(DnD.DragDropContext, {
+    onDragEnd: props.reorder
+  }, React.createElement(DnD.Droppable, {
     droppableId: "columns",
     direction: "horizontal"
   }, function (provided) {
@@ -60129,7 +60325,7 @@ function tryEvent(t, x, sink) {
     sink.error(t, e);
   }
 }
-},{"@most/scheduler":"../node_modules/@most/dom-event/node_modules/@most/scheduler/dist/index.es.js"}],"../src/columnResize.tsx":[function(require,module,exports) {
+},{"@most/scheduler":"../node_modules/@most/dom-event/node_modules/@most/scheduler/dist/index.es.js"}],"../src/resize.tsx":[function(require,module,exports) {
 "use strict";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -60164,7 +60360,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var core_1 = require("@most/core");
+var most = __importStar(require("@most/core"));
 
 var dom_event_1 = require("@most/dom-event");
 
@@ -60176,22 +60372,21 @@ var React = __importStar(require("react"));
 
 var utils_1 = require("./utils");
 
-var THROTTLE = 10; // milliseconds
-
+var THROTTLE_IN_MS = 10;
 var MIN_WIDTH = 30;
 var MAX_WIDTH = 1000;
 
-var ColumnResize =
+var Resize =
 /*#__PURE__*/
 function (_React$Component) {
-  _inherits(ColumnResize, _React$Component);
+  _inherits(Resize, _React$Component);
 
-  function ColumnResize() {
+  function Resize() {
     var _this;
 
-    _classCallCheck(this, ColumnResize);
+    _classCallCheck(this, Resize);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(ColumnResize).apply(this, arguments));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Resize).apply(this, arguments));
     _this.state = {
       columnWidths: _this.props.columns.map(function (column) {
         return column.config.width;
@@ -60215,7 +60410,7 @@ function (_React$Component) {
     return _this;
   }
 
-  _createClass(ColumnResize, [{
+  _createClass(Resize, [{
     key: "componentDidMount",
     value: function componentDidMount() {
       var _this2 = this;
@@ -60231,20 +60426,20 @@ function (_React$Component) {
           _this2.props.resize(_this2.state.columnWidths);
         };
 
-        var mousedowns = core_1.map(getX, dom_event_1.mousedown(colElem));
-        var mouseups = core_1.tap(mouseupEffects, core_1.map(getX, dom_event_1.mouseup(window)));
-        var mousemoves = core_1.skipRepeats(core_1.map(getX, dom_event_1.mousemove(window)));
-        var dragStream = core_1.chain(function (startX) {
-          var ΔxMoves = core_1.map(getΔX(startX), mousemoves);
-          return core_1.until(mouseups, ΔxMoves);
+        var mousedowns = most.map(getX, dom_event_1.mousedown(colElem));
+        var mouseups = most.tap(mouseupEffects, most.map(getX, dom_event_1.mouseup(window)));
+        var mousemoves = most.skipRepeats(most.map(getX, dom_event_1.mousemove(window)));
+        var dragStream = most.chain(function (startX) {
+          var ΔxMoves = most.map(getΔX(startX), mousemoves);
+          return most.until(mouseups, ΔxMoves);
         }, mousedowns);
 
         var effects = function effects(Δx) {
           _this2.updateColumnWidth(Δx, index);
         };
 
-        var stream = core_1.tap(effects, core_1.throttle(THROTTLE, dragStream));
-        core_1.runEffects(stream, scheduler_1.newDefaultScheduler());
+        var stream = most.tap(effects, most.throttle(THROTTLE_IN_MS, dragStream));
+        most.runEffects(stream, scheduler_1.newDefaultScheduler());
       });
     }
   }, {
@@ -60290,10 +60485,10 @@ function (_React$Component) {
     }
   }]);
 
-  return ColumnResize;
+  return Resize;
 }(React.Component);
 
-exports.ColumnResize = ColumnResize;
+exports.Resize = Resize;
 
 function getX(event) {
   return event.x;
@@ -60304,149 +60499,55 @@ function getΔX(startX) {
     return x - startX;
   };
 }
-},{"@most/core":"../node_modules/@most/core/dist/index.es.js","@most/dom-event":"../node_modules/@most/dom-event/dist/index.es.js","@most/scheduler":"../node_modules/@most/scheduler/dist/index.es.js","ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","./utils":"../src/utils.ts"}],"../src/defaultStyles.ts":[function(require,module,exports) {
+},{"@most/core":"../node_modules/@most/core/dist/index.es.js","@most/dom-event":"../node_modules/@most/dom-event/dist/index.es.js","@most/scheduler":"../node_modules/@most/scheduler/dist/index.es.js","ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","./utils":"../src/utils.ts"}],"../src/edit.tsx":[function(require,module,exports) {
 "use strict";
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+  }
+  result["default"] = mod;
+  return result;
+};
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.defaultStyles = {
-  actions: {
-    button: {
-      "&:first-of-type": {
-        borderBottomLeftRadius: "4px",
-        borderTopLeftRadius: "4px"
-      },
-      "&:hover": {
-        backgroundColor: "#485460"
-      },
-      "&:last-of-type": {
-        borderBottomRightRadius: "4px",
-        borderTopRightRadius: "4px"
-      },
-      backgroundColor: "#1e272e",
-      border: 0,
-      color: "#fff",
-      cursor: "pointer",
-      fontSize: ".8rem",
-      fontWeight: "bold",
-      padding: "10px"
-    },
-    wrapper: {
-      display: "flex",
-      justifyContent: "right",
-      padding: "20px 0"
-    }
-  },
-  columnReorder: {
-    column: {
-      display: "flex",
-      flex: "0 0 auto",
-      padding: "0 10px"
-    },
-    container: {
-      backgroundColor: "rgb(225, 227, 231)",
-      borderRadius: "4px",
-      flex: "1 auto",
-      overflow: "scroll",
-      padding: "20px"
-    },
-    controlContainer: {
-      backgroundColor: "#fff",
-      border: "1px solid #808e9b",
-      borderRadius: "4px",
-      display: "flex",
-      flexWrap: "nowrap",
-      padding: "10px"
-    },
-    text: {
-      backgroundColor: "#575fcf",
-      borderRadius: "10px",
-      color: "#fff",
-      display: "flex",
-      fontWeight: "bold",
-      padding: "10px 20px"
-    }
-  },
-  columnResize: {
-    column: {
-      display: "inline-flex",
-      flex: "0 0 auto"
-    },
-    container: {
-      backgroundColor: "rgb(225, 227, 231)",
-      borderRadius: "4px",
-      flex: "1 auto",
-      padding: "20px"
-    },
-    controlContainer: {
-      backgroundColor: "transparent",
-      borderRadius: "4px",
-      display: "flex",
-      flexWrap: "nowrap",
-      overflowX: "scroll",
-      paddingBottom: "15px"
-    },
-    dragHandle: {
-      backgroundColor: "#575fcf",
-      border: 0,
-      borderRadius: "4px",
-      cursor: "ew-resize",
-      flex: "0 0 2px",
-      flexWrap: "nowrap"
-    },
-    text: {
-      backgroundColor: "#fff",
-      color: "#575fcf",
-      display: "flex",
-      fontWeight: "bold",
-      padding: "10px 20px",
-      width: "100%"
-    }
-  },
-  grid: {
-    cell: {
-      backgroundColor: "#fff",
-      boxSizing: "border-box",
-      overflow: "hidden",
-      padding: "10px 6px",
-      whiteSpace: "nowrap"
-    },
-    headers: {
-      backgroundColor: "rgb(247, 248, 249)",
-      borderBottom: "1px solid rgb(225, 227, 231)",
-      boxSizing: "border-box",
-      color: "rgb(148, 157, 173)",
-      fontSize: "0.9rem",
-      padding: "16px 6px 10px",
-      textAlign: "left",
-      textTransform: "uppercase"
-    },
-    row: {
-      "& + *": {
-        borderTop: "1px solid rgb(225, 227, 231)"
-      }
-    },
-    table: {
-      borderCollapse: "collapse",
-      tableLayout: "fixed"
-    },
-    wrapper: {
-      backgroundColor: "rgb(225, 227, 231)",
-      border: "1px solid rgb(225, 227, 231)",
-      borderRadius: "4px",
-      boxSizing: "border-box",
-      display: "inline-block",
-      overflow: "scroll"
-    }
-  },
-  wrapper: {
-    display: "flex",
-    flexDirection: "column",
-    height: "inherit"
-  }
+
+var React = __importStar(require("react"));
+
+var column_1 = require("./column");
+
+var pick_1 = require("./pick");
+
+var reorder_1 = require("./reorder");
+
+var resize_1 = require("./resize");
+
+exports.Edit = function (props) {
+  var styles = props.styles,
+      allColumns = props.columns,
+      toggle = props.toggle,
+      reorder = props.reorder,
+      resize = props.resize;
+  var visibleColumns = column_1.Column.getVisible(allColumns);
+  return React.createElement("div", null, React.createElement(pick_1.Pick, {
+    columns: allColumns,
+    styles: styles,
+    toggle: toggle
+  }), React.createElement(reorder_1.Reorder, {
+    columns: visibleColumns,
+    styles: styles,
+    reorder: reorder
+  }), React.createElement(resize_1.Resize, {
+    columns: visibleColumns,
+    styles: styles,
+    resize: resize
+  }));
 };
-},{}],"../src/errorBoundary.tsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","./column":"../src/column.ts","./pick":"../src/pick.tsx","./reorder":"../src/reorder.tsx","./resize":"../src/resize.tsx"}],"../src/errorBoundary.tsx":[function(require,module,exports) {
 "use strict";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -60931,21 +61032,17 @@ var ramda_1 = require("ramda");
 
 var React = __importStar(require("react"));
 
-var actions_1 = require("./actions");
-
-var columnPicker_1 = require("./columnPicker");
-
-var columnReorder_1 = require("./columnReorder");
-
-var columnResize_1 = require("./columnResize");
+var column_1 = require("./column");
 
 var defaultStyles_1 = require("./defaultStyles");
+
+var edit_1 = require("./edit");
 
 var errorBoundary_1 = require("./errorBoundary");
 
 var grid_1 = require("./grid");
 
-var utils_1 = require("./utils");
+var utils = __importStar(require("./utils"));
 
 var wrapper_1 = require("./wrapper");
 
@@ -60954,13 +61051,7 @@ var Modes;
 (function (Modes) {
   Modes["View"] = "View";
   Modes["Edit"] = "Edit";
-  Modes["ReorderColumns"] = "ReorderColumns";
-  Modes["ResizeColumns"] = "ResizeColumns";
-  Modes["PickColumns"] = "PickColumns";
 })(Modes = exports.Modes || (exports.Modes = {}));
-
-var getVisibleColumns = ramda_1.filter(ramda_1.propEq("visible", true));
-var getHiddenColumns = ramda_1.filter(ramda_1.propEq("visible", false));
 
 var Table =
 /*#__PURE__*/
@@ -60976,72 +61067,17 @@ function (_React$Component) {
     _this.columnsLens = ramda_1.lensProp("columns");
     _this.modeLens = ramda_1.lensProp("mode");
 
-    _this.toggleColumn = function (column) {
-      return function (_) {
-        var index = ramda_1.findIndex(function (col) {
-          return col.id === column.id;
-        }, _this.state.columns);
-        var lens = ramda_1.lensPath(["columns", index]);
-        var update = ramda_1.set(lens, column.toggleVisibility());
-
-        _this.setState(update);
-      };
-    };
-
     _this.changeMode = function (newMode) {
-      return function (_) {
-        _this.setState(ramda_1.set(_this.modeLens, newMode));
-      };
-    };
-
-    _this.saveNewOrder = function (dropResult) {
-      var allColumns = _this.state.columns;
-      var visibleColumns = getVisibleColumns(allColumns);
-      var hiddenColumns = getHiddenColumns(allColumns);
-      var destination = dropResult.destination,
-          source = dropResult.source,
-          columnId = dropResult.draggableId;
-      var lacksDestination = ramda_1.isNil(destination);
-
-      if (lacksDestination) {
-        return;
-      }
-
-      var toIndex = destination.index;
-      var fromIndex = source.index;
-      var destinationChanged = toIndex !== fromIndex;
-
-      if (destinationChanged === false) {
-        return;
-      }
-
-      var column = ramda_1.find(ramda_1.propEq("id", columnId), visibleColumns);
-      var addAtIndex = ramda_1.insert(toIndex, column);
-      var removeAtIndex = ramda_1.remove(fromIndex, 1);
-      var update = ramda_1.pipe(removeAtIndex, addAtIndex);
-      var newColumns = update(visibleColumns);
-
-      _this.setState(ramda_1.set(_this.columnsLens, ramda_1.concat(newColumns, hiddenColumns)));
-    };
-
-    _this.resizeColumns = function (newColumnWidths) {
-      var allColumns = _this.state.columns;
-      var visibleColumns = getVisibleColumns(allColumns);
-      var hiddenColumns = getHiddenColumns(allColumns);
-      var newColumns = visibleColumns.map(function (column, index) {
-        return column.setWidth(newColumnWidths[index]);
-      });
-
-      _this.setState(ramda_1.set(_this.columnsLens, ramda_1.concat(newColumns, hiddenColumns)));
+      _this.setState(ramda_1.set(_this.modeLens, newMode));
     };
 
     var config = props.config;
     var fields = config.order || ramda_1.map(String, ramda_1.keys(config.properties));
-    var columns = utils_1.makeColumns(config, fields);
+    var columns = utils.makeColumns(config, fields);
     var mode = props.mode || Modes.View;
     var sticky = {
       enabled: config.stickyHeaders === true,
-      supported: utils_1.supports("position", "sticky")
+      supported: utils.supports("position", "sticky")
     };
     _this.state = {
       columns: columns,
@@ -61061,77 +61097,34 @@ function (_React$Component) {
           allColumns = _this$state.columns,
           mode = _this$state.mode,
           sticky = _this$state.sticky;
-      var visibleColumns = getVisibleColumns(allColumns);
+      var visibleColumns = column_1.Column.getVisible(allColumns);
       var styles = ramda_1.mergeDeepLeft(this.props.styles, defaultStyles_1.defaultStyles);
-      var actionsStyle = utils_1.getStyleFrom(styles, "actions");
-      var buttonStyle = utils_1.getStyleFrom(actionsStyle, "button");
-      var component = null;
-
-      switch (mode) {
-        case Modes.View:
-          component = React.createElement(React.Fragment, null, React.createElement(actions_1.Actions, {
-            styles: styles
-          }, React.createElement("button", {
-            onClick: this.changeMode(Modes.ReorderColumns),
-            className: utils_1.applyStyles(buttonStyle)
-          }, "Re-order Columns"), React.createElement("button", {
-            onClick: this.changeMode(Modes.ResizeColumns),
-            className: utils_1.applyStyles(buttonStyle)
-          }, "Resize Columns"), React.createElement("button", {
-            onClick: this.changeMode(Modes.PickColumns),
-            className: utils_1.applyStyles(buttonStyle)
-          }, "Show/Hide Columns")), React.createElement(grid_1.Grid, {
-            columns: visibleColumns,
-            config: config,
-            data: data,
-            sticky: sticky,
-            styles: styles
-          }));
-          break;
-
-        case Modes.ReorderColumns:
-          component = React.createElement(React.Fragment, null, React.createElement(actions_1.Actions, {
-            styles: styles
-          }, React.createElement("button", {
-            onClick: this.changeMode(Modes.View),
-            className: utils_1.applyStyles(buttonStyle)
-          }, "Save Column Order")), React.createElement(columnReorder_1.ColumnReorder, {
-            columns: visibleColumns,
-            saveNewOrder: this.saveNewOrder,
-            styles: styles
-          }));
-          break;
-
-        case Modes.ResizeColumns:
-          component = React.createElement(React.Fragment, null, React.createElement(actions_1.Actions, {
-            styles: styles
-          }, React.createElement("button", {
-            onClick: this.changeMode(Modes.View),
-            className: utils_1.applyStyles(buttonStyle)
-          }, "Save Column Sizes")), React.createElement(columnResize_1.ColumnResize, {
-            columns: visibleColumns,
-            styles: styles,
-            resize: this.resizeColumns
-          }));
-          break;
-
-        case Modes.PickColumns:
-          component = React.createElement(React.Fragment, null, React.createElement(actions_1.Actions, {
-            styles: styles
-          }, React.createElement("button", {
-            onClick: this.changeMode(Modes.View),
-            className: utils_1.applyStyles(buttonStyle)
-          }, "Save Column Visibility")), React.createElement(columnPicker_1.ColumnPicker, {
-            columns: allColumns,
-            styles: styles,
-            toggle: this.toggleColumn
-          }));
-          break;
-      }
-
+      var setState = this.setState.bind(this);
+      var updateProps = {
+        allColumns: allColumns,
+        lens: this.columnsLens,
+        setState: setState
+      };
+      var resize = utils.resizeColumns(updateProps);
+      var reorder = utils.reorderColumns(updateProps);
+      var toggle = utils.toggleColumn(updateProps);
+      var editProps = {
+        styles: styles,
+        toggle: toggle,
+        resize: resize,
+        reorder: reorder,
+        columns: allColumns
+      };
+      var gridProps = {
+        styles: styles,
+        config: config,
+        data: data,
+        sticky: sticky,
+        columns: visibleColumns
+      };
       return React.createElement(wrapper_1.Wrapper, {
         styles: styles
-      }, React.createElement(errorBoundary_1.ErrorBoundary, null, component));
+      }, React.createElement(errorBoundary_1.ErrorBoundary, null, mode === Modes.Edit && React.createElement(edit_1.Edit, Object.assign({}, editProps)), mode === Modes.View && React.createElement(grid_1.Grid, Object.assign({}, gridProps))));
     }
   }]);
 
@@ -61139,7 +61132,7 @@ function (_React$Component) {
 }(React.Component);
 
 exports.Table = Table;
-},{"ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","./actions":"../src/actions.tsx","./columnPicker":"../src/columnPicker.tsx","./columnReorder":"../src/columnReorder.tsx","./columnResize":"../src/columnResize.tsx","./defaultStyles":"../src/defaultStyles.ts","./errorBoundary":"../src/errorBoundary.tsx","./grid":"../src/grid.tsx","./utils":"../src/utils.ts","./wrapper":"../src/wrapper.tsx"}],"config.ts":[function(require,module,exports) {
+},{"ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","./column":"../src/column.ts","./defaultStyles":"../src/defaultStyles.ts","./edit":"../src/edit.tsx","./errorBoundary":"../src/errorBoundary.tsx","./grid":"../src/grid.tsx","./utils":"../src/utils.ts","./wrapper":"../src/wrapper.tsx"}],"config.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -61289,7 +61282,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59873" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63594" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

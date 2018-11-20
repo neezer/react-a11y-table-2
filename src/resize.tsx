@@ -1,34 +1,26 @@
-import {
-  chain,
-  map,
-  runEffects,
-  skipRepeats,
-  tap,
-  throttle,
-  until
-} from "@most/core";
+import * as most from "@most/core";
 import { mousedown, mousemove, mouseup } from "@most/dom-event";
 import { newDefaultScheduler } from "@most/scheduler";
 import { allPass, gt, lensPath, lt, mergeDeepLeft, set } from "ramda";
 import * as React from "react";
-import { Columns, Styles } from ".";
+import { Columns, ResizeColumns, Styles } from ".";
 import { applyStyles, getStyleFrom } from "./utils";
 
 interface IProps {
   columns: Columns;
   styles: Styles;
-  resize: (widths: number[]) => void;
+  resize: ResizeColumns;
 }
 
 interface IState {
   columnWidths: number[];
 }
 
-const THROTTLE = 10; // milliseconds
+const THROTTLE_IN_MS = 10;
 const MIN_WIDTH = 30;
 const MAX_WIDTH = 1000;
 
-export class ColumnResize extends React.Component<IProps, IState> {
+export class Resize extends React.Component<IProps, IState> {
   public state = {
     columnWidths: this.props.columns.map(column => column.config.width)
   };
@@ -47,23 +39,31 @@ export class ColumnResize extends React.Component<IProps, IState> {
         this.props.resize(this.state.columnWidths);
       };
 
-      const mousedowns = map(getX, mousedown(colElem));
-      const mouseups = tap(mouseupEffects, map(getX, mouseup(window)));
-      const mousemoves = skipRepeats(map(getX, mousemove(window)));
+      const mousedowns = most.map(getX, mousedown(colElem));
 
-      const dragStream = chain((startX: number) => {
-        const ΔxMoves = map(getΔX(startX), mousemoves);
+      const mouseups = most.tap(
+        mouseupEffects,
+        most.map(getX, mouseup(window))
+      );
 
-        return until(mouseups, ΔxMoves);
+      const mousemoves = most.skipRepeats(most.map(getX, mousemove(window)));
+
+      const dragStream = most.chain((startX: number) => {
+        const ΔxMoves = most.map(getΔX(startX), mousemoves);
+
+        return most.until(mouseups, ΔxMoves);
       }, mousedowns);
 
       const effects = (Δx: number) => {
         this.updateColumnWidth(Δx, index);
       };
 
-      const stream = tap(effects, throttle(THROTTLE, dragStream));
+      const stream = most.tap(
+        effects,
+        most.throttle(THROTTLE_IN_MS, dragStream)
+      );
 
-      runEffects(stream, newDefaultScheduler());
+      most.runEffects(stream, newDefaultScheduler());
     });
   }
 

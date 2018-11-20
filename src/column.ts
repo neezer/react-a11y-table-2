@@ -1,3 +1,5 @@
+import { filter, propEq } from "ramda";
+
 interface IFieldConfig {
   values?: string[];
   width: number;
@@ -13,6 +15,9 @@ interface IProps {
 }
 
 export class Column {
+  public static getVisible = filter(propEq("visible", true));
+  public static getHidden = filter(propEq("visible", false));
+
   public id: string;
   public text: string;
   public config: IFieldConfig;

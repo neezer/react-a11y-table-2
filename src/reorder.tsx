@@ -1,22 +1,15 @@
 import * as React from "react";
-import {
-  DragDropContext,
-  Draggable,
-  DraggingStyle,
-  Droppable,
-  DropResult,
-  NotDraggingStyle
-} from "react-beautiful-dnd";
-import { Columns, Styles } from ".";
+import * as DnD from "react-beautiful-dnd";
+import { Columns, ReorderColumns, Styles } from ".";
 import { applyStyles, getStyleFrom } from "./utils";
 
 interface IProps {
   columns: Columns;
   styles: Styles;
-  saveNewOrder: (result: DropResult) => void;
+  reorder: ReorderColumns;
 }
 
-export const ColumnReorder: React.FunctionComponent<IProps> = props => {
+export const Reorder: React.FunctionComponent<IProps> = props => {
   const { columns, styles } = props;
   const editStyle = getStyleFrom(styles, "columnReorder");
   const containerStyle = getStyleFrom(editStyle, "container");
@@ -25,7 +18,7 @@ export const ColumnReorder: React.FunctionComponent<IProps> = props => {
   const textStyle = getStyleFrom(editStyle, "text");
 
   const columnComponents = columns.map((column, index) => (
-    <Draggable key={column.id} draggableId={column.id} index={index}>
+    <DnD.Draggable key={column.id} draggableId={column.id} index={index}>
       {(provided, snapshot) => (
         <div
           className={applyStyles(columnStyle)}
@@ -40,14 +33,14 @@ export const ColumnReorder: React.FunctionComponent<IProps> = props => {
           <span className={applyStyles(textStyle)}>{column.text}</span>
         </div>
       )}
-    </Draggable>
+    </DnD.Draggable>
   ));
 
   return (
     <div className={applyStyles(containerStyle)}>
       <p>Here you can change the display order of the columns.</p>
-      <DragDropContext onDragEnd={props.saveNewOrder}>
-        <Droppable droppableId="columns" direction="horizontal">
+      <DnD.DragDropContext onDragEnd={props.reorder}>
+        <DnD.Droppable droppableId="columns" direction="horizontal">
           {provided => (
             <div
               {...provided.droppableProps}
@@ -58,14 +51,14 @@ export const ColumnReorder: React.FunctionComponent<IProps> = props => {
               {provided.placeholder}
             </div>
           )}
-        </Droppable>
-      </DragDropContext>
+        </DnD.Droppable>
+      </DnD.DragDropContext>
     </div>
   );
 };
 
 function getDraggingStyle(
-  dragStyle: DraggingStyle | NotDraggingStyle | undefined,
+  dragStyle: DnD.DraggingStyle | DnD.NotDraggingStyle | undefined,
   isDragging: boolean
 ) {
   if (dragStyle === undefined) {

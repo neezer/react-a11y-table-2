@@ -1,16 +1,13 @@
 import * as React from "react";
-import { Columns, Styles } from ".";
-import { Column } from "./column";
+import { Columns, Styles, ToggleColumn } from ".";
 
 interface IProps {
   columns: Columns;
   styles: Styles;
-  toggle: (
-    column: Column
-  ) => (event: React.ChangeEvent<HTMLInputElement>) => void;
+  toggle: ToggleColumn;
 }
 
-export const ColumnPicker: React.FunctionComponent<IProps> = props => {
+export const Pick: React.FunctionComponent<IProps> = props => {
   const { columns, toggle } = props;
 
   const columnComponents = columns.map(column => (
@@ -18,7 +15,7 @@ export const ColumnPicker: React.FunctionComponent<IProps> = props => {
       <input
         type="checkbox"
         checked={column.visible}
-        onChange={toggle(column)}
+        onChange={_ => toggle(column)}
       />
       {column.text}
     </li>
