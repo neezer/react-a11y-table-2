@@ -12,7 +12,7 @@ export const Colgroup: React.FunctionComponent<IProps> = props => {
   const { columns, placeholder } = props;
 
   const cols = columns.map(column => {
-    const { width } = column.config;
+    const { width } = column;
 
     const colProps: ColProps = {
       key: column.id,

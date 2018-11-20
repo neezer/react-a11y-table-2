@@ -5,6 +5,24 @@ import { DraggableLocation, DropResult } from "react-beautiful-dnd";
 import { Columns, IConfig, Styles } from ".";
 import { Column } from "./column";
 
+interface IXPos {
+  x: number;
+}
+
+interface IXColId {
+  columnId: string;
+}
+
+type IXMove = IXPos & IXColId;
+
+type IΔXChange = IXColId & {
+  Δx: number;
+};
+
+const THROTTLE_IN_MS = 10;
+const MIN_WIDTH = 30;
+const MAX_WIDTH = 1000;
+
 export const getStyleFrom = R.curryN(2, (styles: Styles, name: string) => {
   if (R.isNil(styles)) {
     return undefined;
@@ -35,7 +53,8 @@ export const makeColumns = R.curryN(2, (config: IConfig, fields: string[]) => {
         config: config.properties[field],
         id: hash(field),
         text: field,
-        visible: true
+        visible: true,
+        width: config.properties[field].width
       })
   );
 
@@ -52,18 +71,18 @@ interface IUpdateColumnsProps {
   setState: <S>(state: S) => void;
 }
 
+interface IUpdateVisibleColumnsProps {
+  visibleColumns: Columns;
+}
+
 export function resizeColumns(props: IUpdateColumnsProps) {
   const { allColumns, lens, setState } = props;
 
-  return (newColumnWidths: number[]) => {
-    const visibleColumns = Column.getVisible(allColumns);
+  return (newVisibleColumns: Columns) => {
     const hiddenColumns = Column.getHidden(allColumns);
+    const newColumns = R.concat(newVisibleColumns, hiddenColumns);
 
-    const newColumns = visibleColumns.map((column, index) =>
-      column.setWidth(newColumnWidths[index])
-    );
-
-    setState(R.set(lens, R.concat(newColumns, hiddenColumns)));
+    setState(R.set(lens, newColumns));
   };
 }
 
@@ -116,5 +135,30 @@ export function toggleColumn(props: IUpdateColumnsProps) {
     );
 
     setState(R.set(lens, newColumns));
+  };
+}
+
+export function updateColumnWidth(props: IUpdateVisibleColumnsProps) {
+  const { visibleColumns } = props;
+
+  return ({ Δx, columnId }: IΔXChange): Columns => {
+    const inBounds = R.allPass([R.gte(MAX_WIDTH), R.lte(MIN_WIDTH)]);
+    const outOfBounds = R.complement(inBounds);
+    const columnIndex = R.findIndex(R.propEq("id", columnId), visibleColumns);
+    const column = visibleColumns[columnIndex];
+
+    if (column === undefined) {
+      return visibleColumns;
+    }
+
+    const newWidth = column.width + Δx;
+
+    if (outOfBounds(newWidth)) {
+      return visibleColumns;
+    }
+
+    const updatedColumn = column.setWidth(newWidth);
+
+    return R.set(R.lensIndex(columnIndex), updatedColumn, visibleColumns);
   };
 }

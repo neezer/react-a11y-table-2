@@ -85,11 +85,21 @@ export const defaultStyles = {
     },
     text: {
       backgroundColor: "#fff",
-      color: "#575fcf",
+      borderRadius: "4px",
+      color: "#1e272e",
       display: "flex",
       fontWeight: "bold",
       padding: "10px 20px",
       width: "100%"
+    }
+  },
+  edit: {
+    container: {
+      backgroundColor: "rgb(225, 227, 231)",
+      borderRadius: "4px",
+      flex: "1 auto",
+      overflow: "scroll",
+      padding: "20px"
     }
   },
   grid: {

@@ -42303,18 +42303,18 @@ function () {
     this.text = props.text;
     this.config = props.config;
     this.visible = props.visible;
+    this.width = props.width || props.config.width;
   }
 
   _createClass(Column, [{
     key: "setWidth",
     value: function setWidth(newWidth) {
       return new Column({
-        config: Object.assign({}, this.config, {
-          width: newWidth
-        }),
+        config: this.config,
         id: this.id,
         text: this.text,
-        visible: this.visible
+        visible: this.visible,
+        width: newWidth
       });
     }
   }, {
@@ -42324,7 +42324,8 @@ function () {
         config: this.config,
         id: this.id,
         text: this.text,
-        visible: !this.visible
+        visible: !this.visible,
+        width: this.width
       });
     }
   }]);
@@ -42428,11 +42429,21 @@ exports.defaultStyles = {
     },
     text: {
       backgroundColor: "#fff",
-      color: "#575fcf",
+      borderRadius: "4px",
+      color: "#1e272e",
       display: "flex",
       fontWeight: "bold",
       padding: "10px 20px",
       width: "100%"
+    }
+  },
+  edit: {
+    container: {
+      backgroundColor: "rgb(225, 227, 231)",
+      borderRadius: "4px",
+      flex: "1 auto",
+      overflow: "scroll",
+      padding: "20px"
     }
   },
   grid: {
@@ -54176,6 +54187,9 @@ var R = __importStar(require("ramda"));
 
 var column_1 = require("./column");
 
+var THROTTLE_IN_MS = 10;
+var MIN_WIDTH = 30;
+var MAX_WIDTH = 1000;
 exports.getStyleFrom = R.curryN(2, function (styles, name) {
   if (R.isNil(styles)) {
     return undefined;
@@ -54207,7 +54221,8 @@ exports.makeColumns = R.curryN(2, function (config, fields) {
       config: config.properties[field],
       id: hash(field),
       text: field,
-      visible: true
+      visible: true,
+      width: config.properties[field].width
     });
   });
   return mapColumns(fields);
@@ -54223,13 +54238,10 @@ function resizeColumns(props) {
   var allColumns = props.allColumns,
       lens = props.lens,
       setState = props.setState;
-  return function (newColumnWidths) {
-    var visibleColumns = column_1.Column.getVisible(allColumns);
+  return function (newVisibleColumns) {
     var hiddenColumns = column_1.Column.getHidden(allColumns);
-    var newColumns = visibleColumns.map(function (column, index) {
-      return column.setWidth(newColumnWidths[index]);
-    });
-    setState(R.set(lens, R.concat(newColumns, hiddenColumns)));
+    var newColumns = R.concat(newVisibleColumns, hiddenColumns);
+    setState(R.set(lens, newColumns));
   };
 }
 
@@ -54284,6 +54296,33 @@ function toggleColumn(props) {
 }
 
 exports.toggleColumn = toggleColumn;
+
+function updateColumnWidth(props) {
+  var visibleColumns = props.visibleColumns;
+  return function (_ref) {
+    var Δx = _ref.Δx,
+        columnId = _ref.columnId;
+    var inBounds = R.allPass([R.gte(MAX_WIDTH), R.lte(MIN_WIDTH)]);
+    var outOfBounds = R.complement(inBounds);
+    var columnIndex = R.findIndex(R.propEq("id", columnId), visibleColumns);
+    var column = visibleColumns[columnIndex];
+
+    if (column === undefined) {
+      return visibleColumns;
+    }
+
+    var newWidth = column.width + Δx;
+
+    if (outOfBounds(newWidth)) {
+      return visibleColumns;
+    }
+
+    var updatedColumn = column.setWidth(newWidth);
+    return R.set(R.lensIndex(columnIndex), updatedColumn, visibleColumns);
+  };
+}
+
+exports.updateColumnWidth = updateColumnWidth;
 },{"emotion":"../node_modules/emotion/dist/index.esm.js","murmurhash-js":"../node_modules/murmurhash-js/index.js","ramda":"../node_modules/ramda/es/index.js","./column":"../src/column.ts"}],"../src/reorder.tsx":[function(require,module,exports) {
 "use strict";
 
@@ -60366,15 +60405,13 @@ var dom_event_1 = require("@most/dom-event");
 
 var scheduler_1 = require("@most/scheduler");
 
-var ramda_1 = require("ramda");
+var R = __importStar(require("ramda"));
 
 var React = __importStar(require("react"));
 
-var utils_1 = require("./utils");
+var utils = __importStar(require("./utils"));
 
 var THROTTLE_IN_MS = 10;
-var MIN_WIDTH = 30;
-var MAX_WIDTH = 1000;
 
 var Resize =
 /*#__PURE__*/
@@ -60387,26 +60424,7 @@ function (_React$Component) {
     _classCallCheck(this, Resize);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Resize).apply(this, arguments));
-    _this.state = {
-      columnWidths: _this.props.columns.map(function (column) {
-        return column.config.width;
-      })
-    };
     _this.dragRefs = [];
-
-    _this.updateColumnWidth = function (Δx, index) {
-      var column = _this.props.columns[index];
-      var lens = ramda_1.lensPath(["columnWidths", index]);
-      var newWidth = column.config.width + Δx;
-      var inBounds = ramda_1.allPass([ramda_1.gt(MAX_WIDTH), ramda_1.lt(MIN_WIDTH)]);
-
-      if (inBounds(newWidth)) {
-        var update = ramda_1.set(lens, newWidth);
-
-        _this.setState(update);
-      }
-    };
-
     return _this;
   }
 
@@ -60415,27 +60433,30 @@ function (_React$Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      this.dragRefs.forEach(function (ref, index) {
+      var visibleColumns = this.props.columns;
+      this.dragRefs.forEach(function (ref) {
         if (ref.current === null) {
           return;
         }
 
         var colElem = ref.current;
-
-        var mouseupEffects = function mouseupEffects(_) {
-          _this2.props.resize(_this2.state.columnWidths);
-        };
-
-        var mousedowns = most.map(getX, dom_event_1.mousedown(colElem));
-        var mouseups = most.tap(mouseupEffects, most.map(getX, dom_event_1.mouseup(window)));
+        var mousedowns = most.map(getColIdAndX, dom_event_1.mousedown(colElem));
+        var mouseups = most.tap(function (_) {
+          visibleColumns = _this2.props.columns;
+        }, dom_event_1.mouseup(window));
         var mousemoves = most.skipRepeats(most.map(getX, dom_event_1.mousemove(window)));
-        var dragStream = most.chain(function (startX) {
-          var ΔxMoves = most.map(getΔX(startX), mousemoves);
+        var dragStream = most.chain(function (props) {
+          var ΔxMoves = most.map(getΔX(props), mousemoves);
           return most.until(mouseups, ΔxMoves);
         }, mousedowns);
 
-        var effects = function effects(Δx) {
-          _this2.updateColumnWidth(Δx, index);
+        var effects = function effects(props) {
+          var updateVisible = utils.updateColumnWidth({
+            visibleColumns: visibleColumns
+          });
+          var newVisibleColumns = updateVisible(props);
+
+          _this2.props.resize(newVisibleColumns);
         };
 
         var stream = most.tap(effects, most.throttle(THROTTLE_IN_MS, dragStream));
@@ -60450,17 +60471,16 @@ function (_React$Component) {
       var _this$props = this.props,
           columns = _this$props.columns,
           styles = _this$props.styles;
-      var columnWidths = this.state.columnWidths;
-      var editStyles = utils_1.getStyleFrom(styles, "columnResize");
-      var getEditStyle = utils_1.getStyleFrom(editStyles);
+      var editStyles = utils.getStyleFrom(styles, "columnResize");
+      var getEditStyle = utils.getStyleFrom(editStyles);
       var textStyle = getEditStyle("text");
       var dragHandleStyle = getEditStyle("dragHandle");
       var containerStyle = getEditStyle("container");
       var controlContainerStyle = getEditStyle("controlContainer");
-      var columnComponents = columns.map(function (column, index) {
-        var width = "".concat(columnWidths[index] + 20, "px !important");
+      var columnComponents = columns.map(function (column) {
+        var width = "".concat(column.width + 20, "px !important");
         var ref = React.createRef();
-        var columnStyle = ramda_1.mergeDeepLeft({
+        var columnStyle = R.mergeDeepLeft({
           flexBasis: width
         }, getEditStyle("column"));
 
@@ -60469,18 +60489,19 @@ function (_React$Component) {
         return React.createElement(React.Fragment, {
           key: column.id
         }, React.createElement("div", {
-          className: utils_1.applyStyles(columnStyle)
+          className: utils.applyStyles(columnStyle)
         }, React.createElement("span", {
-          className: utils_1.applyStyles(textStyle)
+          className: utils.applyStyles(textStyle)
         }, column.text)), React.createElement("button", {
           ref: ref,
-          className: utils_1.applyStyles(dragHandleStyle)
+          className: utils.applyStyles(dragHandleStyle),
+          "data-id": column.id
         }));
       });
       return React.createElement("div", {
-        className: utils_1.applyStyles(containerStyle)
+        className: utils.applyStyles(containerStyle)
       }, React.createElement("div", {
-        className: utils_1.applyStyles(controlContainerStyle)
+        className: utils.applyStyles(controlContainerStyle)
       }, columnComponents));
     }
   }]);
@@ -60491,15 +60512,43 @@ function (_React$Component) {
 exports.Resize = Resize;
 
 function getX(event) {
-  return event.x;
-}
-
-function getΔX(startX) {
-  return function (x) {
-    return x - startX;
+  return {
+    x: event.x
   };
 }
-},{"@most/core":"../node_modules/@most/core/dist/index.es.js","@most/dom-event":"../node_modules/@most/dom-event/dist/index.es.js","@most/scheduler":"../node_modules/@most/scheduler/dist/index.es.js","ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","./utils":"../src/utils.ts"}],"../src/edit.tsx":[function(require,module,exports) {
+
+function getΔX(_ref) {
+  var startX = _ref.x,
+      columnId = _ref.columnId;
+  return function (_ref2) {
+    var x = _ref2.x;
+    return {
+      columnId: columnId,
+      Δx: x - startX
+    };
+  };
+}
+
+function getColIdAndX(event) {
+  var elem = event.currentTarget;
+  var columnId = elem.dataset.id;
+  return Object.assign({}, getX(event), {
+    columnId: columnId || ""
+  });
+}
+},{"@most/core":"../node_modules/@most/core/dist/index.es.js","@most/dom-event":"../node_modules/@most/dom-event/dist/index.es.js","@most/scheduler":"../node_modules/@most/scheduler/dist/index.es.js","ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","./utils":"../src/utils.ts"}],"../src/types.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var Modes;
+
+(function (Modes) {
+  Modes["View"] = "View";
+  Modes["Edit"] = "Edit";
+})(Modes = exports.Modes || (exports.Modes = {}));
+},{}],"../src/edit.tsx":[function(require,module,exports) {
 "use strict";
 
 var __importStar = this && this.__importStar || function (mod) {
@@ -60518,8 +60567,6 @@ Object.defineProperty(exports, "__esModule", {
 
 var React = __importStar(require("react"));
 
-var T = __importStar(require("."));
-
 var column_1 = require("./column");
 
 var pick_1 = require("./pick");
@@ -60527,6 +60574,10 @@ var pick_1 = require("./pick");
 var reorder_1 = require("./reorder");
 
 var resize_1 = require("./resize");
+
+var types_1 = require("./types");
+
+var utils_1 = require("./utils");
 
 exports.Edit = function (props) {
   var styles = props.styles,
@@ -60536,7 +60587,12 @@ exports.Edit = function (props) {
       resize = props.resize,
       changeMode = props.changeMode;
   var visibleColumns = column_1.Column.getVisible(columns);
-  return React.createElement("div", null, React.createElement(pick_1.Pick, {
+  var editStyles = utils_1.getStyleFrom(styles, "edit");
+  var getEditStyle = utils_1.getStyleFrom(editStyles);
+  var containerStyle = getEditStyle("container");
+  return React.createElement("div", {
+    className: utils_1.applyStyles(containerStyle)
+  }, React.createElement(pick_1.Pick, {
     columns: columns,
     styles: styles,
     toggle: toggle
@@ -60550,11 +60606,11 @@ exports.Edit = function (props) {
     resize: resize
   }), React.createElement("button", {
     onClick: function onClick(_) {
-      return changeMode(T.Modes.View);
+      return changeMode(types_1.Modes.View);
     }
   }, "Save Changes"));
 };
-},{"react":"../node_modules/react/index.js",".":"../src/index.tsx","./column":"../src/column.ts","./pick":"../src/pick.tsx","./reorder":"../src/reorder.tsx","./resize":"../src/resize.tsx"}],"../src/errorBoundary.tsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","./column":"../src/column.ts","./pick":"../src/pick.tsx","./reorder":"../src/reorder.tsx","./resize":"../src/resize.tsx","./types":"../src/types.ts","./utils":"../src/utils.ts"}],"../src/errorBoundary.tsx":[function(require,module,exports) {
 "use strict";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -62574,7 +62630,7 @@ exports.Colgroup = function (props) {
   var columns = props.columns,
       placeholder = props.placeholder;
   var cols = columns.map(function (column) {
-    var width = column.config.width;
+    var width = column.width;
     var colProps = {
       key: column.id,
       style: {
@@ -62794,8 +62850,6 @@ var React = __importStar(require("react"));
 
 var react_contextmenu_1 = require("react-contextmenu");
 
-var T = __importStar(require("."));
-
 var body_1 = require("./body");
 
 var colgroup_1 = require("./colgroup");
@@ -62807,6 +62861,8 @@ var gridWrapper_1 = require("./gridWrapper");
 var head_1 = require("./head");
 
 var table_1 = require("./table");
+
+var types_1 = require("./types");
 
 exports.Grid = function (props) {
   var columns = props.columns,
@@ -62853,11 +62909,11 @@ exports.Grid = function (props) {
     id: "edit-table-headers"
   }, React.createElement(react_contextmenu_1.MenuItem, {
     onClick: function onClick(_) {
-      return changeMode(T.Modes.Edit);
+      return changeMode(types_1.Modes.Edit);
     }
   }, "Edit")));
 };
-},{"ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","react-contextmenu":"../node_modules/react-contextmenu/es6/index.js",".":"../src/index.tsx","./body":"../src/body.tsx","./colgroup":"../src/colgroup.tsx","./empty":"../src/empty.tsx","./gridWrapper":"../src/gridWrapper.tsx","./head":"../src/head.tsx","./table":"../src/table.tsx"}],"../src/wrapper.tsx":[function(require,module,exports) {
+},{"ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","react-contextmenu":"../node_modules/react-contextmenu/es6/index.js","./body":"../src/body.tsx","./colgroup":"../src/colgroup.tsx","./empty":"../src/empty.tsx","./gridWrapper":"../src/gridWrapper.tsx","./head":"../src/head.tsx","./table":"../src/table.tsx","./types":"../src/types.ts"}],"../src/wrapper.tsx":[function(require,module,exports) {
 "use strict";
 
 var __importStar = this && this.__importStar || function (mod) {
@@ -62933,16 +62989,11 @@ var errorBoundary_1 = require("./errorBoundary");
 
 var grid_1 = require("./grid");
 
+var types_1 = require("./types");
+
 var utils = __importStar(require("./utils"));
 
 var wrapper_1 = require("./wrapper");
-
-var Modes;
-
-(function (Modes) {
-  Modes["View"] = "View";
-  Modes["Edit"] = "Edit";
-})(Modes = exports.Modes || (exports.Modes = {}));
 
 var Table =
 /*#__PURE__*/
@@ -62965,7 +63016,7 @@ function (_React$Component) {
     var config = props.config;
     var fields = config.order || ramda_1.map(String, ramda_1.keys(config.properties));
     var columns = utils.makeColumns(config, fields);
-    var mode = props.mode || Modes.View;
+    var mode = props.mode || types_1.Modes.View;
     var sticky = {
       enabled: config.stickyHeaders === true,
       supported: utils.supports("position", "sticky")
@@ -63017,7 +63068,7 @@ function (_React$Component) {
       };
       return React.createElement(wrapper_1.Wrapper, {
         styles: styles
-      }, React.createElement(errorBoundary_1.ErrorBoundary, null, mode === Modes.Edit && React.createElement(edit_1.Edit, Object.assign({}, editProps)), mode === Modes.View && React.createElement(grid_1.Grid, Object.assign({}, gridProps))));
+      }, React.createElement(errorBoundary_1.ErrorBoundary, null, mode === types_1.Modes.Edit && React.createElement(edit_1.Edit, Object.assign({}, editProps)), mode === types_1.Modes.View && React.createElement(grid_1.Grid, Object.assign({}, gridProps))));
     }
   }]);
 
@@ -63025,7 +63076,7 @@ function (_React$Component) {
 }(React.Component);
 
 exports.Table = Table;
-},{"ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","./column":"../src/column.ts","./defaultStyles":"../src/defaultStyles.ts","./edit":"../src/edit.tsx","./errorBoundary":"../src/errorBoundary.tsx","./grid":"../src/grid.tsx","./utils":"../src/utils.ts","./wrapper":"../src/wrapper.tsx"}],"config.ts":[function(require,module,exports) {
+},{"ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","./column":"../src/column.ts","./defaultStyles":"../src/defaultStyles.ts","./edit":"../src/edit.tsx","./errorBoundary":"../src/errorBoundary.tsx","./grid":"../src/grid.tsx","./types":"../src/types.ts","./utils":"../src/utils.ts","./wrapper":"../src/wrapper.tsx"}],"config.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -63175,7 +63226,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65134" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55804" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

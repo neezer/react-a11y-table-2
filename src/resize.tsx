@@ -1,10 +1,10 @@
 import * as most from "@most/core";
 import { mousedown, mousemove, mouseup } from "@most/dom-event";
 import { newDefaultScheduler } from "@most/scheduler";
-import { allPass, gt, lensPath, lt, mergeDeepLeft, set } from "ramda";
+import * as R from "ramda";
 import * as React from "react";
 import { Columns, ResizeColumns, Styles } from ".";
-import { applyStyles, getStyleFrom } from "./utils";
+import * as utils from "./utils";
 
 interface IProps {
   columns: Columns;
@@ -12,50 +12,53 @@ interface IProps {
   resize: ResizeColumns;
 }
 
-interface IState {
-  columnWidths: number[];
+interface IXPos {
+  x: number;
 }
 
+interface IXColId {
+  columnId: string;
+}
+
+type IXMove = IXPos & IXColId;
+
+type IΔXChange = IXColId & {
+  Δx: number;
+};
+
 const THROTTLE_IN_MS = 10;
-const MIN_WIDTH = 30;
-const MAX_WIDTH = 1000;
 
-export class Resize extends React.Component<IProps, IState> {
-  public state = {
-    columnWidths: this.props.columns.map(column => column.config.width)
-  };
-
+export class Resize extends React.Component<IProps> {
   private dragRefs: Array<React.RefObject<HTMLButtonElement>> = [];
 
   public componentDidMount() {
-    this.dragRefs.forEach((ref, index) => {
+    let { columns: visibleColumns } = this.props;
+
+    this.dragRefs.forEach(ref => {
       if (ref.current === null) {
         return;
       }
 
       const { current: colElem } = ref;
+      const mousedowns = most.map(getColIdAndX, mousedown(colElem));
 
-      const mouseupEffects = (_: number) => {
-        this.props.resize(this.state.columnWidths);
-      };
-
-      const mousedowns = most.map(getX, mousedown(colElem));
-
-      const mouseups = most.tap(
-        mouseupEffects,
-        most.map(getX, mouseup(window))
-      );
+      const mouseups = most.tap((_: MouseEvent) => {
+        visibleColumns = this.props.columns;
+      }, mouseup(window));
 
       const mousemoves = most.skipRepeats(most.map(getX, mousemove(window)));
 
-      const dragStream = most.chain((startX: number) => {
-        const ΔxMoves = most.map(getΔX(startX), mousemoves);
+      const dragStream = most.chain((props: IXMove) => {
+        const ΔxMoves = most.map(getΔX(props), mousemoves);
 
         return most.until(mouseups, ΔxMoves);
       }, mousedowns);
 
-      const effects = (Δx: number) => {
-        this.updateColumnWidth(Δx, index);
+      const effects = (props: IΔXChange) => {
+        const updateVisible = utils.updateColumnWidth({ visibleColumns });
+        const newVisibleColumns = updateVisible(props);
+
+        this.props.resize(newVisibleColumns);
       };
 
       const stream = most.tap(
@@ -69,19 +72,18 @@ export class Resize extends React.Component<IProps, IState> {
 
   public render() {
     const { columns, styles } = this.props;
-    const { columnWidths } = this.state;
-    const editStyles = getStyleFrom(styles, "columnResize");
-    const getEditStyle = getStyleFrom(editStyles);
+    const editStyles = utils.getStyleFrom(styles, "columnResize");
+    const getEditStyle = utils.getStyleFrom(editStyles);
     const textStyle = getEditStyle("text");
     const dragHandleStyle = getEditStyle("dragHandle");
     const containerStyle = getEditStyle("container");
     const controlContainerStyle = getEditStyle("controlContainer");
 
-    const columnComponents = columns.map((column, index) => {
-      const width = `${columnWidths[index] + 20}px !important`;
+    const columnComponents = columns.map(column => {
+      const width = `${column.width + 20}px !important`;
       const ref = React.createRef<HTMLButtonElement>();
 
-      const columnStyle = mergeDeepLeft(
+      const columnStyle = R.mergeDeepLeft(
         { flexBasis: width },
         getEditStyle("column")
       );
@@ -90,41 +92,42 @@ export class Resize extends React.Component<IProps, IState> {
 
       return (
         <React.Fragment key={column.id}>
-          <div className={applyStyles(columnStyle)}>
-            <span className={applyStyles(textStyle)}>{column.text}</span>
+          <div className={utils.applyStyles(columnStyle)}>
+            <span className={utils.applyStyles(textStyle)}>{column.text}</span>
           </div>
-          <button ref={ref} className={applyStyles(dragHandleStyle)} />
+          <button
+            ref={ref}
+            className={utils.applyStyles(dragHandleStyle)}
+            data-id={column.id}
+          />
         </React.Fragment>
       );
     });
 
     return (
-      <div className={applyStyles(containerStyle)}>
-        <div className={applyStyles(controlContainerStyle)}>
+      <div className={utils.applyStyles(containerStyle)}>
+        <div className={utils.applyStyles(controlContainerStyle)}>
           {columnComponents}
         </div>
       </div>
     );
   }
-
-  private updateColumnWidth = (Δx: number, index: number) => {
-    const column = this.props.columns[index];
-    const lens = lensPath(["columnWidths", index]);
-    const newWidth = column.config.width + Δx;
-    const inBounds = allPass([gt(MAX_WIDTH), lt(MIN_WIDTH)]);
-
-    if (inBounds(newWidth)) {
-      const update = set(lens, newWidth);
-
-      this.setState(update);
-    }
-  };
 }
 
 function getX(event: MouseEvent) {
-  return event.x;
+  return { x: event.x };
 }
 
-function getΔX(startX: number) {
-  return (x: number) => x - startX;
+function getΔX({ x: startX, columnId }: IXMove) {
+  return ({ x }: IXPos) => ({
+    columnId,
+    Δx: x - startX
+  });
+}
+
+function getColIdAndX(event: MouseEvent) {
+  const elem = event.currentTarget as HTMLButtonElement;
+  const columnId = elem.dataset.id;
+
+  return { ...getX(event), columnId: columnId || "" };
 }

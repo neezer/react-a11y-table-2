@@ -6,13 +6,9 @@ import { defaultStyles } from "./defaultStyles";
 import { Edit } from "./edit";
 import { ErrorBoundary } from "./errorBoundary";
 import { Grid } from "./grid";
+import { Modes } from "./types";
 import * as utils from "./utils";
 import { Wrapper } from "./wrapper";
-
-export enum Modes {
-  View = "View",
-  Edit = "Edit"
-}
 
 interface IProps {
   config: IConfig;
@@ -111,7 +107,7 @@ export type DatumValue = string | null | number;
 export type Datum = Record<PropertyName, DatumValue> & { id: string };
 export type Styles = Record<Component, Style>;
 export type Columns = Column[];
-export type ResizeColumns = (newWidths: number[]) => void;
+export type ResizeColumns = (visibleColumns: Columns) => void;
 export type ReorderColumns = (dropResult: DropResult) => void;
 export type ToggleColumn = (column: Column) => void;
 export type ChangeMode = (mode: Modes) => void;
