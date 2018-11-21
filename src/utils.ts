@@ -168,10 +168,11 @@ export function reorderColumns(props: IUpdateColumnsProps) {
 
 export function updateColumnWidth(props: IUpdateVisibleColumnsProps) {
   const { columns } = props;
+  const belowBounds = R.flip(R.lt)(MIN_WIDTH);
+  const aboveBounds = R.flip(R.gt)(MAX_WIDTH);
+  const outOfBounds = R.anyPass([belowBounds, aboveBounds]);
 
   return ({ Δx, columnId }: IΔXChange): Columns => {
-    const inBounds = R.allPass([R.gte(MAX_WIDTH), R.lte(MIN_WIDTH)]);
-    const outOfBounds = R.complement(inBounds);
     const columnIndex = R.findIndex(R.propEq("id", columnId), columns);
     const column = columns[columnIndex];
 
@@ -179,10 +180,10 @@ export function updateColumnWidth(props: IUpdateVisibleColumnsProps) {
       return columns;
     }
 
-    const newWidth = column.width + Δx;
+    let newWidth = column.width + Δx;
 
     if (outOfBounds(newWidth)) {
-      return columns;
+      newWidth = belowBounds(newWidth) ? MIN_WIDTH : MAX_WIDTH;
     }
 
     const updatedColumn = column.setWidth(newWidth);

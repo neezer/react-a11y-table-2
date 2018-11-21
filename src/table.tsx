@@ -11,7 +11,7 @@ interface IProps {
 
 export const Table: React.FunctionComponent<IProps> = props => {
   const { children, columns, styles } = props;
-  const tableWidth = sum(map(({ config }) => config.width, columns));
+  const tableWidth = sum(map(({ width }) => width, columns));
   const gridStyles = getStyleFrom(styles, "grid");
   const tableStyles = getStyleFrom(gridStyles, "table");
 

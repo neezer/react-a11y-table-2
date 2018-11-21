@@ -94,6 +94,7 @@ export const defaultStyles = {
       boxSizing: "border-box",
       color: "rgb(148, 157, 173)",
       fontSize: "0.9rem",
+      overflow: "hidden",
       padding: "16px 6px 10px",
       textAlign: "left",
       textTransform: "uppercase"

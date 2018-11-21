@@ -42439,6 +42439,7 @@ exports.defaultStyles = {
       boxSizing: "border-box",
       color: "rgb(148, 157, 173)",
       fontSize: "0.9rem",
+      overflow: "hidden",
       padding: "16px 6px 10px",
       textAlign: "left",
       textTransform: "uppercase"
@@ -60219,11 +60220,12 @@ exports.reorderColumns = reorderColumns;
 
 function updateColumnWidth(props) {
   var columns = props.columns;
+  var belowBounds = R.flip(R.lt)(MIN_WIDTH);
+  var aboveBounds = R.flip(R.gt)(MAX_WIDTH);
+  var outOfBounds = R.anyPass([belowBounds, aboveBounds]);
   return function (_ref) {
     var Δx = _ref.Δx,
         columnId = _ref.columnId;
-    var inBounds = R.allPass([R.gte(MAX_WIDTH), R.lte(MIN_WIDTH)]);
-    var outOfBounds = R.complement(inBounds);
     var columnIndex = R.findIndex(R.propEq("id", columnId), columns);
     var column = columns[columnIndex];
 
@@ -60234,7 +60236,7 @@ function updateColumnWidth(props) {
     var newWidth = column.width + Δx;
 
     if (outOfBounds(newWidth)) {
-      return columns;
+      newWidth = belowBounds(newWidth) ? MIN_WIDTH : MAX_WIDTH;
     }
 
     var updatedColumn = column.setWidth(newWidth);
@@ -63848,8 +63850,8 @@ exports.Table = function (props) {
       columns = props.columns,
       styles = props.styles;
   var tableWidth = ramda_1.sum(ramda_1.map(function (_ref) {
-    var config = _ref.config;
-    return config.width;
+    var width = _ref.width;
+    return width;
   }, columns));
   var gridStyles = utils_1.getStyleFrom(styles, "grid");
   var tableStyles = utils_1.getStyleFrom(gridStyles, "table");
@@ -64257,7 +64259,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61804" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62548" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
