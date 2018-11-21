@@ -1,7 +1,15 @@
 import { isEmpty } from "ramda";
 import * as React from "react";
 import { ContextMenu, ContextMenuTrigger, MenuItem } from "react-contextmenu";
-import { ChangeMode, Columns, Datum, IConfig, IStickyConfig, Styles } from ".";
+import {
+  ChangeMode,
+  Columns,
+  Datum,
+  IConfig,
+  IStickyConfig,
+  ResizeColumns,
+  Styles
+} from ".";
 import { Body } from "./body";
 import { Colgroup } from "./colgroup";
 import { Empty } from "./empty";
@@ -17,10 +25,11 @@ interface IProps {
   sticky: IStickyConfig;
   columns: Columns;
   changeMode: ChangeMode;
+  resize: ResizeColumns;
 }
 
 export const Grid: React.FunctionComponent<IProps> = props => {
-  const { columns, data, config, styles, sticky, changeMode } = props;
+  const { columns, data, config, styles, sticky, changeMode, resize } = props;
   const theadRef = React.createRef<Ref>();
 
   if (isEmpty(data)) {
@@ -28,7 +37,7 @@ export const Grid: React.FunctionComponent<IProps> = props => {
   }
 
   const wrapperProps = { sticky, styles, theadRef };
-  const headProps = { columns, sticky, styles, theadRef, changeMode };
+  const headProps = { columns, sticky, styles, theadRef, changeMode, resize };
   const bodyProps = { columns, data, styles };
   const colGroupProps = { columns };
   const tableProps = { columns, styles };

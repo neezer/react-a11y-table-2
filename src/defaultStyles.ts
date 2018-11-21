@@ -9,7 +9,7 @@ export const defaultStyles = {
       backgroundColor: "#fff",
       borderRadius: "4px",
       display: "flex",
-      flex: "0 0 50%",
+      flex: "0 0 200px",
       flexDirection: "column",
       flexWrap: "nowrap",
       padding: "10px"
@@ -57,6 +57,19 @@ export const defaultStyles = {
       padding: "10px 20px",
       width: "100%"
     }
+  },
+  dragHandle: {
+    backgroundColor: "#575fcf",
+    border: 0,
+    cursor: "ew-resize",
+    display: "block",
+    height: "100%",
+    overflow: "hidden",
+    padding: 0,
+    position: "absolute",
+    right: 0,
+    top: 0,
+    width: "5px"
   },
   edit: {
     container: {

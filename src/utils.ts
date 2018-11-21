@@ -1,8 +1,12 @@
+import * as most from "@most/core";
+import { mousedown, mousemove, mouseup } from "@most/dom-event";
+import { newDefaultScheduler } from "@most/scheduler";
+import { Stream } from "@most/types";
 import { css, Interpolation } from "emotion";
 import { murmur3 } from "murmurhash-js";
 import * as R from "ramda";
 import { DraggableLocation, DropResult } from "react-beautiful-dnd";
-import { Columns, IConfig, Styles } from ".";
+import { Columns, IConfig, ResizeColumns, Styles } from ".";
 import { Column } from "./column";
 
 interface IXPos {
@@ -72,7 +76,7 @@ interface IUpdateColumnsProps {
 }
 
 interface IUpdateVisibleColumnsProps {
-  visibleColumns: Columns;
+  columns: Columns;
 }
 
 export function resizeColumns(props: IUpdateColumnsProps) {
@@ -162,43 +166,108 @@ export function reorderColumns(props: IUpdateColumnsProps) {
   };
 }
 
-export function toggleColumn(props: IUpdateColumnsProps) {
-  const { allColumns, lens, setState } = props;
-
-  return (column: Column) => {
-    const index = R.findIndex(col => col.id === column.id, allColumns);
-
-    const newColumns = R.set(
-      R.lensIndex(index),
-      column.toggleVisibility(),
-      allColumns
-    );
-
-    setState(R.set(lens, newColumns));
-  };
-}
-
 export function updateColumnWidth(props: IUpdateVisibleColumnsProps) {
-  const { visibleColumns } = props;
+  const { columns } = props;
 
   return ({ Δx, columnId }: IΔXChange): Columns => {
     const inBounds = R.allPass([R.gte(MAX_WIDTH), R.lte(MIN_WIDTH)]);
     const outOfBounds = R.complement(inBounds);
-    const columnIndex = R.findIndex(R.propEq("id", columnId), visibleColumns);
-    const column = visibleColumns[columnIndex];
+    const columnIndex = R.findIndex(R.propEq("id", columnId), columns);
+    const column = columns[columnIndex];
 
     if (column === undefined) {
-      return visibleColumns;
+      return columns;
     }
 
     const newWidth = column.width + Δx;
 
     if (outOfBounds(newWidth)) {
-      return visibleColumns;
+      return columns;
     }
 
     const updatedColumn = column.setWidth(newWidth);
 
-    return R.set(R.lensIndex(columnIndex), updatedColumn, visibleColumns);
+    return R.set(R.lensIndex(columnIndex), updatedColumn, columns);
+  };
+}
+
+interface ISetupDragHandlers {
+  elements: Array<HTMLElement | null>;
+  resize: ResizeColumns;
+  columns: Columns;
+  endStream: Stream<boolean>;
+  end: () => void;
+}
+
+export function setupDragHandles(props: ISetupDragHandlers) {
+  const { elements, resize, columns, endStream, end } = props;
+
+  elements.forEach(element => {
+    if (element === null) {
+      return;
+    }
+
+    const cursor = changeBodyCursor();
+
+    const mousedowns = most.map(
+      getColIdAndX,
+      most.tap(cursor.override, mousedown(element))
+    );
+
+    const mouseups = most.tap((_: MouseEvent) => {
+      cursor.restore(_);
+      end();
+    }, mouseup(window));
+
+    const mousemoves = most.skipRepeats(most.map(getX, mousemove(window)));
+
+    const dragStream = most.chain((move: IXMove) => {
+      const ΔxMoves = most.map(getΔX(move), mousemoves);
+
+      return most.until(mouseups, ΔxMoves);
+    }, mousedowns);
+
+    const effects = (change: IΔXChange) => {
+      const updateVisible = updateColumnWidth({ columns });
+      const newVisibleColumns = updateVisible(change);
+
+      resize(newVisibleColumns);
+    };
+
+    const stream = most.tap(effects, most.throttle(THROTTLE_IN_MS, dragStream));
+
+    most.runEffects(most.until(endStream, stream), newDefaultScheduler());
+  });
+}
+
+function getX(event: MouseEvent) {
+  return { x: event.x };
+}
+
+function getΔX({ x: startX, columnId }: IXMove) {
+  return ({ x }: IXPos) => ({
+    columnId,
+    Δx: x - startX
+  });
+}
+
+function getColIdAndX(event: MouseEvent) {
+  const elem = event.currentTarget as HTMLButtonElement;
+  const columnId = elem.dataset.id;
+
+  return { ...getX(event), columnId: columnId || "" };
+}
+
+function changeBodyCursor() {
+  const body = document.body;
+  const originalCursor = body.style.cursor;
+
+  return {
+    override: (_: unknown) => {
+      body.style.cursor = "ew-resize";
+    },
+    restore: (_: unknown) => {
+      body.style.cursor = originalCursor;
+    }
   };
 }

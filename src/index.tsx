@@ -46,15 +46,12 @@ export class Table extends React.Component<IProps, IState> {
     const updateProps = { allColumns, lens: this.columnsLens, setState };
     const resize = utils.resizeColumns(updateProps);
     const reorder = utils.reorderColumns(updateProps);
-    const toggle = utils.toggleColumn(updateProps);
 
     const editProps = {
       changeMode: this.changeMode,
       columns: allColumns,
       reorder,
-      resize,
-      styles,
-      toggle
+      styles
     };
 
     const gridProps = {
@@ -62,6 +59,7 @@ export class Table extends React.Component<IProps, IState> {
       columns: visibleColumns,
       config,
       data,
+      resize,
       sticky,
       styles
     };

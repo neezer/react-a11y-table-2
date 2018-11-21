@@ -42354,7 +42354,7 @@ exports.defaultStyles = {
       backgroundColor: "#fff",
       borderRadius: "4px",
       display: "flex",
-      flex: "0 0 50%",
+      flex: "0 0 200px",
       flexDirection: "column",
       flexWrap: "nowrap",
       padding: "10px"
@@ -42402,6 +42402,19 @@ exports.defaultStyles = {
       padding: "10px 20px",
       width: "100%"
     }
+  },
+  dragHandle: {
+    backgroundColor: "#575fcf",
+    border: 0,
+    cursor: "ew-resize",
+    display: "block",
+    height: "100%",
+    overflow: "hidden",
+    padding: 0,
+    position: "absolute",
+    right: 0,
+    top: 0,
+    width: "5px"
   },
   edit: {
     container: {
@@ -42454,42 +42467,7 @@ exports.defaultStyles = {
     height: "inherit"
   }
 };
-},{}],"../src/pick.tsx":[function(require,module,exports) {
-"use strict";
-
-var __importStar = this && this.__importStar || function (mod) {
-  if (mod && mod.__esModule) return mod;
-  var result = {};
-  if (mod != null) for (var k in mod) {
-    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-  }
-  result["default"] = mod;
-  return result;
-};
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var React = __importStar(require("react"));
-
-exports.Pick = function (props) {
-  var columns = props.columns,
-      toggle = props.toggle;
-  var columnComponents = columns.map(function (column) {
-    return React.createElement("li", {
-      key: column.id
-    }, React.createElement("input", {
-      type: "checkbox",
-      checked: column.visible,
-      onChange: function onChange(_) {
-        return toggle(column);
-      }
-    }), column.text);
-  });
-  return React.createElement("section", null, React.createElement("ol", null, columnComponents));
-};
-},{"react":"../node_modules/react/index.js"}],"../node_modules/symbol-observable/es/ponyfill.js":[function(require,module,exports) {
+},{}],"../node_modules/symbol-observable/es/ponyfill.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -53995,447 +53973,7 @@ var ConnectedDraggable = (0, _reactRedux.connect)(makeMapStateToProps$1, mapDisp
 })(Draggable);
 exports.Draggable = ConnectedDraggable;
 ConnectedDraggable.defaultProps = defaultProps$1;
-},{"redux":"../node_modules/redux/es/redux.js","@babel/runtime-corejs2/core-js/object/values":"../node_modules/@babel/runtime-corejs2/core-js/object/values.js","@babel/runtime-corejs2/core-js/object/keys":"../node_modules/@babel/runtime-corejs2/core-js/object/keys.js","@babel/runtime-corejs2/core-js/object/assign":"../node_modules/@babel/runtime-corejs2/core-js/object/assign.js","react-redux":"../node_modules/react-redux/es/index.js","@babel/runtime-corejs2/helpers/esm/inheritsLoose":"../node_modules/@babel/runtime-corejs2/helpers/esm/inheritsLoose.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","memoize-one":"../node_modules/memoize-one/dist/memoize-one.esm.js","raf-schd":"../node_modules/raf-schd/dist/raf-schd.esm.js","css-box-model":"../node_modules/css-box-model/dist/css-box-model.esm.js","@babel/runtime-corejs2/helpers/esm/extends":"../node_modules/@babel/runtime-corejs2/helpers/esm/extends.js","@babel/runtime-corejs2/core-js/number/is-integer":"../node_modules/@babel/runtime-corejs2/core-js/number/is-integer.js","tiny-invariant":"../node_modules/tiny-invariant/dist/tiny-invariant.esm.js"}],"../node_modules/murmurhash-js/murmurhash3_gc.js":[function(require,module,exports) {
-/**
- * JS Implementation of MurmurHash3 (r136) (as of May 20, 2011)
- * 
- * @author <a href="mailto:gary.court@gmail.com">Gary Court</a>
- * @see http://github.com/garycourt/murmurhash-js
- * @author <a href="mailto:aappleby@gmail.com">Austin Appleby</a>
- * @see http://sites.google.com/site/murmurhash/
- * 
- * @param {string} key ASCII only
- * @param {number} seed Positive integer only
- * @return {number} 32-bit positive integer hash 
- */
-
-function murmurhash3_32_gc(key, seed) {
-	var remainder, bytes, h1, h1b, c1, c1b, c2, c2b, k1, i;
-	
-	remainder = key.length & 3; // key.length % 4
-	bytes = key.length - remainder;
-	h1 = seed;
-	c1 = 0xcc9e2d51;
-	c2 = 0x1b873593;
-	i = 0;
-	
-	while (i < bytes) {
-	  	k1 = 
-	  	  ((key.charCodeAt(i) & 0xff)) |
-	  	  ((key.charCodeAt(++i) & 0xff) << 8) |
-	  	  ((key.charCodeAt(++i) & 0xff) << 16) |
-	  	  ((key.charCodeAt(++i) & 0xff) << 24);
-		++i;
-		
-		k1 = ((((k1 & 0xffff) * c1) + ((((k1 >>> 16) * c1) & 0xffff) << 16))) & 0xffffffff;
-		k1 = (k1 << 15) | (k1 >>> 17);
-		k1 = ((((k1 & 0xffff) * c2) + ((((k1 >>> 16) * c2) & 0xffff) << 16))) & 0xffffffff;
-
-		h1 ^= k1;
-        h1 = (h1 << 13) | (h1 >>> 19);
-		h1b = ((((h1 & 0xffff) * 5) + ((((h1 >>> 16) * 5) & 0xffff) << 16))) & 0xffffffff;
-		h1 = (((h1b & 0xffff) + 0x6b64) + ((((h1b >>> 16) + 0xe654) & 0xffff) << 16));
-	}
-	
-	k1 = 0;
-	
-	switch (remainder) {
-		case 3: k1 ^= (key.charCodeAt(i + 2) & 0xff) << 16;
-		case 2: k1 ^= (key.charCodeAt(i + 1) & 0xff) << 8;
-		case 1: k1 ^= (key.charCodeAt(i) & 0xff);
-		
-		k1 = (((k1 & 0xffff) * c1) + ((((k1 >>> 16) * c1) & 0xffff) << 16)) & 0xffffffff;
-		k1 = (k1 << 15) | (k1 >>> 17);
-		k1 = (((k1 & 0xffff) * c2) + ((((k1 >>> 16) * c2) & 0xffff) << 16)) & 0xffffffff;
-		h1 ^= k1;
-	}
-	
-	h1 ^= key.length;
-
-	h1 ^= h1 >>> 16;
-	h1 = (((h1 & 0xffff) * 0x85ebca6b) + ((((h1 >>> 16) * 0x85ebca6b) & 0xffff) << 16)) & 0xffffffff;
-	h1 ^= h1 >>> 13;
-	h1 = ((((h1 & 0xffff) * 0xc2b2ae35) + ((((h1 >>> 16) * 0xc2b2ae35) & 0xffff) << 16))) & 0xffffffff;
-	h1 ^= h1 >>> 16;
-
-	return h1 >>> 0;
-}
-
-if(typeof module !== "undefined") {
-  module.exports = murmurhash3_32_gc
-}
-},{}],"../node_modules/murmurhash-js/murmurhash2_gc.js":[function(require,module,exports) {
-/**
- * JS Implementation of MurmurHash2
- * 
- * @author <a href="mailto:gary.court@gmail.com">Gary Court</a>
- * @see http://github.com/garycourt/murmurhash-js
- * @author <a href="mailto:aappleby@gmail.com">Austin Appleby</a>
- * @see http://sites.google.com/site/murmurhash/
- * 
- * @param {string} str ASCII only
- * @param {number} seed Positive integer only
- * @return {number} 32-bit positive integer hash
- */
-
-function murmurhash2_32_gc(str, seed) {
-  var
-    l = str.length,
-    h = seed ^ l,
-    i = 0,
-    k;
-  
-  while (l >= 4) {
-  	k = 
-  	  ((str.charCodeAt(i) & 0xff)) |
-  	  ((str.charCodeAt(++i) & 0xff) << 8) |
-  	  ((str.charCodeAt(++i) & 0xff) << 16) |
-  	  ((str.charCodeAt(++i) & 0xff) << 24);
-    
-    k = (((k & 0xffff) * 0x5bd1e995) + ((((k >>> 16) * 0x5bd1e995) & 0xffff) << 16));
-    k ^= k >>> 24;
-    k = (((k & 0xffff) * 0x5bd1e995) + ((((k >>> 16) * 0x5bd1e995) & 0xffff) << 16));
-
-	h = (((h & 0xffff) * 0x5bd1e995) + ((((h >>> 16) * 0x5bd1e995) & 0xffff) << 16)) ^ k;
-
-    l -= 4;
-    ++i;
-  }
-  
-  switch (l) {
-  case 3: h ^= (str.charCodeAt(i + 2) & 0xff) << 16;
-  case 2: h ^= (str.charCodeAt(i + 1) & 0xff) << 8;
-  case 1: h ^= (str.charCodeAt(i) & 0xff);
-          h = (((h & 0xffff) * 0x5bd1e995) + ((((h >>> 16) * 0x5bd1e995) & 0xffff) << 16));
-  }
-
-  h ^= h >>> 13;
-  h = (((h & 0xffff) * 0x5bd1e995) + ((((h >>> 16) * 0x5bd1e995) & 0xffff) << 16));
-  h ^= h >>> 15;
-
-  return h >>> 0;
-}
-
-if(typeof module !== undefined) {
-  module.exports = murmurhash2_32_gc
-}
-
-},{}],"../node_modules/murmurhash-js/index.js":[function(require,module,exports) {
-var murmur3 = require("./murmurhash3_gc.js")
-var murmur2 = require("./murmurhash2_gc.js")
-
-module.exports = murmur3
-module.exports.murmur3 = murmur3
-module.exports.murmur2 = murmur2
-
-},{"./murmurhash3_gc.js":"../node_modules/murmurhash-js/murmurhash3_gc.js","./murmurhash2_gc.js":"../node_modules/murmurhash-js/murmurhash2_gc.js"}],"../src/utils.ts":[function(require,module,exports) {
-"use strict";
-
-var __importStar = this && this.__importStar || function (mod) {
-  if (mod && mod.__esModule) return mod;
-  var result = {};
-  if (mod != null) for (var k in mod) {
-    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-  }
-  result["default"] = mod;
-  return result;
-};
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var emotion_1 = require("emotion");
-
-var murmurhash_js_1 = require("murmurhash-js");
-
-var R = __importStar(require("ramda"));
-
-var column_1 = require("./column");
-
-var THROTTLE_IN_MS = 10;
-var MIN_WIDTH = 30;
-var MAX_WIDTH = 1000;
-exports.getStyleFrom = R.curryN(2, function (styles, name) {
-  if (R.isNil(styles)) {
-    return undefined;
-  }
-
-  return R.propOr(undefined, name, styles);
-});
-
-function supports(property, value) {
-  return supportsFeatureDetection() && CSS.supports(property, value);
-}
-
-exports.supports = supports;
-
-function supportsFeatureDetection() {
-  return R.is(Function, CSS.supports);
-}
-
-function hash(value) {
-  return String(murmurhash_js_1.murmur3(value));
-}
-
-exports.hash = hash;
-exports.isNotEmpty = R.complement(R.isEmpty);
-exports.isNotNil = R.complement(R.isNil);
-exports.makeColumns = R.curryN(2, function (config, fields) {
-  var mapColumns = R.map(function (field) {
-    return new column_1.Column({
-      config: config.properties[field],
-      id: hash(field),
-      text: field,
-      visible: true,
-      width: config.properties[field].width
-    });
-  });
-  return mapColumns(fields);
-});
-
-function applyStyles(styles) {
-  return emotion_1.css(styles);
-}
-
-exports.applyStyles = applyStyles;
-
-function resizeColumns(props) {
-  var allColumns = props.allColumns,
-      lens = props.lens,
-      setState = props.setState;
-  return function (newVisibleColumns) {
-    var hiddenColumns = column_1.Column.getHidden(allColumns);
-    var newColumns = R.concat(newVisibleColumns, hiddenColumns);
-    setState(R.set(lens, newColumns));
-  };
-}
-
-exports.resizeColumns = resizeColumns;
-
-function reorderColumns(props) {
-  var allColumns = props.allColumns,
-      lens = props.lens,
-      setState = props.setState;
-  return function (dropResult) {
-    var visibleColumns = column_1.Column.getVisible(allColumns);
-    var hiddenColumns = column_1.Column.getHidden(allColumns);
-    var destination = dropResult.destination,
-        source = dropResult.source,
-        columnId = dropResult.draggableId;
-    var lacksDestination = R.isNil(destination);
-
-    if (lacksDestination) {
-      return;
-    }
-
-    var toIndex = destination.index,
-        toDroppable = destination.droppableId;
-    var fromIndex = source.index,
-        fromDroppable = source.droppableId;
-    var isSameDroppable = toDroppable === fromDroppable;
-    var droppableChanged = !isSameDroppable;
-    var indexChanged = toIndex !== fromIndex;
-    var destinationChanged = indexChanged || droppableChanged;
-    var visibleChanged = toDroppable === "enabled-columns";
-    var hiddenChanged = toDroppable === "disabled-columns";
-
-    if (destinationChanged === false) {
-      return;
-    }
-
-    if (indexChanged && isSameDroppable && visibleChanged) {
-      var column = R.find(R.propEq("id", columnId), visibleColumns);
-      var addAtIndex = R.insert(toIndex, column);
-      var removeAtIndex = R.remove(fromIndex, 1);
-      var update = R.pipe(removeAtIndex, addAtIndex);
-      var newVisibleColumns = update(visibleColumns);
-      var newColumns = R.concat(newVisibleColumns, hiddenColumns);
-      setState(R.set(lens, newColumns));
-    } else if (droppableChanged && visibleChanged) {
-      var _column = R.find(R.propEq("id", columnId), hiddenColumns);
-
-      var _addAtIndex = R.insert(toIndex, _column.toggleVisibility());
-
-      var _removeAtIndex = R.remove(fromIndex, 1);
-
-      var newHiddenColumns = R.pipe(_removeAtIndex, column_1.Column.sort)(hiddenColumns);
-
-      var _newVisibleColumns = _addAtIndex(visibleColumns);
-
-      var _newColumns = R.concat(_newVisibleColumns, newHiddenColumns);
-
-      setState(R.set(lens, _newColumns));
-    } else if (droppableChanged && hiddenChanged) {
-      var _column2 = R.find(R.propEq("id", columnId), visibleColumns);
-
-      var _addAtIndex2 = R.insert(toIndex, _column2.toggleVisibility());
-
-      var _removeAtIndex2 = R.remove(fromIndex, 1);
-
-      var _newVisibleColumns2 = _removeAtIndex2(visibleColumns);
-
-      var _newHiddenColumns = R.pipe(_addAtIndex2, column_1.Column.sort)(hiddenColumns);
-
-      var _newColumns2 = R.concat(_newVisibleColumns2, _newHiddenColumns);
-
-      setState(R.set(lens, _newColumns2));
-    }
-  };
-}
-
-exports.reorderColumns = reorderColumns;
-
-function toggleColumn(props) {
-  var allColumns = props.allColumns,
-      lens = props.lens,
-      setState = props.setState;
-  return function (column) {
-    var index = R.findIndex(function (col) {
-      return col.id === column.id;
-    }, allColumns);
-    var newColumns = R.set(R.lensIndex(index), column.toggleVisibility(), allColumns);
-    setState(R.set(lens, newColumns));
-  };
-}
-
-exports.toggleColumn = toggleColumn;
-
-function updateColumnWidth(props) {
-  var visibleColumns = props.visibleColumns;
-  return function (_ref) {
-    var Δx = _ref.Δx,
-        columnId = _ref.columnId;
-    var inBounds = R.allPass([R.gte(MAX_WIDTH), R.lte(MIN_WIDTH)]);
-    var outOfBounds = R.complement(inBounds);
-    var columnIndex = R.findIndex(R.propEq("id", columnId), visibleColumns);
-    var column = visibleColumns[columnIndex];
-
-    if (column === undefined) {
-      return visibleColumns;
-    }
-
-    var newWidth = column.width + Δx;
-
-    if (outOfBounds(newWidth)) {
-      return visibleColumns;
-    }
-
-    var updatedColumn = column.setWidth(newWidth);
-    return R.set(R.lensIndex(columnIndex), updatedColumn, visibleColumns);
-  };
-}
-
-exports.updateColumnWidth = updateColumnWidth;
-},{"emotion":"../node_modules/emotion/dist/index.esm.js","murmurhash-js":"../node_modules/murmurhash-js/index.js","ramda":"../node_modules/ramda/es/index.js","./column":"../src/column.ts"}],"../src/reorder.tsx":[function(require,module,exports) {
-"use strict";
-
-var __importStar = this && this.__importStar || function (mod) {
-  if (mod && mod.__esModule) return mod;
-  var result = {};
-  if (mod != null) for (var k in mod) {
-    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-  }
-  result["default"] = mod;
-  return result;
-};
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var React = __importStar(require("react"));
-
-var DnD = __importStar(require("react-beautiful-dnd"));
-
-var column_1 = require("./column");
-
-var utils_1 = require("./utils");
-
-exports.Reorder = function (props) {
-  var styles = props.styles;
-  var editStyle = utils_1.getStyleFrom(styles, "columnReorder");
-  var getEditStyle = utils_1.getStyleFrom(editStyle);
-  var columnStyle = getEditStyle("column");
-  var controlContainerStyle = getEditStyle("controlContainer");
-  var textStyle = getEditStyle("text");
-  var wrapperStyle = getEditStyle("wrapper");
-  var visibleColumns = column_1.Column.getVisible(props.columns);
-  var hiddenColumns = column_1.Column.getHidden(props.columns);
-
-  var columnComponents = function columnComponents(columns) {
-    return columns.map(function (column, index) {
-      return React.createElement(DnD.Draggable, {
-        key: column.id,
-        draggableId: column.id,
-        index: index
-      }, function (provided, snapshot) {
-        return React.createElement("div", Object.assign({
-          className: utils_1.applyStyles(columnStyle)
-        }, provided.draggableProps, provided.dragHandleProps, {
-          style: getDraggingStyle(provided.draggableProps.style, snapshot.isDragging),
-          ref: provided.innerRef
-        }), React.createElement("span", {
-          className: utils_1.applyStyles(textStyle)
-        }, column.text));
-      });
-    });
-  };
-
-  return React.createElement("section", null, React.createElement("p", null, "Here you can change the display order of the columns."), React.createElement("div", {
-    className: utils_1.applyStyles(wrapperStyle)
-  }, React.createElement(DnD.DragDropContext, {
-    onDragEnd: props.reorder
-  }, React.createElement(DnD.Droppable, {
-    droppableId: "enabled-columns"
-  }, function (provided) {
-    return React.createElement("div", Object.assign({}, provided.droppableProps, {
-      ref: provided.innerRef,
-      className: utils_1.applyStyles(controlContainerStyle)
-    }), columnComponents(visibleColumns), provided.placeholder);
-  }), React.createElement(DnD.Droppable, {
-    droppableId: "disabled-columns"
-  }, function (provided) {
-    return React.createElement("div", Object.assign({}, provided.droppableProps, {
-      ref: provided.innerRef,
-      className: utils_1.applyStyles(controlContainerStyle)
-    }), columnComponents(hiddenColumns), provided.placeholder);
-  }))));
-};
-
-function getDraggingStyle(dragStyle, isDragging) {
-  if (dragStyle === undefined) {
-    return undefined;
-  }
-
-  var transform = dragStyle.transform;
-  var transitionsTransform = transitionIncludesTransform(dragStyle.transition);
-
-  if (transform !== null) {
-    if (isDragging) {
-      if (transitionsTransform) {
-        return Object.assign({}, dragStyle, {
-          transform: "".concat(transform, " rotate(0)")
-        });
-      }
-
-      return Object.assign({}, dragStyle, {
-        transform: "".concat(transform, " rotate(3deg)")
-      });
-    }
-  }
-
-  return dragStyle;
-}
-
-function transitionIncludesTransform(transition) {
-  if (transition === undefined) {
-    return false;
-  }
-
-  return /transform/.test(transition);
-}
-},{"react":"../node_modules/react/index.js","react-beautiful-dnd":"../node_modules/react-beautiful-dnd/dist/react-beautiful-dnd.esm.js","./column":"../src/column.ts","./utils":"../src/utils.ts"}],"../node_modules/@most/prelude/dist/index.es.js":[function(require,module,exports) {
+},{"redux":"../node_modules/redux/es/redux.js","@babel/runtime-corejs2/core-js/object/values":"../node_modules/@babel/runtime-corejs2/core-js/object/values.js","@babel/runtime-corejs2/core-js/object/keys":"../node_modules/@babel/runtime-corejs2/core-js/object/keys.js","@babel/runtime-corejs2/core-js/object/assign":"../node_modules/@babel/runtime-corejs2/core-js/object/assign.js","react-redux":"../node_modules/react-redux/es/index.js","@babel/runtime-corejs2/helpers/esm/inheritsLoose":"../node_modules/@babel/runtime-corejs2/helpers/esm/inheritsLoose.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","memoize-one":"../node_modules/memoize-one/dist/memoize-one.esm.js","raf-schd":"../node_modules/raf-schd/dist/raf-schd.esm.js","css-box-model":"../node_modules/css-box-model/dist/css-box-model.esm.js","@babel/runtime-corejs2/helpers/esm/extends":"../node_modules/@babel/runtime-corejs2/helpers/esm/extends.js","@babel/runtime-corejs2/core-js/number/is-integer":"../node_modules/@babel/runtime-corejs2/core-js/number/is-integer.js","tiny-invariant":"../node_modules/tiny-invariant/dist/tiny-invariant.esm.js"}],"../node_modules/@most/prelude/dist/index.es.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -60382,26 +59920,141 @@ function tryEvent(t, x, sink) {
     sink.error(t, e);
   }
 }
-},{"@most/scheduler":"../node_modules/@most/dom-event/node_modules/@most/scheduler/dist/index.es.js"}],"../src/resize.tsx":[function(require,module,exports) {
+},{"@most/scheduler":"../node_modules/@most/dom-event/node_modules/@most/scheduler/dist/index.es.js"}],"../node_modules/murmurhash-js/murmurhash3_gc.js":[function(require,module,exports) {
+/**
+ * JS Implementation of MurmurHash3 (r136) (as of May 20, 2011)
+ * 
+ * @author <a href="mailto:gary.court@gmail.com">Gary Court</a>
+ * @see http://github.com/garycourt/murmurhash-js
+ * @author <a href="mailto:aappleby@gmail.com">Austin Appleby</a>
+ * @see http://sites.google.com/site/murmurhash/
+ * 
+ * @param {string} key ASCII only
+ * @param {number} seed Positive integer only
+ * @return {number} 32-bit positive integer hash 
+ */
+
+function murmurhash3_32_gc(key, seed) {
+	var remainder, bytes, h1, h1b, c1, c1b, c2, c2b, k1, i;
+	
+	remainder = key.length & 3; // key.length % 4
+	bytes = key.length - remainder;
+	h1 = seed;
+	c1 = 0xcc9e2d51;
+	c2 = 0x1b873593;
+	i = 0;
+	
+	while (i < bytes) {
+	  	k1 = 
+	  	  ((key.charCodeAt(i) & 0xff)) |
+	  	  ((key.charCodeAt(++i) & 0xff) << 8) |
+	  	  ((key.charCodeAt(++i) & 0xff) << 16) |
+	  	  ((key.charCodeAt(++i) & 0xff) << 24);
+		++i;
+		
+		k1 = ((((k1 & 0xffff) * c1) + ((((k1 >>> 16) * c1) & 0xffff) << 16))) & 0xffffffff;
+		k1 = (k1 << 15) | (k1 >>> 17);
+		k1 = ((((k1 & 0xffff) * c2) + ((((k1 >>> 16) * c2) & 0xffff) << 16))) & 0xffffffff;
+
+		h1 ^= k1;
+        h1 = (h1 << 13) | (h1 >>> 19);
+		h1b = ((((h1 & 0xffff) * 5) + ((((h1 >>> 16) * 5) & 0xffff) << 16))) & 0xffffffff;
+		h1 = (((h1b & 0xffff) + 0x6b64) + ((((h1b >>> 16) + 0xe654) & 0xffff) << 16));
+	}
+	
+	k1 = 0;
+	
+	switch (remainder) {
+		case 3: k1 ^= (key.charCodeAt(i + 2) & 0xff) << 16;
+		case 2: k1 ^= (key.charCodeAt(i + 1) & 0xff) << 8;
+		case 1: k1 ^= (key.charCodeAt(i) & 0xff);
+		
+		k1 = (((k1 & 0xffff) * c1) + ((((k1 >>> 16) * c1) & 0xffff) << 16)) & 0xffffffff;
+		k1 = (k1 << 15) | (k1 >>> 17);
+		k1 = (((k1 & 0xffff) * c2) + ((((k1 >>> 16) * c2) & 0xffff) << 16)) & 0xffffffff;
+		h1 ^= k1;
+	}
+	
+	h1 ^= key.length;
+
+	h1 ^= h1 >>> 16;
+	h1 = (((h1 & 0xffff) * 0x85ebca6b) + ((((h1 >>> 16) * 0x85ebca6b) & 0xffff) << 16)) & 0xffffffff;
+	h1 ^= h1 >>> 13;
+	h1 = ((((h1 & 0xffff) * 0xc2b2ae35) + ((((h1 >>> 16) * 0xc2b2ae35) & 0xffff) << 16))) & 0xffffffff;
+	h1 ^= h1 >>> 16;
+
+	return h1 >>> 0;
+}
+
+if(typeof module !== "undefined") {
+  module.exports = murmurhash3_32_gc
+}
+},{}],"../node_modules/murmurhash-js/murmurhash2_gc.js":[function(require,module,exports) {
+/**
+ * JS Implementation of MurmurHash2
+ * 
+ * @author <a href="mailto:gary.court@gmail.com">Gary Court</a>
+ * @see http://github.com/garycourt/murmurhash-js
+ * @author <a href="mailto:aappleby@gmail.com">Austin Appleby</a>
+ * @see http://sites.google.com/site/murmurhash/
+ * 
+ * @param {string} str ASCII only
+ * @param {number} seed Positive integer only
+ * @return {number} 32-bit positive integer hash
+ */
+
+function murmurhash2_32_gc(str, seed) {
+  var
+    l = str.length,
+    h = seed ^ l,
+    i = 0,
+    k;
+  
+  while (l >= 4) {
+  	k = 
+  	  ((str.charCodeAt(i) & 0xff)) |
+  	  ((str.charCodeAt(++i) & 0xff) << 8) |
+  	  ((str.charCodeAt(++i) & 0xff) << 16) |
+  	  ((str.charCodeAt(++i) & 0xff) << 24);
+    
+    k = (((k & 0xffff) * 0x5bd1e995) + ((((k >>> 16) * 0x5bd1e995) & 0xffff) << 16));
+    k ^= k >>> 24;
+    k = (((k & 0xffff) * 0x5bd1e995) + ((((k >>> 16) * 0x5bd1e995) & 0xffff) << 16));
+
+	h = (((h & 0xffff) * 0x5bd1e995) + ((((h >>> 16) * 0x5bd1e995) & 0xffff) << 16)) ^ k;
+
+    l -= 4;
+    ++i;
+  }
+  
+  switch (l) {
+  case 3: h ^= (str.charCodeAt(i + 2) & 0xff) << 16;
+  case 2: h ^= (str.charCodeAt(i + 1) & 0xff) << 8;
+  case 1: h ^= (str.charCodeAt(i) & 0xff);
+          h = (((h & 0xffff) * 0x5bd1e995) + ((((h >>> 16) * 0x5bd1e995) & 0xffff) << 16));
+  }
+
+  h ^= h >>> 13;
+  h = (((h & 0xffff) * 0x5bd1e995) + ((((h >>> 16) * 0x5bd1e995) & 0xffff) << 16));
+  h ^= h >>> 15;
+
+  return h >>> 0;
+}
+
+if(typeof module !== undefined) {
+  module.exports = murmurhash2_32_gc
+}
+
+},{}],"../node_modules/murmurhash-js/index.js":[function(require,module,exports) {
+var murmur3 = require("./murmurhash3_gc.js")
+var murmur2 = require("./murmurhash2_gc.js")
+
+module.exports = murmur3
+module.exports.murmur3 = murmur3
+module.exports.murmur2 = murmur2
+
+},{"./murmurhash3_gc.js":"../node_modules/murmurhash-js/murmurhash3_gc.js","./murmurhash2_gc.js":"../node_modules/murmurhash-js/murmurhash2_gc.js"}],"../src/utils.ts":[function(require,module,exports) {
 "use strict";
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var __importStar = this && this.__importStar || function (mod) {
   if (mod && mod.__esModule) return mod;
@@ -60423,108 +60076,211 @@ var dom_event_1 = require("@most/dom-event");
 
 var scheduler_1 = require("@most/scheduler");
 
+var emotion_1 = require("emotion");
+
+var murmurhash_js_1 = require("murmurhash-js");
+
 var R = __importStar(require("ramda"));
 
-var React = __importStar(require("react"));
-
-var utils = __importStar(require("./utils"));
+var column_1 = require("./column");
 
 var THROTTLE_IN_MS = 10;
-
-var Resize =
-/*#__PURE__*/
-function (_React$Component) {
-  _inherits(Resize, _React$Component);
-
-  function Resize() {
-    var _this;
-
-    _classCallCheck(this, Resize);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Resize).apply(this, arguments));
-    _this.dragRefs = [];
-    return _this;
+var MIN_WIDTH = 30;
+var MAX_WIDTH = 1000;
+exports.getStyleFrom = R.curryN(2, function (styles, name) {
+  if (R.isNil(styles)) {
+    return undefined;
   }
 
-  _createClass(Resize, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var _this2 = this;
+  return R.propOr(undefined, name, styles);
+});
 
-      var visibleColumns = this.props.columns;
-      this.dragRefs.forEach(function (ref) {
-        if (ref.current === null) {
-          return;
-        }
+function supports(property, value) {
+  return supportsFeatureDetection() && CSS.supports(property, value);
+}
 
-        var colElem = ref.current;
-        var mousedowns = most.map(getColIdAndX, dom_event_1.mousedown(colElem));
-        var mouseups = most.tap(function (_) {
-          visibleColumns = _this2.props.columns;
-        }, dom_event_1.mouseup(window));
-        var mousemoves = most.skipRepeats(most.map(getX, dom_event_1.mousemove(window)));
-        var dragStream = most.chain(function (props) {
-          var ΔxMoves = most.map(getΔX(props), mousemoves);
-          return most.until(mouseups, ΔxMoves);
-        }, mousedowns);
+exports.supports = supports;
 
-        var effects = function effects(props) {
-          var updateVisible = utils.updateColumnWidth({
-            visibleColumns: visibleColumns
-          });
-          var newVisibleColumns = updateVisible(props);
+function supportsFeatureDetection() {
+  return R.is(Function, CSS.supports);
+}
 
-          _this2.props.resize(newVisibleColumns);
-        };
+function hash(value) {
+  return String(murmurhash_js_1.murmur3(value));
+}
 
-        var stream = most.tap(effects, most.throttle(THROTTLE_IN_MS, dragStream));
-        most.runEffects(stream, scheduler_1.newDefaultScheduler());
-      });
+exports.hash = hash;
+exports.isNotEmpty = R.complement(R.isEmpty);
+exports.isNotNil = R.complement(R.isNil);
+exports.makeColumns = R.curryN(2, function (config, fields) {
+  var mapColumns = R.map(function (field) {
+    return new column_1.Column({
+      config: config.properties[field],
+      id: hash(field),
+      text: field,
+      visible: true,
+      width: config.properties[field].width
+    });
+  });
+  return mapColumns(fields);
+});
+
+function applyStyles(styles) {
+  return emotion_1.css(styles);
+}
+
+exports.applyStyles = applyStyles;
+
+function resizeColumns(props) {
+  var allColumns = props.allColumns,
+      lens = props.lens,
+      setState = props.setState;
+  return function (newVisibleColumns) {
+    var hiddenColumns = column_1.Column.getHidden(allColumns);
+    var newColumns = R.concat(newVisibleColumns, hiddenColumns);
+    setState(R.set(lens, newColumns));
+  };
+}
+
+exports.resizeColumns = resizeColumns;
+
+function reorderColumns(props) {
+  var allColumns = props.allColumns,
+      lens = props.lens,
+      setState = props.setState;
+  return function (dropResult) {
+    var visibleColumns = column_1.Column.getVisible(allColumns);
+    var hiddenColumns = column_1.Column.getHidden(allColumns);
+    var destination = dropResult.destination,
+        source = dropResult.source,
+        columnId = dropResult.draggableId;
+    var lacksDestination = R.isNil(destination);
+
+    if (lacksDestination) {
+      return;
     }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this3 = this;
 
-      var _this$props = this.props,
-          columns = _this$props.columns,
-          styles = _this$props.styles;
-      var editStyles = utils.getStyleFrom(styles, "columnResize");
-      var getEditStyle = utils.getStyleFrom(editStyles);
-      var textStyle = getEditStyle("text");
-      var dragHandleStyle = getEditStyle("dragHandle");
-      var controlContainerStyle = getEditStyle("controlContainer");
-      var columnComponents = columns.map(function (column) {
-        var width = "".concat(column.width + 20, "px !important");
-        var ref = React.createRef();
-        var columnStyle = R.mergeDeepLeft({
-          flexBasis: width
-        }, getEditStyle("column"));
+    var toIndex = destination.index,
+        toDroppable = destination.droppableId;
+    var fromIndex = source.index,
+        fromDroppable = source.droppableId;
+    var isSameDroppable = toDroppable === fromDroppable;
+    var droppableChanged = !isSameDroppable;
+    var indexChanged = toIndex !== fromIndex;
+    var destinationChanged = indexChanged || droppableChanged;
+    var visibleChanged = toDroppable === "enabled-columns";
+    var hiddenChanged = toDroppable === "disabled-columns";
 
-        _this3.dragRefs.push(ref);
-
-        return React.createElement(React.Fragment, {
-          key: column.id
-        }, React.createElement("div", {
-          className: utils.applyStyles(columnStyle)
-        }, React.createElement("span", {
-          className: utils.applyStyles(textStyle)
-        }, column.text)), React.createElement("button", {
-          ref: ref,
-          className: utils.applyStyles(dragHandleStyle),
-          "data-id": column.id
-        }));
-      });
-      return React.createElement("section", null, React.createElement("div", {
-        className: utils.applyStyles(controlContainerStyle)
-      }, columnComponents));
+    if (destinationChanged === false) {
+      return;
     }
-  }]);
 
-  return Resize;
-}(React.Component);
+    if (indexChanged && isSameDroppable && visibleChanged) {
+      var column = R.find(R.propEq("id", columnId), visibleColumns);
+      var addAtIndex = R.insert(toIndex, column);
+      var removeAtIndex = R.remove(fromIndex, 1);
+      var update = R.pipe(removeAtIndex, addAtIndex);
+      var newVisibleColumns = update(visibleColumns);
+      var newColumns = R.concat(newVisibleColumns, hiddenColumns);
+      setState(R.set(lens, newColumns));
+    } else if (droppableChanged && visibleChanged) {
+      var _column = R.find(R.propEq("id", columnId), hiddenColumns);
 
-exports.Resize = Resize;
+      var _addAtIndex = R.insert(toIndex, _column.toggleVisibility());
+
+      var _removeAtIndex = R.remove(fromIndex, 1);
+
+      var newHiddenColumns = R.pipe(_removeAtIndex, column_1.Column.sort)(hiddenColumns);
+
+      var _newVisibleColumns = _addAtIndex(visibleColumns);
+
+      var _newColumns = R.concat(_newVisibleColumns, newHiddenColumns);
+
+      setState(R.set(lens, _newColumns));
+    } else if (droppableChanged && hiddenChanged) {
+      var _column2 = R.find(R.propEq("id", columnId), visibleColumns);
+
+      var _addAtIndex2 = R.insert(toIndex, _column2.toggleVisibility());
+
+      var _removeAtIndex2 = R.remove(fromIndex, 1);
+
+      var _newVisibleColumns2 = _removeAtIndex2(visibleColumns);
+
+      var _newHiddenColumns = R.pipe(_addAtIndex2, column_1.Column.sort)(hiddenColumns);
+
+      var _newColumns2 = R.concat(_newVisibleColumns2, _newHiddenColumns);
+
+      setState(R.set(lens, _newColumns2));
+    }
+  };
+}
+
+exports.reorderColumns = reorderColumns;
+
+function updateColumnWidth(props) {
+  var columns = props.columns;
+  return function (_ref) {
+    var Δx = _ref.Δx,
+        columnId = _ref.columnId;
+    var inBounds = R.allPass([R.gte(MAX_WIDTH), R.lte(MIN_WIDTH)]);
+    var outOfBounds = R.complement(inBounds);
+    var columnIndex = R.findIndex(R.propEq("id", columnId), columns);
+    var column = columns[columnIndex];
+
+    if (column === undefined) {
+      return columns;
+    }
+
+    var newWidth = column.width + Δx;
+
+    if (outOfBounds(newWidth)) {
+      return columns;
+    }
+
+    var updatedColumn = column.setWidth(newWidth);
+    return R.set(R.lensIndex(columnIndex), updatedColumn, columns);
+  };
+}
+
+exports.updateColumnWidth = updateColumnWidth;
+
+function setupDragHandles(props) {
+  var elements = props.elements,
+      resize = props.resize,
+      columns = props.columns,
+      endStream = props.endStream,
+      end = props.end;
+  elements.forEach(function (element) {
+    if (element === null) {
+      return;
+    }
+
+    var cursor = changeBodyCursor();
+    var mousedowns = most.map(getColIdAndX, most.tap(cursor.override, dom_event_1.mousedown(element)));
+    var mouseups = most.tap(function (_) {
+      cursor.restore(_);
+      end();
+    }, dom_event_1.mouseup(window));
+    var mousemoves = most.skipRepeats(most.map(getX, dom_event_1.mousemove(window)));
+    var dragStream = most.chain(function (move) {
+      var ΔxMoves = most.map(getΔX(move), mousemoves);
+      return most.until(mouseups, ΔxMoves);
+    }, mousedowns);
+
+    var effects = function effects(change) {
+      var updateVisible = updateColumnWidth({
+        columns: columns
+      });
+      var newVisibleColumns = updateVisible(change);
+      resize(newVisibleColumns);
+    };
+
+    var stream = most.tap(effects, most.throttle(THROTTLE_IN_MS, dragStream));
+    most.runEffects(most.until(endStream, stream), scheduler_1.newDefaultScheduler());
+  });
+}
+
+exports.setupDragHandles = setupDragHandles;
 
 function getX(event) {
   return {
@@ -60532,11 +60288,11 @@ function getX(event) {
   };
 }
 
-function getΔX(_ref) {
-  var startX = _ref.x,
-      columnId = _ref.columnId;
-  return function (_ref2) {
-    var x = _ref2.x;
+function getΔX(_ref2) {
+  var startX = _ref2.x,
+      columnId = _ref2.columnId;
+  return function (_ref3) {
+    var x = _ref3.x;
     return {
       columnId: columnId,
       Δx: x - startX
@@ -60551,7 +60307,128 @@ function getColIdAndX(event) {
     columnId: columnId || ""
   });
 }
-},{"@most/core":"../node_modules/@most/core/dist/index.es.js","@most/dom-event":"../node_modules/@most/dom-event/dist/index.es.js","@most/scheduler":"../node_modules/@most/scheduler/dist/index.es.js","ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","./utils":"../src/utils.ts"}],"../src/types.ts":[function(require,module,exports) {
+
+function changeBodyCursor() {
+  var body = document.body;
+  var originalCursor = body.style.cursor;
+  return {
+    override: function override(_) {
+      body.style.cursor = "ew-resize";
+    },
+    restore: function restore(_) {
+      body.style.cursor = originalCursor;
+    }
+  };
+}
+},{"@most/core":"../node_modules/@most/core/dist/index.es.js","@most/dom-event":"../node_modules/@most/dom-event/dist/index.es.js","@most/scheduler":"../node_modules/@most/scheduler/dist/index.es.js","emotion":"../node_modules/emotion/dist/index.esm.js","murmurhash-js":"../node_modules/murmurhash-js/index.js","ramda":"../node_modules/ramda/es/index.js","./column":"../src/column.ts"}],"../src/reorder.tsx":[function(require,module,exports) {
+"use strict";
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+  }
+  result["default"] = mod;
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var React = __importStar(require("react"));
+
+var DnD = __importStar(require("react-beautiful-dnd"));
+
+var column_1 = require("./column");
+
+var utils_1 = require("./utils");
+
+exports.Reorder = function (props) {
+  var styles = props.styles;
+  var editStyle = utils_1.getStyleFrom(styles, "columnReorder");
+  var getEditStyle = utils_1.getStyleFrom(editStyle);
+  var columnStyle = getEditStyle("column");
+  var controlContainerStyle = getEditStyle("controlContainer");
+  var textStyle = getEditStyle("text");
+  var wrapperStyle = getEditStyle("wrapper");
+  var visibleColumns = column_1.Column.getVisible(props.columns);
+  var hiddenColumns = column_1.Column.getHidden(props.columns);
+
+  var columnComponents = function columnComponents(columns) {
+    return columns.map(function (column, index) {
+      return React.createElement(DnD.Draggable, {
+        key: column.id,
+        draggableId: column.id,
+        index: index
+      }, function (provided, snapshot) {
+        return React.createElement("div", Object.assign({
+          className: utils_1.applyStyles(columnStyle)
+        }, provided.draggableProps, provided.dragHandleProps, {
+          style: getDraggingStyle(provided.draggableProps.style, snapshot.isDragging),
+          ref: provided.innerRef
+        }), React.createElement("span", {
+          className: utils_1.applyStyles(textStyle)
+        }, column.text));
+      });
+    });
+  };
+
+  return React.createElement("section", null, React.createElement("p", null, "Here you can change the display order of the columns."), React.createElement("div", {
+    className: utils_1.applyStyles(wrapperStyle)
+  }, React.createElement(DnD.DragDropContext, {
+    onDragEnd: props.reorder
+  }, React.createElement(DnD.Droppable, {
+    droppableId: "enabled-columns"
+  }, function (provided) {
+    return React.createElement("div", Object.assign({}, provided.droppableProps, {
+      ref: provided.innerRef,
+      className: utils_1.applyStyles(controlContainerStyle)
+    }), columnComponents(visibleColumns), provided.placeholder);
+  }), React.createElement(DnD.Droppable, {
+    droppableId: "disabled-columns"
+  }, function (provided) {
+    return React.createElement("div", Object.assign({}, provided.droppableProps, {
+      ref: provided.innerRef,
+      className: utils_1.applyStyles(controlContainerStyle)
+    }), columnComponents(hiddenColumns), provided.placeholder);
+  }))));
+};
+
+function getDraggingStyle(dragStyle, isDragging) {
+  if (dragStyle === undefined) {
+    return undefined;
+  }
+
+  var transform = dragStyle.transform;
+  var transitionsTransform = transitionIncludesTransform(dragStyle.transition);
+
+  if (transform !== null) {
+    if (isDragging) {
+      if (transitionsTransform) {
+        return Object.assign({}, dragStyle, {
+          transform: "".concat(transform, " rotate(0)")
+        });
+      }
+
+      return Object.assign({}, dragStyle, {
+        transform: "".concat(transform, " rotate(3deg)")
+      });
+    }
+  }
+
+  return dragStyle;
+}
+
+function transitionIncludesTransform(transition) {
+  if (transition === undefined) {
+    return false;
+  }
+
+  return /transform/.test(transition);
+}
+},{"react":"../node_modules/react/index.js","react-beautiful-dnd":"../node_modules/react-beautiful-dnd/dist/react-beautiful-dnd.esm.js","./column":"../src/column.ts","./utils":"../src/utils.ts"}],"../src/types.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -60582,13 +60459,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var React = __importStar(require("react"));
 
-var column_1 = require("./column");
-
-var pick_1 = require("./pick");
-
 var reorder_1 = require("./reorder");
-
-var resize_1 = require("./resize");
 
 var types_1 = require("./types");
 
@@ -60597,35 +60468,24 @@ var utils_1 = require("./utils");
 exports.Edit = function (props) {
   var styles = props.styles,
       columns = props.columns,
-      toggle = props.toggle,
       reorder = props.reorder,
-      resize = props.resize,
       changeMode = props.changeMode;
-  var visibleColumns = column_1.Column.getVisible(columns);
   var editStyles = utils_1.getStyleFrom(styles, "edit");
   var getEditStyle = utils_1.getStyleFrom(editStyles);
   var containerStyle = getEditStyle("container");
   return React.createElement("div", {
     className: utils_1.applyStyles(containerStyle)
-  }, React.createElement(pick_1.Pick, {
-    columns: columns,
-    styles: styles,
-    toggle: toggle
-  }), React.createElement(reorder_1.Reorder, {
+  }, React.createElement(reorder_1.Reorder, {
     columns: columns,
     styles: styles,
     reorder: reorder
-  }), React.createElement(resize_1.Resize, {
-    columns: visibleColumns,
-    styles: styles,
-    resize: resize
   }), React.createElement("button", {
     onClick: function onClick(_) {
       return changeMode(types_1.Modes.View);
     }
   }, "Save Changes"));
 };
-},{"react":"../node_modules/react/index.js","./column":"../src/column.ts","./pick":"../src/pick.tsx","./reorder":"../src/reorder.tsx","./resize":"../src/resize.tsx","./types":"../src/types.ts","./utils":"../src/utils.ts"}],"../src/errorBoundary.tsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","./reorder":"../src/reorder.tsx","./types":"../src/types.ts","./utils":"../src/utils.ts"}],"../src/errorBoundary.tsx":[function(require,module,exports) {
 "use strict";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -62649,7 +62509,7 @@ exports.Colgroup = function (props) {
     var colProps = {
       key: column.id,
       style: {
-        width: "".concat(width, "px")
+        width: "".concat(width + 5, "px")
       }
     };
     return React.createElement("col", Object.assign({}, colProps));
@@ -62681,7 +62541,631 @@ exports.Empty = function (_ref) {
   var message = _ref.message;
   return React.createElement("h1", null, message || defaultMessage);
 };
-},{"react":"../node_modules/react/index.js"}],"../src/gridWrapper.tsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js"}],"../node_modules/debug/node_modules/ms/index.js":[function(require,module,exports) {
+/**
+ * Helpers.
+ */
+
+var s = 1000;
+var m = s * 60;
+var h = m * 60;
+var d = h * 24;
+var w = d * 7;
+var y = d * 365.25;
+
+/**
+ * Parse or format the given `val`.
+ *
+ * Options:
+ *
+ *  - `long` verbose formatting [false]
+ *
+ * @param {String|Number} val
+ * @param {Object} [options]
+ * @throws {Error} throw an error if val is not a non-empty string or a number
+ * @return {String|Number}
+ * @api public
+ */
+
+module.exports = function(val, options) {
+  options = options || {};
+  var type = typeof val;
+  if (type === 'string' && val.length > 0) {
+    return parse(val);
+  } else if (type === 'number' && isNaN(val) === false) {
+    return options.long ? fmtLong(val) : fmtShort(val);
+  }
+  throw new Error(
+    'val is not a non-empty string or a valid number. val=' +
+      JSON.stringify(val)
+  );
+};
+
+/**
+ * Parse the given `str` and return milliseconds.
+ *
+ * @param {String} str
+ * @return {Number}
+ * @api private
+ */
+
+function parse(str) {
+  str = String(str);
+  if (str.length > 100) {
+    return;
+  }
+  var match = /^((?:\d+)?\-?\d?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|w|years?|yrs?|y)?$/i.exec(
+    str
+  );
+  if (!match) {
+    return;
+  }
+  var n = parseFloat(match[1]);
+  var type = (match[2] || 'ms').toLowerCase();
+  switch (type) {
+    case 'years':
+    case 'year':
+    case 'yrs':
+    case 'yr':
+    case 'y':
+      return n * y;
+    case 'weeks':
+    case 'week':
+    case 'w':
+      return n * w;
+    case 'days':
+    case 'day':
+    case 'd':
+      return n * d;
+    case 'hours':
+    case 'hour':
+    case 'hrs':
+    case 'hr':
+    case 'h':
+      return n * h;
+    case 'minutes':
+    case 'minute':
+    case 'mins':
+    case 'min':
+    case 'm':
+      return n * m;
+    case 'seconds':
+    case 'second':
+    case 'secs':
+    case 'sec':
+    case 's':
+      return n * s;
+    case 'milliseconds':
+    case 'millisecond':
+    case 'msecs':
+    case 'msec':
+    case 'ms':
+      return n;
+    default:
+      return undefined;
+  }
+}
+
+/**
+ * Short format for `ms`.
+ *
+ * @param {Number} ms
+ * @return {String}
+ * @api private
+ */
+
+function fmtShort(ms) {
+  var msAbs = Math.abs(ms);
+  if (msAbs >= d) {
+    return Math.round(ms / d) + 'd';
+  }
+  if (msAbs >= h) {
+    return Math.round(ms / h) + 'h';
+  }
+  if (msAbs >= m) {
+    return Math.round(ms / m) + 'm';
+  }
+  if (msAbs >= s) {
+    return Math.round(ms / s) + 's';
+  }
+  return ms + 'ms';
+}
+
+/**
+ * Long format for `ms`.
+ *
+ * @param {Number} ms
+ * @return {String}
+ * @api private
+ */
+
+function fmtLong(ms) {
+  var msAbs = Math.abs(ms);
+  if (msAbs >= d) {
+    return plural(ms, msAbs, d, 'day');
+  }
+  if (msAbs >= h) {
+    return plural(ms, msAbs, h, 'hour');
+  }
+  if (msAbs >= m) {
+    return plural(ms, msAbs, m, 'minute');
+  }
+  if (msAbs >= s) {
+    return plural(ms, msAbs, s, 'second');
+  }
+  return ms + ' ms';
+}
+
+/**
+ * Pluralization helper.
+ */
+
+function plural(ms, msAbs, n, name) {
+  var isPlural = msAbs >= n * 1.5;
+  return Math.round(ms / n) + ' ' + name + (isPlural ? 's' : '');
+}
+
+},{}],"../node_modules/debug/src/common.js":[function(require,module,exports) {
+
+/**
+ * This is the common logic for both the Node.js and web browser
+ * implementations of `debug()`.
+ */
+
+function setup(env) {
+	createDebug.debug = createDebug;
+	createDebug.default = createDebug;
+	createDebug.coerce = coerce;
+	createDebug.disable = disable;
+	createDebug.enable = enable;
+	createDebug.enabled = enabled;
+	createDebug.humanize = require('ms');
+
+	Object.keys(env).forEach(key => {
+		createDebug[key] = env[key];
+	});
+
+	/**
+	* Active `debug` instances.
+	*/
+	createDebug.instances = [];
+
+	/**
+	* The currently active debug mode names, and names to skip.
+	*/
+
+	createDebug.names = [];
+	createDebug.skips = [];
+
+	/**
+	* Map of special "%n" handling functions, for the debug "format" argument.
+	*
+	* Valid key names are a single, lower or upper-case letter, i.e. "n" and "N".
+	*/
+	createDebug.formatters = {};
+
+	/**
+	* Selects a color for a debug namespace
+	* @param {String} namespace The namespace string for the for the debug instance to be colored
+	* @return {Number|String} An ANSI color code for the given namespace
+	* @api private
+	*/
+	function selectColor(namespace) {
+		let hash = 0;
+
+		for (let i = 0; i < namespace.length; i++) {
+			hash = ((hash << 5) - hash) + namespace.charCodeAt(i);
+			hash |= 0; // Convert to 32bit integer
+		}
+
+		return createDebug.colors[Math.abs(hash) % createDebug.colors.length];
+	}
+	createDebug.selectColor = selectColor;
+
+	/**
+	* Create a debugger with the given `namespace`.
+	*
+	* @param {String} namespace
+	* @return {Function}
+	* @api public
+	*/
+	function createDebug(namespace) {
+		let prevTime;
+
+		function debug(...args) {
+			// Disabled?
+			if (!debug.enabled) {
+				return;
+			}
+
+			const self = debug;
+
+			// Set `diff` timestamp
+			const curr = Number(new Date());
+			const ms = curr - (prevTime || curr);
+			self.diff = ms;
+			self.prev = prevTime;
+			self.curr = curr;
+			prevTime = curr;
+
+			args[0] = createDebug.coerce(args[0]);
+
+			if (typeof args[0] !== 'string') {
+				// Anything else let's inspect with %O
+				args.unshift('%O');
+			}
+
+			// Apply any `formatters` transformations
+			let index = 0;
+			args[0] = args[0].replace(/%([a-zA-Z%])/g, (match, format) => {
+				// If we encounter an escaped % then don't increase the array index
+				if (match === '%%') {
+					return match;
+				}
+				index++;
+				const formatter = createDebug.formatters[format];
+				if (typeof formatter === 'function') {
+					const val = args[index];
+					match = formatter.call(self, val);
+
+					// Now we need to remove `args[index]` since it's inlined in the `format`
+					args.splice(index, 1);
+					index--;
+				}
+				return match;
+			});
+
+			// Apply env-specific formatting (colors, etc.)
+			createDebug.formatArgs.call(self, args);
+
+			const logFn = self.log || createDebug.log;
+			logFn.apply(self, args);
+		}
+
+		debug.namespace = namespace;
+		debug.enabled = createDebug.enabled(namespace);
+		debug.useColors = createDebug.useColors();
+		debug.color = selectColor(namespace);
+		debug.destroy = destroy;
+		debug.extend = extend;
+		// Debug.formatArgs = formatArgs;
+		// debug.rawLog = rawLog;
+
+		// env-specific initialization logic for debug instances
+		if (typeof createDebug.init === 'function') {
+			createDebug.init(debug);
+		}
+
+		createDebug.instances.push(debug);
+
+		return debug;
+	}
+
+	function destroy() {
+		const index = createDebug.instances.indexOf(this);
+		if (index !== -1) {
+			createDebug.instances.splice(index, 1);
+			return true;
+		}
+		return false;
+	}
+
+	function extend(namespace, delimiter) {
+		return createDebug(this.namespace + (typeof delimiter === 'undefined' ? ':' : delimiter) + namespace);
+	}
+
+	/**
+	* Enables a debug mode by namespaces. This can include modes
+	* separated by a colon and wildcards.
+	*
+	* @param {String} namespaces
+	* @api public
+	*/
+	function enable(namespaces) {
+		createDebug.save(namespaces);
+
+		createDebug.names = [];
+		createDebug.skips = [];
+
+		let i;
+		const split = (typeof namespaces === 'string' ? namespaces : '').split(/[\s,]+/);
+		const len = split.length;
+
+		for (i = 0; i < len; i++) {
+			if (!split[i]) {
+				// ignore empty strings
+				continue;
+			}
+
+			namespaces = split[i].replace(/\*/g, '.*?');
+
+			if (namespaces[0] === '-') {
+				createDebug.skips.push(new RegExp('^' + namespaces.substr(1) + '$'));
+			} else {
+				createDebug.names.push(new RegExp('^' + namespaces + '$'));
+			}
+		}
+
+		for (i = 0; i < createDebug.instances.length; i++) {
+			const instance = createDebug.instances[i];
+			instance.enabled = createDebug.enabled(instance.namespace);
+		}
+	}
+
+	/**
+	* Disable debug output.
+	*
+	* @return {String} namespaces
+	* @api public
+	*/
+	function disable() {
+		const namespaces = [
+			...createDebug.names.map(toNamespace),
+			...createDebug.skips.map(toNamespace).map(namespace => '-' + namespace)
+		].join(',');
+		createDebug.enable('');
+		return namespaces;
+	}
+
+	/**
+	* Returns true if the given mode name is enabled, false otherwise.
+	*
+	* @param {String} name
+	* @return {Boolean}
+	* @api public
+	*/
+	function enabled(name) {
+		if (name[name.length - 1] === '*') {
+			return true;
+		}
+
+		let i;
+		let len;
+
+		for (i = 0, len = createDebug.skips.length; i < len; i++) {
+			if (createDebug.skips[i].test(name)) {
+				return false;
+			}
+		}
+
+		for (i = 0, len = createDebug.names.length; i < len; i++) {
+			if (createDebug.names[i].test(name)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	* Convert regexp to namespace
+	*
+	* @param {RegExp} regxep
+	* @return {String} namespace
+	* @api private
+	*/
+	function toNamespace(regexp) {
+		return regexp.toString()
+			.substring(2, regexp.toString().length - 2)
+			.replace(/\.\*\?$/, '*');
+	}
+
+	/**
+	* Coerce `val`.
+	*
+	* @param {Mixed} val
+	* @return {Mixed}
+	* @api private
+	*/
+	function coerce(val) {
+		if (val instanceof Error) {
+			return val.stack || val.message;
+		}
+		return val;
+	}
+
+	createDebug.enable(createDebug.load());
+
+	return createDebug;
+}
+
+module.exports = setup;
+
+},{"ms":"../node_modules/debug/node_modules/ms/index.js"}],"../node_modules/debug/src/browser.js":[function(require,module,exports) {
+var process = require("process");
+/* eslint-env browser */
+
+/**
+ * This is the web browser implementation of `debug()`.
+ */
+exports.log = log;
+exports.formatArgs = formatArgs;
+exports.save = save;
+exports.load = load;
+exports.useColors = useColors;
+exports.storage = localstorage();
+/**
+ * Colors.
+ */
+
+exports.colors = ['#0000CC', '#0000FF', '#0033CC', '#0033FF', '#0066CC', '#0066FF', '#0099CC', '#0099FF', '#00CC00', '#00CC33', '#00CC66', '#00CC99', '#00CCCC', '#00CCFF', '#3300CC', '#3300FF', '#3333CC', '#3333FF', '#3366CC', '#3366FF', '#3399CC', '#3399FF', '#33CC00', '#33CC33', '#33CC66', '#33CC99', '#33CCCC', '#33CCFF', '#6600CC', '#6600FF', '#6633CC', '#6633FF', '#66CC00', '#66CC33', '#9900CC', '#9900FF', '#9933CC', '#9933FF', '#99CC00', '#99CC33', '#CC0000', '#CC0033', '#CC0066', '#CC0099', '#CC00CC', '#CC00FF', '#CC3300', '#CC3333', '#CC3366', '#CC3399', '#CC33CC', '#CC33FF', '#CC6600', '#CC6633', '#CC9900', '#CC9933', '#CCCC00', '#CCCC33', '#FF0000', '#FF0033', '#FF0066', '#FF0099', '#FF00CC', '#FF00FF', '#FF3300', '#FF3333', '#FF3366', '#FF3399', '#FF33CC', '#FF33FF', '#FF6600', '#FF6633', '#FF9900', '#FF9933', '#FFCC00', '#FFCC33'];
+/**
+ * Currently only WebKit-based Web Inspectors, Firefox >= v31,
+ * and the Firebug extension (any Firefox version) are known
+ * to support "%c" CSS customizations.
+ *
+ * TODO: add a `localStorage` variable to explicitly enable/disable colors
+ */
+// eslint-disable-next-line complexity
+
+function useColors() {
+  // NB: In an Electron preload script, document will be defined but not fully
+  // initialized. Since we know we're in Chrome, we'll just detect this case
+  // explicitly
+  if (typeof window !== 'undefined' && window.process && (window.process.type === 'renderer' || window.process.__nwjs)) {
+    return true;
+  } // Internet Explorer and Edge do not support colors.
+
+
+  if (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/(edge|trident)\/(\d+)/)) {
+    return false;
+  } // Is webkit? http://stackoverflow.com/a/16459606/376773
+  // document is undefined in react-native: https://github.com/facebook/react-native/pull/1632
+
+
+  return typeof document !== 'undefined' && document.documentElement && document.documentElement.style && document.documentElement.style.WebkitAppearance || // Is firebug? http://stackoverflow.com/a/398120/376773
+  typeof window !== 'undefined' && window.console && (window.console.firebug || window.console.exception && window.console.table) || // Is firefox >= v31?
+  // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
+  typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31 || // Double check webkit in userAgent just in case we are in a worker
+  typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/applewebkit\/(\d+)/);
+}
+/**
+ * Colorize log arguments if enabled.
+ *
+ * @api public
+ */
+
+
+function formatArgs(args) {
+  args[0] = (this.useColors ? '%c' : '') + this.namespace + (this.useColors ? ' %c' : ' ') + args[0] + (this.useColors ? '%c ' : ' ') + '+' + module.exports.humanize(this.diff);
+
+  if (!this.useColors) {
+    return;
+  }
+
+  const c = 'color: ' + this.color;
+  args.splice(1, 0, c, 'color: inherit'); // The final "%c" is somewhat tricky, because there could be other
+  // arguments passed either before or after the %c, so we need to
+  // figure out the correct index to insert the CSS into
+
+  let index = 0;
+  let lastC = 0;
+  args[0].replace(/%[a-zA-Z%]/g, match => {
+    if (match === '%%') {
+      return;
+    }
+
+    index++;
+
+    if (match === '%c') {
+      // We only are interested in the *last* %c
+      // (the user may have provided their own)
+      lastC = index;
+    }
+  });
+  args.splice(lastC, 0, c);
+}
+/**
+ * Invokes `console.log()` when available.
+ * No-op when `console.log` is not a "function".
+ *
+ * @api public
+ */
+
+
+function log(...args) {
+  // This hackery is required for IE8/9, where
+  // the `console.log` function doesn't have 'apply'
+  return typeof console === 'object' && console.log && console.log(...args);
+}
+/**
+ * Save `namespaces`.
+ *
+ * @param {String} namespaces
+ * @api private
+ */
+
+
+function save(namespaces) {
+  try {
+    if (namespaces) {
+      exports.storage.setItem('debug', namespaces);
+    } else {
+      exports.storage.removeItem('debug');
+    }
+  } catch (error) {// Swallow
+    // XXX (@Qix-) should we be logging these?
+  }
+}
+/**
+ * Load `namespaces`.
+ *
+ * @return {String} returns the previously persisted debug modes
+ * @api private
+ */
+
+
+function load() {
+  let r;
+
+  try {
+    r = exports.storage.getItem('debug');
+  } catch (error) {} // Swallow
+  // XXX (@Qix-) should we be logging these?
+  // If debug isn't set in LS, and we're in Electron, try to load $DEBUG
+
+
+  if (!r && typeof process !== 'undefined' && 'env' in process) {
+    r = undefined;
+  }
+
+  return r;
+}
+/**
+ * Localstorage attempts to return the localstorage.
+ *
+ * This is necessary because safari throws
+ * when a user disables cookies/localstorage
+ * and you attempt to access it.
+ *
+ * @return {LocalStorage}
+ * @api private
+ */
+
+
+function localstorage() {
+  try {
+    // TVMLKit (Apple TV JS Runtime) does not have a window object, just localStorage in the global context
+    // The Browser also has localStorage in the global context.
+    return localStorage;
+  } catch (error) {// Swallow
+    // XXX (@Qix-) should we be logging these?
+  }
+}
+
+module.exports = require('./common')(exports);
+const {
+  formatters
+} = module.exports;
+/**
+ * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
+ */
+
+formatters.j = function (v) {
+  try {
+    return JSON.stringify(v);
+  } catch (error) {
+    return '[UnexpectedJSONParseError]: ' + error.message;
+  }
+};
+},{"./common":"../node_modules/debug/src/common.js","process":"../node_modules/process/browser.js"}],"../src/debug.ts":[function(require,module,exports) {
+"use strict";
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var debug_1 = __importDefault(require("debug"));
+
+var debug = debug_1.default("react-a11y-table-2");
+exports.debug = debug;
+},{"debug":"../node_modules/debug/src/browser.js"}],"../src/gridWrapper.tsx":[function(require,module,exports) {
 "use strict";
 
 var __importStar = this && this.__importStar || function (mod) {
@@ -62702,6 +63186,8 @@ var ramda_1 = require("ramda");
 
 var React = __importStar(require("react"));
 
+var debug_1 = require("./debug");
+
 var utils_1 = require("./utils");
 
 exports.GridWrapper = function (props) {
@@ -62714,6 +63200,7 @@ exports.GridWrapper = function (props) {
   var wrapperProps = {};
 
   if (sticky.enabled && ramda_1.not(sticky.supported)) {
+    debug_1.debug("sticky headers not supported; falling back on scroll handler");
     wrapperProps.onScroll = followHeaders(theadRef);
   }
 
@@ -62730,13 +63217,457 @@ function followHeaders(theadRef) {
 
     if (thead !== null) {
       thead.style.transform = translate;
+    } else {
+      debug_1.debug("no thead ref found; aborting sticky header move");
     }
   };
 }
-},{"ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","./utils":"../src/utils.ts"}],"../src/head.tsx":[function(require,module,exports) {
+},{"ramda":"../node_modules/ramda/es/index.js","react":"../node_modules/react/index.js","./debug":"../src/debug.ts","./utils":"../src/utils.ts"}],"../node_modules/eventemitter3/index.js":[function(require,module,exports) {
+'use strict';
+
+var has = Object.prototype.hasOwnProperty
+  , prefix = '~';
+
+/**
+ * Constructor to create a storage for our `EE` objects.
+ * An `Events` instance is a plain object whose properties are event names.
+ *
+ * @constructor
+ * @private
+ */
+function Events() {}
+
+//
+// We try to not inherit from `Object.prototype`. In some engines creating an
+// instance in this way is faster than calling `Object.create(null)` directly.
+// If `Object.create(null)` is not supported we prefix the event names with a
+// character to make sure that the built-in object properties are not
+// overridden or used as an attack vector.
+//
+if (Object.create) {
+  Events.prototype = Object.create(null);
+
+  //
+  // This hack is needed because the `__proto__` property is still inherited in
+  // some old browsers like Android 4, iPhone 5.1, Opera 11 and Safari 5.
+  //
+  if (!new Events().__proto__) prefix = false;
+}
+
+/**
+ * Representation of a single event listener.
+ *
+ * @param {Function} fn The listener function.
+ * @param {*} context The context to invoke the listener with.
+ * @param {Boolean} [once=false] Specify if the listener is a one-time listener.
+ * @constructor
+ * @private
+ */
+function EE(fn, context, once) {
+  this.fn = fn;
+  this.context = context;
+  this.once = once || false;
+}
+
+/**
+ * Add a listener for a given event.
+ *
+ * @param {EventEmitter} emitter Reference to the `EventEmitter` instance.
+ * @param {(String|Symbol)} event The event name.
+ * @param {Function} fn The listener function.
+ * @param {*} context The context to invoke the listener with.
+ * @param {Boolean} once Specify if the listener is a one-time listener.
+ * @returns {EventEmitter}
+ * @private
+ */
+function addListener(emitter, event, fn, context, once) {
+  if (typeof fn !== 'function') {
+    throw new TypeError('The listener must be a function');
+  }
+
+  var listener = new EE(fn, context || emitter, once)
+    , evt = prefix ? prefix + event : event;
+
+  if (!emitter._events[evt]) emitter._events[evt] = listener, emitter._eventsCount++;
+  else if (!emitter._events[evt].fn) emitter._events[evt].push(listener);
+  else emitter._events[evt] = [emitter._events[evt], listener];
+
+  return emitter;
+}
+
+/**
+ * Clear event by name.
+ *
+ * @param {EventEmitter} emitter Reference to the `EventEmitter` instance.
+ * @param {(String|Symbol)} evt The Event name.
+ * @private
+ */
+function clearEvent(emitter, evt) {
+  if (--emitter._eventsCount === 0) emitter._events = new Events();
+  else delete emitter._events[evt];
+}
+
+/**
+ * Minimal `EventEmitter` interface that is molded against the Node.js
+ * `EventEmitter` interface.
+ *
+ * @constructor
+ * @public
+ */
+function EventEmitter() {
+  this._events = new Events();
+  this._eventsCount = 0;
+}
+
+/**
+ * Return an array listing the events for which the emitter has registered
+ * listeners.
+ *
+ * @returns {Array}
+ * @public
+ */
+EventEmitter.prototype.eventNames = function eventNames() {
+  var names = []
+    , events
+    , name;
+
+  if (this._eventsCount === 0) return names;
+
+  for (name in (events = this._events)) {
+    if (has.call(events, name)) names.push(prefix ? name.slice(1) : name);
+  }
+
+  if (Object.getOwnPropertySymbols) {
+    return names.concat(Object.getOwnPropertySymbols(events));
+  }
+
+  return names;
+};
+
+/**
+ * Return the listeners registered for a given event.
+ *
+ * @param {(String|Symbol)} event The event name.
+ * @returns {Array} The registered listeners.
+ * @public
+ */
+EventEmitter.prototype.listeners = function listeners(event) {
+  var evt = prefix ? prefix + event : event
+    , handlers = this._events[evt];
+
+  if (!handlers) return [];
+  if (handlers.fn) return [handlers.fn];
+
+  for (var i = 0, l = handlers.length, ee = new Array(l); i < l; i++) {
+    ee[i] = handlers[i].fn;
+  }
+
+  return ee;
+};
+
+/**
+ * Return the number of listeners listening to a given event.
+ *
+ * @param {(String|Symbol)} event The event name.
+ * @returns {Number} The number of listeners.
+ * @public
+ */
+EventEmitter.prototype.listenerCount = function listenerCount(event) {
+  var evt = prefix ? prefix + event : event
+    , listeners = this._events[evt];
+
+  if (!listeners) return 0;
+  if (listeners.fn) return 1;
+  return listeners.length;
+};
+
+/**
+ * Calls each of the listeners registered for a given event.
+ *
+ * @param {(String|Symbol)} event The event name.
+ * @returns {Boolean} `true` if the event had listeners, else `false`.
+ * @public
+ */
+EventEmitter.prototype.emit = function emit(event, a1, a2, a3, a4, a5) {
+  var evt = prefix ? prefix + event : event;
+
+  if (!this._events[evt]) return false;
+
+  var listeners = this._events[evt]
+    , len = arguments.length
+    , args
+    , i;
+
+  if (listeners.fn) {
+    if (listeners.once) this.removeListener(event, listeners.fn, undefined, true);
+
+    switch (len) {
+      case 1: return listeners.fn.call(listeners.context), true;
+      case 2: return listeners.fn.call(listeners.context, a1), true;
+      case 3: return listeners.fn.call(listeners.context, a1, a2), true;
+      case 4: return listeners.fn.call(listeners.context, a1, a2, a3), true;
+      case 5: return listeners.fn.call(listeners.context, a1, a2, a3, a4), true;
+      case 6: return listeners.fn.call(listeners.context, a1, a2, a3, a4, a5), true;
+    }
+
+    for (i = 1, args = new Array(len -1); i < len; i++) {
+      args[i - 1] = arguments[i];
+    }
+
+    listeners.fn.apply(listeners.context, args);
+  } else {
+    var length = listeners.length
+      , j;
+
+    for (i = 0; i < length; i++) {
+      if (listeners[i].once) this.removeListener(event, listeners[i].fn, undefined, true);
+
+      switch (len) {
+        case 1: listeners[i].fn.call(listeners[i].context); break;
+        case 2: listeners[i].fn.call(listeners[i].context, a1); break;
+        case 3: listeners[i].fn.call(listeners[i].context, a1, a2); break;
+        case 4: listeners[i].fn.call(listeners[i].context, a1, a2, a3); break;
+        default:
+          if (!args) for (j = 1, args = new Array(len -1); j < len; j++) {
+            args[j - 1] = arguments[j];
+          }
+
+          listeners[i].fn.apply(listeners[i].context, args);
+      }
+    }
+  }
+
+  return true;
+};
+
+/**
+ * Add a listener for a given event.
+ *
+ * @param {(String|Symbol)} event The event name.
+ * @param {Function} fn The listener function.
+ * @param {*} [context=this] The context to invoke the listener with.
+ * @returns {EventEmitter} `this`.
+ * @public
+ */
+EventEmitter.prototype.on = function on(event, fn, context) {
+  return addListener(this, event, fn, context, false);
+};
+
+/**
+ * Add a one-time listener for a given event.
+ *
+ * @param {(String|Symbol)} event The event name.
+ * @param {Function} fn The listener function.
+ * @param {*} [context=this] The context to invoke the listener with.
+ * @returns {EventEmitter} `this`.
+ * @public
+ */
+EventEmitter.prototype.once = function once(event, fn, context) {
+  return addListener(this, event, fn, context, true);
+};
+
+/**
+ * Remove the listeners of a given event.
+ *
+ * @param {(String|Symbol)} event The event name.
+ * @param {Function} fn Only remove the listeners that match this function.
+ * @param {*} context Only remove the listeners that have this context.
+ * @param {Boolean} once Only remove one-time listeners.
+ * @returns {EventEmitter} `this`.
+ * @public
+ */
+EventEmitter.prototype.removeListener = function removeListener(event, fn, context, once) {
+  var evt = prefix ? prefix + event : event;
+
+  if (!this._events[evt]) return this;
+  if (!fn) {
+    clearEvent(this, evt);
+    return this;
+  }
+
+  var listeners = this._events[evt];
+
+  if (listeners.fn) {
+    if (
+      listeners.fn === fn &&
+      (!once || listeners.once) &&
+      (!context || listeners.context === context)
+    ) {
+      clearEvent(this, evt);
+    }
+  } else {
+    for (var i = 0, events = [], length = listeners.length; i < length; i++) {
+      if (
+        listeners[i].fn !== fn ||
+        (once && !listeners[i].once) ||
+        (context && listeners[i].context !== context)
+      ) {
+        events.push(listeners[i]);
+      }
+    }
+
+    //
+    // Reset the array, or remove it completely if we have no more listeners.
+    //
+    if (events.length) this._events[evt] = events.length === 1 ? events[0] : events;
+    else clearEvent(this, evt);
+  }
+
+  return this;
+};
+
+/**
+ * Remove all listeners, or those of the specified event.
+ *
+ * @param {(String|Symbol)} [event] The event name.
+ * @returns {EventEmitter} `this`.
+ * @public
+ */
+EventEmitter.prototype.removeAllListeners = function removeAllListeners(event) {
+  var evt;
+
+  if (event) {
+    evt = prefix ? prefix + event : event;
+    if (this._events[evt]) clearEvent(this, evt);
+  } else {
+    this._events = new Events();
+    this._eventsCount = 0;
+  }
+
+  return this;
+};
+
+//
+// Alias methods names because people roll like that.
+//
+EventEmitter.prototype.off = EventEmitter.prototype.removeListener;
+EventEmitter.prototype.addListener = EventEmitter.prototype.on;
+
+//
+// Expose the prefix.
+//
+EventEmitter.prefixed = prefix;
+
+//
+// Allow `EventEmitter` to be imported as module namespace.
+//
+EventEmitter.EventEmitter = EventEmitter;
+
+//
+// Expose the module.
+//
+if ('undefined' !== typeof module) {
+  module.exports = EventEmitter;
+}
+
+},{}],"../src/dragHandle.tsx":[function(require,module,exports) {
 "use strict";
 
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+  }
+  result["default"] = mod;
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var React = __importStar(require("react"));
+
+var utils_1 = require("./utils");
+
+exports.DragHandle = React.forwardRef(function (props, ref) {
+  var style = utils_1.getStyleFrom(props.styles, "dragHandle");
+  return React.createElement("button", {
+    ref: ref,
+    "data-id": props.id,
+    className: utils_1.applyStyles(style)
+  }, "drag");
+});
+},{"react":"../node_modules/react/index.js","./utils":"../src/utils.ts"}],"../src/endEvent.ts":[function(require,module,exports) {
+"use strict";
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var scheduler_1 = require("@most/scheduler");
+
+var EndEvent =
+/*#__PURE__*/
+function () {
+  function EndEvent(emitter, event) {
+    _classCallCheck(this, EndEvent);
+
+    this.emitter = emitter;
+    this.event = event;
+  }
+
+  _createClass(EndEvent, [{
+    key: "run",
+    value: function run(sink, scheduler) {
+      var _this = this;
+
+      var send = function send(value) {
+        return tryEvent(scheduler_1.currentTime(scheduler), value, sink);
+      };
+
+      var dispose = function dispose() {
+        _this.emitter.removeListener(_this.event, send);
+      };
+
+      this.emitter.on(this.event, send);
+      return {
+        dispose: dispose
+      };
+    }
+  }]);
+
+  return EndEvent;
+}();
+
+exports.EndEvent = EndEvent;
+
+function tryEvent(t, x, sink) {
+  try {
+    sink.event(t, x);
+  } catch (e) {
+    sink.error(t, e);
+  }
+}
+},{"@most/scheduler":"../node_modules/@most/scheduler/dist/index.es.js"}],"../src/head.tsx":[function(require,module,exports) {
+"use strict";
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 function _templateObject() {
   var data = _taggedTemplateLiteral(["\n  position: sticky;\n  top: 0;\n"]);
@@ -62749,6 +63680,12 @@ function _templateObject() {
 }
 
 function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
 
 var __importStar = this && this.__importStar || function (mod) {
   if (mod && mod.__esModule) return mod;
@@ -62766,31 +63703,110 @@ Object.defineProperty(exports, "__esModule", {
 
 var emotion_1 = require("emotion");
 
+var eventemitter3_1 = __importDefault(require("eventemitter3"));
+
 var React = __importStar(require("react"));
+
+var debug_1 = require("./debug");
+
+var dragHandle_1 = require("./dragHandle");
+
+var endEvent_1 = require("./endEvent");
 
 var utils_1 = require("./utils");
 
 var stickyStyle = emotion_1.css(_templateObject());
-exports.Head = React.forwardRef(function (props, ref) {
-  var columns = props.columns,
-      styles = props.styles,
-      sticky = props.sticky;
-  var gridStyles = utils_1.getStyleFrom(styles, "grid");
-  var baseStyle = utils_1.getStyleFrom(gridStyles, "headers");
-  var hasStickyStyle = sticky.supported && sticky.enabled;
-  var style = emotion_1.cx(utils_1.applyStyles(baseStyle), _defineProperty({}, stickyStyle, hasStickyStyle));
-  var columnLabels = columns.map(function (column) {
-    return React.createElement("th", {
-      key: column.id,
-      className: style,
-      scope: "col"
-    }, column.text);
-  });
-  return React.createElement("thead", {
-    ref: ref
-  }, React.createElement("tr", null, columnLabels));
-});
-},{"emotion":"../node_modules/emotion/dist/index.esm.js","react":"../node_modules/react/index.js","./utils":"../src/utils.ts"}],"../src/table.tsx":[function(require,module,exports) {
+
+var Head =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(Head, _React$Component);
+
+  function Head() {
+    var _this;
+
+    _classCallCheck(this, Head);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Head).apply(this, arguments));
+    _this.dragRefs = [];
+    _this.endEmitter = new eventemitter3_1.default();
+    _this.endStream = new endEvent_1.EndEvent(_this.endEmitter, "end");
+    return _this;
+  }
+
+  _createClass(Head, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      debug_1.debug("binding column drag handlers");
+      var dragHandles = this.dragRefs.map(function (ref) {
+        return ref.current;
+      });
+
+      var end = function end() {
+        return _this2.endEmitter.emit("end");
+      };
+
+      var endStream = this.endStream;
+      var resize = this.props.resize;
+
+      var getDragHandlerProps = function getDragHandlerProps(props) {
+        return {
+          columns: props.columns,
+          elements: dragHandles,
+          end: end,
+          endStream: endStream,
+          resize: resize
+        };
+      };
+
+      utils_1.setupDragHandles(getDragHandlerProps(this.props));
+      this.endEmitter.on("end", function () {
+        debug_1.debug("rebinding drag handlers with new props");
+        utils_1.setupDragHandles(getDragHandlerProps(_this2.props));
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this3 = this;
+
+      var _this$props = this.props,
+          columns = _this$props.columns,
+          styles = _this$props.styles,
+          sticky = _this$props.sticky,
+          theadRef = _this$props.theadRef;
+      var gridStyles = utils_1.getStyleFrom(styles, "grid");
+      var baseStyle = utils_1.getStyleFrom(gridStyles, "headers");
+      var hasStickyStyle = sticky.supported && sticky.enabled;
+      var style = emotion_1.cx(utils_1.applyStyles(baseStyle), _defineProperty({}, stickyStyle, hasStickyStyle));
+      var columnLabels = columns.map(function (column) {
+        var dragRef = React.createRef();
+
+        _this3.dragRefs.push(dragRef);
+
+        return React.createElement("th", {
+          key: column.id,
+          className: style,
+          scope: "col"
+        }, column.text, React.createElement(dragHandle_1.DragHandle, {
+          ref: dragRef,
+          id: column.id,
+          styles: styles
+        }));
+      });
+      return React.createElement("thead", {
+        ref: theadRef
+      }, React.createElement("tr", null, columnLabels));
+    }
+  }]);
+
+  return Head;
+}(React.Component);
+
+exports.Head = Head;
+},{"emotion":"../node_modules/emotion/dist/index.esm.js","eventemitter3":"../node_modules/eventemitter3/index.js","react":"../node_modules/react/index.js","./debug":"../src/debug.ts","./dragHandle":"../src/dragHandle.tsx","./endEvent":"../src/endEvent.ts","./utils":"../src/utils.ts"}],"../src/table.tsx":[function(require,module,exports) {
 "use strict";
 
 function _templateObject() {
@@ -62885,7 +63901,8 @@ exports.Grid = function (props) {
       config = props.config,
       styles = props.styles,
       sticky = props.sticky,
-      changeMode = props.changeMode;
+      changeMode = props.changeMode,
+      resize = props.resize;
   var theadRef = React.createRef();
 
   if (ramda_1.isEmpty(data)) {
@@ -62904,7 +63921,8 @@ exports.Grid = function (props) {
     sticky: sticky,
     styles: styles,
     theadRef: theadRef,
-    changeMode: changeMode
+    changeMode: changeMode,
+    resize: resize
   };
   var bodyProps = {
     columns: columns,
@@ -63064,20 +64082,18 @@ function (_React$Component) {
       };
       var resize = utils.resizeColumns(updateProps);
       var reorder = utils.reorderColumns(updateProps);
-      var toggle = utils.toggleColumn(updateProps);
       var editProps = {
         changeMode: this.changeMode,
         columns: allColumns,
         reorder: reorder,
-        resize: resize,
-        styles: styles,
-        toggle: toggle
+        styles: styles
       };
       var gridProps = {
         changeMode: this.changeMode,
         columns: visibleColumns,
         config: config,
         data: data,
+        resize: resize,
         sticky: sticky,
         styles: styles
       };
@@ -63241,7 +64257,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56124" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61804" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

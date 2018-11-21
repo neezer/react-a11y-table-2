@@ -16,7 +16,7 @@ export const Colgroup: React.FunctionComponent<IProps> = props => {
 
     const colProps: ColProps = {
       key: column.id,
-      style: { width: `${width}px` }
+      style: { width: `${width + 5}px` }
     };
 
     return <col {...colProps} />;

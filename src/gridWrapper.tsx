@@ -1,6 +1,7 @@
 import { not } from "ramda";
 import * as React from "react";
 import { IStickyConfig, Styles } from ".";
+import { debug } from "./debug";
 import { applyStyles, getStyleFrom } from "./utils";
 
 type THeadRef = React.RefObject<HTMLTableSectionElement>;
@@ -18,6 +19,8 @@ export const GridWrapper: React.FunctionComponent<IProps> = props => {
   const wrapperProps: React.HTMLAttributes<HTMLDivElement> = {};
 
   if (sticky.enabled && not(sticky.supported)) {
+    debug("sticky headers not supported; falling back on scroll handler");
+
     wrapperProps.onScroll = followHeaders(theadRef);
   }
 
@@ -36,6 +39,8 @@ function followHeaders(theadRef: THeadRef) {
 
     if (thead !== null) {
       thead.style.transform = translate;
+    } else {
+      debug("no thead ref found; aborting sticky header move");
     }
   };
 }
