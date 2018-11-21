@@ -1,4 +1,4 @@
-import * as most from "@most/core";
+import * as M from "@most/core";
 import { mousedown, mousemove, mouseup } from "@most/dom-event";
 import { newDefaultScheduler } from "@most/scheduler";
 import { Stream } from "@most/types";
@@ -17,11 +17,12 @@ interface IXColId {
   columnId: string;
 }
 
-type IXMove = IXPos & IXColId;
-
-type IΔXChange = IXColId & {
+interface IΔX {
   Δx: number;
-};
+}
+
+type IXMove = IXPos & IXColId;
+type IΔXChange = IΔX & IXColId;
 
 const THROTTLE_IN_MS = 10;
 const MIN_WIDTH = 30;
@@ -168,8 +169,8 @@ export function reorderColumns(props: IUpdateColumnsProps) {
 
 export function updateColumnWidth(props: IUpdateVisibleColumnsProps) {
   const { columns } = props;
-  const belowBounds = R.flip(R.lt)(MIN_WIDTH);
-  const aboveBounds = R.flip(R.gt)(MAX_WIDTH);
+  const belowBounds = R.lt(R.__, MIN_WIDTH);
+  const aboveBounds = R.gt(R.__, MAX_WIDTH);
   const outOfBounds = R.anyPass([belowBounds, aboveBounds]);
 
   return ({ Δx, columnId }: IΔXChange): Columns => {
@@ -210,23 +211,10 @@ export function setupDragHandles(props: ISetupDragHandlers) {
 
     const cursor = changeBodyCursor();
 
-    const mousedowns = most.map(
-      getColIdAndX,
-      most.tap(cursor.override, mousedown(element))
-    );
-
-    const mouseups = most.tap((_: MouseEvent) => {
+    const mouseupsEffects = (_: MouseEvent) => {
       cursor.restore(_);
       end();
-    }, mouseup(window));
-
-    const mousemoves = most.skipRepeats(most.map(getX, mousemove(window)));
-
-    const dragStream = most.chain((move: IXMove) => {
-      const ΔxMoves = most.map(getΔX(move), mousemoves);
-
-      return most.until(mouseups, ΔxMoves);
-    }, mousedowns);
+    };
 
     const effects = (change: IΔXChange) => {
       const updateVisible = updateColumnWidth({ columns });
@@ -235,9 +223,27 @@ export function setupDragHandles(props: ISetupDragHandlers) {
       resize(newVisibleColumns);
     };
 
-    const stream = most.tap(effects, most.throttle(THROTTLE_IN_MS, dragStream));
+    const mousedowns = mousedown(element);
+    const mousedownsWithEffects = M.tap(cursor.override, mousedowns);
+    const dragStarts = M.map(getColIdAndX, mousedownsWithEffects);
+    const mouseups = mouseup(window);
+    const mouseupsWithEffects = M.tap(mouseupsEffects, mouseups);
+    const mousemoves = mousemove(window);
+    const xMoves = M.map(getX, mousemoves);
+    const uniqXMoves = M.skipRepeats(xMoves);
 
-    most.runEffects(most.until(endStream, stream), newDefaultScheduler());
+    const createDragStream = (move: IXMove) => {
+      const ΔxMoves = M.map(getΔX(move), uniqXMoves);
+
+      return M.until(mouseupsWithEffects, ΔxMoves);
+    };
+
+    const drags = M.chain(createDragStream, dragStarts);
+    const throttledDrags = M.throttle(THROTTLE_IN_MS, drags);
+    const dragsWithEffects = M.tap(effects, throttledDrags);
+    const disposableDrags = M.until(endStream, dragsWithEffects);
+
+    M.runEffects(disposableDrags, newDefaultScheduler());
   });
 }
 

@@ -60071,7 +60071,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var most = __importStar(require("@most/core"));
+var M = __importStar(require("@most/core"));
 
 var dom_event_1 = require("@most/dom-event");
 
@@ -60220,8 +60220,8 @@ exports.reorderColumns = reorderColumns;
 
 function updateColumnWidth(props) {
   var columns = props.columns;
-  var belowBounds = R.flip(R.lt)(MIN_WIDTH);
-  var aboveBounds = R.flip(R.gt)(MAX_WIDTH);
+  var belowBounds = R.lt(R.__, MIN_WIDTH);
+  var aboveBounds = R.gt(R.__, MAX_WIDTH);
   var outOfBounds = R.anyPass([belowBounds, aboveBounds]);
   return function (_ref) {
     var Δx = _ref.Δx,
@@ -60258,16 +60258,11 @@ function setupDragHandles(props) {
     }
 
     var cursor = changeBodyCursor();
-    var mousedowns = most.map(getColIdAndX, most.tap(cursor.override, dom_event_1.mousedown(element)));
-    var mouseups = most.tap(function (_) {
+
+    var mouseupsEffects = function mouseupsEffects(_) {
       cursor.restore(_);
       end();
-    }, dom_event_1.mouseup(window));
-    var mousemoves = most.skipRepeats(most.map(getX, dom_event_1.mousemove(window)));
-    var dragStream = most.chain(function (move) {
-      var ΔxMoves = most.map(getΔX(move), mousemoves);
-      return most.until(mouseups, ΔxMoves);
-    }, mousedowns);
+    };
 
     var effects = function effects(change) {
       var updateVisible = updateColumnWidth({
@@ -60277,8 +60272,25 @@ function setupDragHandles(props) {
       resize(newVisibleColumns);
     };
 
-    var stream = most.tap(effects, most.throttle(THROTTLE_IN_MS, dragStream));
-    most.runEffects(most.until(endStream, stream), scheduler_1.newDefaultScheduler());
+    var mousedowns = dom_event_1.mousedown(element);
+    var mousedownsWithEffects = M.tap(cursor.override, mousedowns);
+    var dragStarts = M.map(getColIdAndX, mousedownsWithEffects);
+    var mouseups = dom_event_1.mouseup(window);
+    var mouseupsWithEffects = M.tap(mouseupsEffects, mouseups);
+    var mousemoves = dom_event_1.mousemove(window);
+    var xMoves = M.map(getX, mousemoves);
+    var uniqXMoves = M.skipRepeats(xMoves);
+
+    var createDragStream = function createDragStream(move) {
+      var ΔxMoves = M.map(getΔX(move), uniqXMoves);
+      return M.until(mouseupsWithEffects, ΔxMoves);
+    };
+
+    var drags = M.chain(createDragStream, dragStarts);
+    var throttledDrags = M.throttle(THROTTLE_IN_MS, drags);
+    var dragsWithEffects = M.tap(effects, throttledDrags);
+    var disposableDrags = M.until(endStream, dragsWithEffects);
+    M.runEffects(disposableDrags, scheduler_1.newDefaultScheduler());
   });
 }
 
@@ -64259,7 +64271,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62548" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65112" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
